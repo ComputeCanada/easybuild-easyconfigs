@@ -1,7 +1,8 @@
-easyblock = "EB_CUDA"
+easyblock = 'EB_CUDA'
+
 name = 'CUDAcore'
-version = '11.0.2'
-local_nv_version = '450.51.05'
+version = '11.1.0'
+local_nv_version = '455.23.05'
 
 homepage = 'https://developer.nvidia.com/cuda-toolkit'
 description = """CUDA (formerly Compute Unified Device Architecture) is a parallel
@@ -16,9 +17,9 @@ sources = ['cuda_%%(version)s_%s_linux%%(cudaarch)s.run' % local_nv_version]
 checksums = [
     {
         'cuda_%%(version)s_%s_linux.run' % local_nv_version:
-            '48247ada0e3f106051029ae8f70fbd0c238040f58b0880e55026374a959a69c1',
+            '858cbab091fde94556a249b9580fadff55a46eafbcb4d4a741d2dcd358ab94a5',
         'cuda_%%(version)s_%s_linux_ppc64le.run' % local_nv_version:
-            'db06d0f3fbf6f7aa1f106fc921ad1c86162210a26e8cb65b171c5240a3bf75da',
+            'a561e6f7f659bc4100e4713523b0b8aad6b36aa77fac847f6423e7780c750064',
     }
 ]
 

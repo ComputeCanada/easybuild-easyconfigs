@@ -1,6 +1,7 @@
 easyblock = 'Bundle'
+
 name = 'CUDA'
-version = '11.0.2'
+version = '11.1.0'
 
 homepage = 'https://developer.nvidia.com/cuda-toolkit'
 description = """CUDA (formerly Compute Unified Device Architecture) is a parallel
@@ -8,9 +9,9 @@ description = """CUDA (formerly Compute Unified Device Architecture) is a parall
  graphics processing units (GPUs) that they produce. CUDA gives developers access
  to the virtual instruction set and memory of the parallel computational elements in CUDA GPUs."""
 
-toolchain = {'name': 'GCC', 'version': '9.3.0'}
+toolchain = {'name': 'iccifort', 'version': '2020.1.217'}
 
-dependencies = [('CUDAcore', '11.0.2', '', True)]
+dependencies = [('CUDAcore', version, '', True)]
 
 altroot = 'CUDAcore'
 
