@@ -50,4 +50,8 @@ sanity_check_commands = [
 
 modextrapaths = {'EBPYTHONPREFIXES': ['']}
 
+modluafooter = """
+depends_on("python")
+"""
+
 moduleclass = 'bio'
