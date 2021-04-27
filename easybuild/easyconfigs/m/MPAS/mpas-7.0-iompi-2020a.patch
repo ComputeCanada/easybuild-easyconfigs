@@ -1,0 +1,10 @@
+diff --git a/Makefile b/Makefile
+index 5fbaeca3..0aae0807 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,4 +1,4 @@
+-MODEL_FORMULATION = 
++MODEL_FORMULATION = gfortran 
+ 
+ 
+ dummy:
