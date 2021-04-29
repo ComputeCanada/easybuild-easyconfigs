@@ -1,4 +1,4 @@
-easyblock = 'CMakeMake'
+easyblock = 'ConfigureMake'
 
 name = 'MPAS'
 version = '7.0'
@@ -6,7 +6,7 @@ version = '7.0'
 homepage = 'https://github.com/NCAR/ParallelIO'
 description = """The Model for Prediction Across Scales (MPAS) is for developing atmosphere, ocean, and other earth-system simulation components for use in climate, regional climate, and weather studies."""
 
-toolchain = {'name': 'iompi', 'version': '2020a'}
+toolchain = {'name': 'gompi', 'version': '2020a'}
 
 source_urls = ['https://github.com/MPAS-Dev/MPAS-Model/archive/refs/tags/']
 sources = ['v%(version)s.tar.gz']
@@ -16,9 +16,12 @@ dependencies = [
     ('PnetCDF', '1.10.0'),
     ('netCDF-Fortran', '4.5.2', '-mpi'),
     ('HDF5', '1.10.6', '-mpi'),
-
+    ('pio', '2.5.3')
 ]
 
+configure_cmd=''
+install_cmd=''
+buildininstalldir=True
 
 sanity_check_paths = {
     'files': ['lib/libpiof.a', 'include/pio.mod'],
