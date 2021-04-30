@@ -19,7 +19,9 @@ dependencies = [
     ('parallelio', '2.5.3')
 ]
 
-preconfigopts = "export PIO=$EBROOTPARALLELIO; export PNETCDF=$EBROOTPNETCDF; export NETCDF=$EBROOTNETCDF; export HDF5=$EBROOTHDF5; "
+#TODO: Find local path for PIO, and put it here
+installdir = ./local 
+preconfigopts = "export PIO=%(installdir)s; export PNETCDF=$EBROOTPNETCDF; export NETCDF=$EBROOTNETCDF; "
 configure_cmd=''
 install_cmd=''
 buildopts='ifort CORE="atmosphere" USE_PIO2=true'
