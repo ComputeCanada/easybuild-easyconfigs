@@ -1,9 +1,9 @@
-easyblock = 'ConfigureMake'
+easyblock = 'MakeCp'
 
 name = 'MPAS'
 version = '7.0'
 
-homepage = 'https://github.com/NCAR/ParallelIO'
+homepage = ''
 description = """The Model for Prediction Across Scales (MPAS) is for developing atmosphere, ocean, and other earth-system simulation components for use in climate, regional climate, and weather studies."""
 
 toolchain = {'name': 'iompi', 'version': '2020a'}
@@ -19,11 +19,11 @@ dependencies = [
     ('parallelio', '2.5.3')
 ]
 
+preconfigopts = "export PIO=$EBROOTPARALLELIO; export PNETCDF=$EBROOTPNETCDF; export NETCDF=$EBROOTNETCDF; export HDF5=$EBROOTHDF5; "
 configure_cmd=''
 install_cmd=''
-prebuildopts='CORE="atmosphere" '
-buildopts='ifort'
-buildininstalldir=True
+buildopts='ifort CORE="atmosphere" USE_PIO2=true'
+files_to_copy=''
 
 sanity_check_paths = {
     'files': ['lib/libpiof.a', 'include/pio.mod'],
