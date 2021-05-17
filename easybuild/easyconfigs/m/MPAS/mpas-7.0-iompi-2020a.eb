@@ -16,7 +16,7 @@ dependencies = [
     ('PnetCDF', '1.8.1'),
     ('netCDF-Fortran', '4.5.2', '-mpi'),
     ('HDF5', '1.10.6', '-mpi'),
-    ('ParallelIO', '2.5.3')
+    ('ParallelIO', '1.9.23')
 ]
 
 configure_cmd=''
