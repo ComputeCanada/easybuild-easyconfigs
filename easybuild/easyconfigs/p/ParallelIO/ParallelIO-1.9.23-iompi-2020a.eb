@@ -1,0 +1,35 @@
+easyblock = 'CMakeMake'
+
+name = 'ParallelIO'
+version = '1.9.23'
+
+homepage = 'https://github.com/NCAR/ParallelIO'
+description = """A high-level Parallel I/O Library for structured grid applications"""
+
+toolchain = {'name': 'iompi', 'version': '2020a'}
+
+source_urls= ['https://github.com/NCAR/ParallelIO/archive/refs/tags/']
+sources = ['pio{}.tar.gz'.format(version.replace('.','_'))]
+checksums = ['11c8b5d482a0842ff88a419e21bd62d90bf636e0184f77dc77ff8c4e2194756d']
+
+dependencies = [
+    ('PnetCDF', '1.8.1'),
+    ('netCDF-Fortran', '4.5.2', '-mpi'),
+    ('HDF5', '1.10.6', '-mpi'),
+]
+
+preconfigopts = 'CC=mpicc FC=mpif90'
+configopts = ''
+#configopts = ' -DNETCDF_C_DIR=$EBROOTNETCDF -DNETCDF_Fortran_DIR=$EBROOTNETCDF -DPNETCDF_DIR=$EBROOTPNETCDF -DCMAKE_VERBOSE_MAKEFILE=1 $PIOSRC --disable-shared --enable-fortran'
+files_to_copy = ''
+
+sanity_check_paths = {
+    'files': ['lib/libpiof.a', 'include/pio.mod'],
+    'dirs': [],
+}
+
+modextravars = {
+    'PIO': '%(installdir)s'
+}
+
+moduleclass = 'data'
