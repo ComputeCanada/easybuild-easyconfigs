@@ -5,7 +5,7 @@ index 5fbaeca3..0aae0807 100644
 +++ b/Makefile
 @@ -1,4 +1,4 @@
 -MODEL_FORMULATION = 
-+MODEL_FORMULATION = gfortran 
++MODEL_FORMULATION = ifort 
  
  
  dummy:
