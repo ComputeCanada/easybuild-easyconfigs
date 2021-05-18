@@ -19,8 +19,8 @@ dependencies = [
 ]
 
 preconfigopts = 'CC=mpicc FC=mpif90'
-configopts = ''
-#configopts = ' -DNETCDF_C_DIR=$EBROOTNETCDF -DNETCDF_Fortran_DIR=$EBROOTNETCDF -DPNETCDF_DIR=$EBROOTPNETCDF -DCMAKE_VERBOSE_MAKEFILE=1 $PIOSRC --disable-shared --enable-fortran'
+buildininstalldir='TRUE'
+configopts = ' -DNETCDF_C_DIR=$EBROOTNETCDF -DNETCDF_Fortran_DIR=$EBROOTNETCDF -DPNETCDF_DIR=$EBROOTPNETCDF -DCMAKE_VERBOSE_MAKEFILE=1 $PIOSRC --disable-shared --enable-fortran'
 files_to_copy = ''
 
 sanity_check_paths = {
