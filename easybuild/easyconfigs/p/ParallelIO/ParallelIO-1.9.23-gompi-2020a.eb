@@ -1,0 +1,49 @@
+easyblock = 'CMakeMake'
+
+name = 'ParallelIO'
+version = '1.9.23'
+
+homepage = 'https://github.com/NCAR/ParallelIO'
+description = """A high-level Parallel I/O Library for structured grid applications"""
+
+toolchain = {'name': 'gompi', 'version': '2020a'}
+
+sources = [{
+        'source_urls': ['https://github.com/NCAR/ParallelIO/archive/'],
+        'filename': 'pio1_9_23.tar.gz',
+    },{
+        'source_urls': ['https://github.com/PARALLELIO/genf90/archive/refs/tags/'],
+        'filename': 'genf90_200608.tar.gz',
+    },{
+        'source_urls': ['https://github.com/CESM-Development/CMake_Fortran_utils/archive/refs/tags/'],
+        'filename': 'CMake_Fortran_utils_150308.tar.gz',
+}]
+
+
+toolchainopts = {'cstd': 'c++11'}
+
+checksums = [
+    '11c8b5d482a0842ff88a419e21bd62d90bf636e0184f77dc77ff8c4e2194756d',  # pio1_9_23.tar.gz
+    'b39a560de70fe1043930c3f2e873b207b7e3950ed8f8a927753be0f795f59f35',  # genf90_200608.tar.gz
+    '4f22073e0142494c421a21a059a861f55965ed6e730fd186ef25302a75e6cfb8'  # CMake_Fortran_utils_150308.tar.gz
+]
+
+dependencies = [
+    ('PnetCDF', '1.8.1'),
+    ('netCDF-Fortran', '4.4.1', '-mpi'),
+    ('HDF5', '1.10.6', '-mpi')
+]
+
+buildininstalldir='TRUE'
+preconfigopts = ' mkdir -p %(builddir)s/ParallelIO-pio1_9_23/pio/bin %(builddir)s/ParallelIO-pio1_9_23/pio/cmake && '
+preconfigopts += ' cp %(builddir)s/genf90_200608/*               %(builddir)s/ParallelIO-pio1_9_23/pio/bin && '
+preconfigopts += ' cp %(builddir)s/CMake_Fortran_utils_150308/*  %(builddir)s/ParallelIO-pio1_9_23/pio/cmake && '
+srcdir = '%(builddir)s/ParallelIO-pio*/pio'
+configopts = ' -DNETCDF_C_DIR=$EBROOTNETCDF -DNETCDF_Fortran_DIR=$EBROOTNETCDF -DPNETCDF_DIR=$EBROOTPNETCDF -DCMAKE_VERBOSE_MAKEFILE=1 $PIOSRC'
+
+sanity_check_paths = {
+    'files': ['lib/libpiof.a', 'include/pio.mod'],
+    'dirs': [],
+}
+
+moduleclass = 'data'

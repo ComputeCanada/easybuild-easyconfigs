@@ -1,0 +1,33 @@
+easyblock = 'MakeCp'
+
+name = 'MPAS'
+version = '7.0'
+
+homepage = ''
+description = """The Model for Prediction Across Scales (MPAS) is for developing atmosphere, ocean, and other earth-system simulation components for use in climate, regional climate, and weather studies."""
+
+toolchain = {'name': 'gompi', 'version': '2020a'}
+
+source_urls = ['https://github.com/MPAS-Dev/MPAS-Model/archive/refs/tags/']
+sources = ['v%(version)s.tar.gz']
+checksums = ['f898ce257e66cff9e29320458870570e55721d16cb000de7f2cc27de7fdef14f']
+
+dependencies = [
+    ('PnetCDF', '1.8.1'),
+    ('netCDF-Fortran', '4.5.2', '-mpi'),
+    ('HDF5', '1.10.6', '-mpi'),
+    ('ParallelIO', '1.9.23')
+]
+
+configure_cmd=''
+install_cmd=''
+prebuildopts = "PIO=$EBROOPARALLELIO PNETCDF=$EBROOTPNETCDF NETCDF=$EBROOTNETCDF "
+buildopts='ifort CORE="atmosphere" USE_PIO2=true'
+files_to_copy=''
+
+sanity_check_paths = {
+    'files': ['lib/libpiof.a', 'include/pio.mod'],
+    'dirs': [],
+}
+
+moduleclass = 'geo'
