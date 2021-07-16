@@ -1,26 +1,21 @@
+#/home/mclarade/easybuild-easyconfigs/easybuild/easyconfigs/p/ParallelIO/ParallelIO-1.9.23-gompi-2020a.eb
 easyblock = 'CMakeMake'
 
 name = 'ParallelIO'
 version = '1.9.23'
 
 homepage = 'https://github.com/NCAR/ParallelIO'
-description = """A high-level Parallel I/O Library for structured grid applications"""
+description = """A high-level Parallel I/O Library for structured grid applions"""
 
 toolchain = {'name': 'gompi', 'version': '2020a'}
 
-sources = [{
-        'source_urls': ['https://github.com/NCAR/ParallelIO/archive/'],
-        'filename': 'pio1_9_23.tar.gz',
-    },{
-        'source_urls': ['https://github.com/PARALLELIO/genf90/archive/refs/tags/'],
-        'filename': 'genf90_200608.tar.gz',
-    },{
-        'source_urls': ['https://github.com/CESM-Development/CMake_Fortran_utils/archive/refs/tags/'],
-        'filename': 'CMake_Fortran_utils_150308.tar.gz',
-}]
+source_urls = ['https://github.com/NCAR/ParallelIO/archive/', 
+	'https://github.com/CESM-Development/CMake_Fortran_utils/archive/refs/tags/', 
+	'https://github.com/PARALLELIO/genf90/archive/refs/tags/']
 
-
-toolchainopts = {'cstd': 'c++11'}
+sources = ['pio1_9_23.tar.gz', 
+	'genf90_200608.tar.gz', 
+	'CMake_Fortran_utils_150308.tar.gz']
 
 checksums = [
     '11c8b5d482a0842ff88a419e21bd62d90bf636e0184f77dc77ff8c4e2194756d',  # pio1_9_23.tar.gz
@@ -34,11 +29,9 @@ dependencies = [
     ('HDF5', '1.10.6', '-mpi')
 ]
 
-buildininstalldir='TRUE'
-preconfigopts = ' mkdir -p %(builddir)s/ParallelIO-pio1_9_23/pio/bin %(builddir)s/ParallelIO-pio1_9_23/pio/cmake && '
-preconfigopts += ' cp %(builddir)s/genf90_200608/*               %(builddir)s/ParallelIO-pio1_9_23/pio/bin && '
-preconfigopts += ' cp %(builddir)s/CMake_Fortran_utils_150308/*  %(builddir)s/ParallelIO-pio1_9_23/pio/cmake && '
-srcdir = '%(builddir)s/ParallelIO-pio*/pio'
+preconfigopts = [' mkdir -p %(builddir)s/ParallelIO-pio1_9_23/pio/cmake %(builddir)s/ParallelIO-pio1_9_23/pio/bin && cp -r %(builddir)s/CMake_Fortran_utils-CMake_Fortran_utils_150308/* %(builddir)s/ParallelIO-pio1_9_23/pio/cmake && cp -r %(builddir)s/genf90-genf90_200608/* %(builddir)s/ParallelIO-pio1_9_23/pio/bin && ']
+
+srcdir = '%(builddir)s/ParallelIO-pio1_9_23//pio'
 configopts = ' -DNETCDF_C_DIR=$EBROOTNETCDF -DNETCDF_Fortran_DIR=$EBROOTNETCDF -DPNETCDF_DIR=$EBROOTPNETCDF -DCMAKE_VERBOSE_MAKEFILE=1 $PIOSRC'
 
 sanity_check_paths = {
