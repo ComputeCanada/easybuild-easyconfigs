@@ -13,11 +13,12 @@ toolchain = {'name': 'GCCcore', 'version': '9.3.0'}
 
 source_urls = ['https://github.com/codeandkey/mii/archive']
 sources = ['v%(version)s.tar.gz']
-patches = ['mii-1.1.0_global-index.patch', 'mii-1.1.0_hierarchic-modulepath.patch']
+patches = ['mii-1.1.0_global-index.patch', 'mii-1.1.0_hierarchic-modulepath.patch', 'mii-1.1.0_transposition.patch']
 checksums = [
     'cfca1318eac3db5f1452aaa82cb1a95de6175922075ba3fab1111b8594e6072c',  # v1.1.0.tar.gz
     '72db9fa725e542d56544f027e9462d10435ee8d7a2aad36880e78d3ee9ae23d3',  # mii-1.1.0_global-index.patch
-    '2814dba2b4600226c591e9f3f6e2e3c783b399c9ff2f95c59feb27371b3465e4',  # mii-1.1.0_hierarchic-modulepath.patch
+    'a59532b1778feeea0f3b92caf8a6fe700ecd05f306953de56a6f759928203a0c',  # mii-1.1.0_hierarchic-modulepath.patch
+    'f93e68a614c59d55fbf620279a1f31c8d9bd9dba8aa2f7e9982c983a5abce1bf',  # mii-1.1.0_transposition.patch
 ]
 
 # only make install is needed

@@ -1,0 +1,36 @@
+From 01cfd765403ad7ae0f816fde66d5d68e196e1a50 Mon Sep 17 00:00:00 2001
+From: JLague <justin.lague@calculquebec.ca>
+Date: Mon, 9 Aug 2021 16:07:23 -0400
+Subject: [PATCH] check for transposition in levenshtein distance
+
+use the optimal string alignment distance to check
+for transposition of two adjacent characters
+---
+ src/util.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/src/util.c b/src/util.c
+index fa880ff..bd6cf14 100644
+--- a/src/util.c
++++ b/src/util.c
+@@ -34,7 +34,7 @@ char* mii_join_path(const char* a, const char* b) {
+ 
+ int mii_levenshtein_distance(const char* a, const char* b) {
+     /*
+-     * quickly compute the levenshtein distance between
++     * quickly compute the damerau-levenshtein distance between
+      * string <a> and <b> using a full matrix
+      */
+ 
+@@ -57,6 +57,11 @@ int mii_levenshtein_distance(const char* a, const char* b) {
+             int substitution = mat[(i - 1) * (b_len + 1) + j - 1] + (tolower(a[i - 1]) != tolower(b[j - 1]));
+ 
+             mat[i * (b_len + 1) + j] = mii_min(deletion, mii_min(insertion, substitution));
++
++            /* transposition with optimal string alignment distance */
++            if (i > 1 && j > 1 && tolower(a[i - 1]) == tolower(b[j - 2]) && tolower(a[i - 2]) == tolower(b[j - 1])) {
++                mat[i * (b_len + 1) + j] = mii_min(mat[i * (b_len + 1) + j], mat[(i - 2) * (b_len + 1) + j - 2] + 1);
++            }
+         }
+     }
+ 
