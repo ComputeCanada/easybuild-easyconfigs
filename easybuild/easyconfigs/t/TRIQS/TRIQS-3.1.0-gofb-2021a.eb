@@ -13,7 +13,7 @@ description = """
 docurls = ['https://triqs.github.io/triqs/%(version_major_minor)s.x/']
 software_license = 'LicenseGPLv3'
 
-toolchain = {'name': 'gompi', 'version': '2021a'}
+toolchain = {'name': 'gofb', 'version': '2021a'}
 toolchainopts = {'pic': True, 'usempi': True}
 
 source_urls = ['https://github.com/TRIQS/triqs/releases/download/%(version)s/']
@@ -24,7 +24,6 @@ dependencies = [
     ('Boost', '1.76.0'),
     ('Clang', '13.0.1'),
     ('FFTW', '3.3.9'),
-    ('FlexiBLAS', '3.0.4'),
     ('HDF5', '1.12.1'),
 ]
 
@@ -34,17 +33,9 @@ builddependencies = [
     ('SciPy-Stack', '2021a'),
 ]
 
-multi_deps = {'Python': ['3.8', '3.9', '3.10.2']}
+multi_deps = {'Python': ['3.8', '3.9', '3.10']}
 
-# Remove installation directory before building. This fixes problems with
-# failing builds in the presence of preexisting installation.
-preconfigopts = [
-    'module load python/%(pyshortver)s scipy-stack && ' + \
-    'pip install mako==1.1.4 --no-index && ' + \
-    'rm -rf %(installdir)s && '
-]
-
-configopts = '-DBLA_VENDOR=FlexiBLAS'
+preconfigopts = 'pip install --prefix=%(builddir)s mako==1.1.4 && '
 
 separate_build_dir = True
 
@@ -62,11 +53,8 @@ sanity_check_commands = [
     "python -c 'import triqs'"
 ]
 
-modextrapaths = {
-    'CPLUS_INCLUDE_PATH': 'include',
-    'PYTHONPATH': 'lib/python%(pyshortver)s/site-packages',
-    'CMAKE_PREFIX_PATH': ['lib/cmake/triqs', 'lib/cmake/cpp2py']
-}
+modextrapaths = {'PYTHONPATH': ['lib/python%(pyshortver)s/site-packages']}
+
 modextravars = {
     'TRIQS_ROOT': '%(installdir)s',
     'TRIQS_VERSION': '%(version)s'
