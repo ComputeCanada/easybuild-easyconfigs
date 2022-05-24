@@ -53,11 +53,6 @@ sanity_check_commands = [
     "python -c 'import triqs'"
 ]
 
-modextrapaths = {'PYTHONPATH': ['lib/python%(pyshortver)s/site-packages']}
-
-modextravars = {
-    'TRIQS_ROOT': '%(installdir)s',
-    'TRIQS_VERSION': '%(version)s'
-}
+modextrapaths = {'EBPYTHONPREFIXES': ['lib/python%(pyshortver)s/site-packages']}
 
 moduleclass = 'phys'
