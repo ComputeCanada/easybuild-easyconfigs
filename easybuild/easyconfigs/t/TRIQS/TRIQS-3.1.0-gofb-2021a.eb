@@ -25,21 +25,82 @@ dependencies = [
     ('Clang', '13.0.1'),
     ('FFTW', '3.3.9'),
     ('HDF5', '1.12.1'),
-]
-
-builddependencies = [
-    ('CMake', '3.22.1'),
     ('mpi4py', '3.1.3'),
     ('SciPy-Stack', '2022a'),
 ]
 
-multi_deps = {'Python': ['3.8', '3.9', '3.10']}
+builddependencies = [
+    ('CMake', '3.22.1'),
+    ('pytest', '7.0.1'),
+]
 
-preconfigopts = 'pip install --prefix=%(builddir)s mako==1.1.4 && '
+multi_deps = {'Python': ['3.9']}
+
+preconfigopts = 'PYTHONPATH=$PYTHONPATH:%(builddir)s/lib/python%(pyshortver)s/site-packages; '
+preconfigopts += 'pip install mako==1.1.4 --prefix=%(builddir)s/ && '
+
+#I had to reinstall mako after installing TRIQS, even with separate_build_dir = False
+installopts = [
+    " && pip install --prefix=%(installdir)s mako==1.1.4 --no-index" +
+    " && /cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/lib --any_interpreter --add_path %(installdir)s/lib"
+]
 
 separate_build_dir = True
 
 runtest = 'test'
+
+exts_defaultclass = "CMakePythonPackage"
+exts_list = [
+    ('triqs_maxent', '1.1.0', {
+        'source_urls' : ['https://github.com/TRIQS/maxent/releases/download/%(version)s/'],
+        'sources' : ['maxent-%(version)s.tar.gz'],
+        'checksums' : ['87523adabdfe0c6d0a1fd84bdc1b4bceed64361adde922809d85e19c155e4c68'],
+        'preconfigopts' : 'source $EBROOTTRIQS/share/triqs/triqsvars.sh && ',
+        'configopts': ' '.join([
+            '-DBuild_Documentation=OFF',
+            '-DMeasureG2=ON',
+            '-DHybridisation_is_complex=ON',
+            '-DLocal_hamiltonian_is_complex=ON',
+        ]),
+        'runtest': 'test',
+    }),
+    ('triqs_cthyb', '3.1.0', {
+        'source_urls' : ['https://github.com/TRIQS/cthyb/releases/download/%(version)s/'],
+        'sources' : ['cthyb-%(version)s.tar.gz'],
+        'checksums' : ['8d6d2c4d5b3928d062b72fad4ea9df9aae198e39dd9c1fd3cc5dc34a5019acc0'],
+        'preconfigopts' : 'source $EBROOTTRIQS/share/triqs/triqsvars.sh && ',
+        'runtest': 'test',
+    }),
+    ('triqs_hubbardI', '3.1.0', {
+        'source_urls' : ['https://github.com/TRIQS/hubbardI/releases/download/%(version)s/'],
+        'sources' : ['hubbardI-%(version)s.tar.gz'],
+        'checksums' : ['a5748c90bfe4138f37c516fad5fb4cdc02bca3283a2328558d9c3224e0d372c7'],
+        'preconfigopts' : 'source $EBROOTTRIQS/share/triqs/triqsvars.sh && ',
+        'runtest' : 'test',
+        'modulename' : 'triqs_hubbardI',
+    }),
+    ('triqs_tprf', '3.1.0', {
+        'source_urls' : ['https://github.com/TRIQS/tprf/releases/download/%(version)s/'],
+        'sources' : ['tprf-%(version)s.tar.gz'],
+        'checksums' : ['75f6e79d891342951652353ea4d9914074d9947c67cad60844ebaa3f82bd17b5'],
+        'preconfigopts' : 'source $EBROOTTRIQS/share/triqs/triqsvars.sh && ',
+        'runtest': 'test',
+    }),
+    ('triqs_dft_tools', '3.1.0', { #https://triqs.github.io/dft_tools/
+        'source_urls' : ['https://github.com/TRIQS/dft_tools/releases/download/%(version)s/'],
+        'sources' : ['dft_tools-%(version)s.tar.gz'],
+        'checksums' : ['57b7d0fe5a96c5a42bb684c60ca8e136a33e1385bf6cd7e9d1371fa507dc2ec4'],
+        'preconfigopts' : 'source $EBROOTTRIQS/share/triqs/triqsvars.sh && ',
+        'runtest': 'test',
+    }),
+    ('solid_dmft', '3.1.0', { #https://flatironinstitute.github.io/solid_dmft/      
+        'source_urls' : ['https://github.com/flatironinstitute/solid_dmft/archive/refs/tags/'],
+        'sources' : ['%(version)s.tar.gz'],
+        'checksums' : ['ac2f73cd350349d76c1344e7eb16b7cc7372b5ab284e8cc8a5d31de531a844c1'],
+        'preconfigopts' : 'source $EBROOTTRIQS/share/triqs/triqsvars.sh && ',
+        'runtest': 'test',
+    }),
+]
 
 sanity_check_paths = {
     'files': ['lib/libtriqs.%s' % SHLIB_EXT],
@@ -53,6 +114,8 @@ sanity_check_commands = [
     "python -c 'import triqs'"
 ]
 
-modextrapaths = {'EBPYTHONPREFIXES': ['']}
+modextrapaths = {
+    'EBPYTHONPREFIXES': [''],
+}
 
 moduleclass = 'phys'
