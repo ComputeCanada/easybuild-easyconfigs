@@ -34,18 +34,21 @@ builddependencies = [
     ('pytest', '7.0.1'),
 ]
 
-multi_deps = {'Python': ['3.8','3.9']}
+multi_deps = {'Python': ['3.8','3.9']} #note: triqs_maxent not compatible with Python 3.10
 
+#install Python package Mako needed for configure step
 preconfigopts = ' && '.join([
     'PYTHONPATH=$PYTHONPATH:%(builddir)s/lib/python%(pyshortver)s/site-packages',
     'pip install mako==1.1.4 --prefix=%(builddir)s/ && '
 ])
 
-#I had to reinstall mako after installing TRIQS
-#even when I installed it in the installdir or with
-#separate_build_dir = False
 installopts = ' && '.join([
+#reinstall mako needed for TRIQS extension 
+#don't use keeppreviousinstall=True as we need manually to delete the installdir during rebuild
     " && pip install --prefix=%(installdir)s mako==1.1.4 --no-index",
+#TRIQS set LD_LIBRARY_PATH for its Python extension to find its lib
+#However, we don't not use LD_LIBRARY_PATH and to avoid sourcing triqsvar.sh
+#each time, we add installdir/lib to the RPATH
     "/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/lib --any_interpreter --add_path %(installdir)s/lib"
 ])
 
