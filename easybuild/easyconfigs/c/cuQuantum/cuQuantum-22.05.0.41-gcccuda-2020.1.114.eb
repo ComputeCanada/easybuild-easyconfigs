@@ -26,7 +26,6 @@ checksums = [
 dependencies = [
     ('cuTENSOR', '1.5.0.3'),
     ('SciPy-Stack', '2022a'),
-    ('CUDA', '11.4.2'),
 ]
 
 builddependencies = {
@@ -36,15 +35,14 @@ builddependencies = {
 
 multi_deps = {'Python' : ['3.8']}
 
-installopts = " && /cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path $EBROOTCUDA/lib --any_interpreter --add_path $EBROOTCUDA/lib"
-
+#installopts = " && /cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path $EBROOTCUDA/lib --any_interpreter --add_path $EBROOTCUDA/lib"
 
 local_extoptions = ' && '.join([
     'export CUQUANTUM_ROOT=$EBROOTCUQUANTUM',
     'export CUTENSOR_ROOT=$EBROOTCUTENSOR',
     'export CUQUANTUM_IGNORE_SOLVER=ON',
     'cd python',
-    '', #for tailing character
+    '', #for trailing character
 ])
 
 exts_defaultclass = "PythonPackage"

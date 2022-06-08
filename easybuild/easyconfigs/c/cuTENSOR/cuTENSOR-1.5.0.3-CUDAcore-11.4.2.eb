@@ -16,7 +16,7 @@ toolchainopts = {'optarch': 'False'}
 # By downloading, you accept the cuTENSOR Software License Agreement
 # (https://docs.nvidia.com/cuda/cutensor/license.html)
 # accept_eula = True
-source_urls = ['https://developer.download.nvidia.com/compute/cutensor/redist/libcutensor/linux-x86_64/libcutensor-linux-x86_64-%(version)s-archive.tar.xz']
+source_urls = ['https://developer.download.nvidia.com/compute/cutensor/redist/libcutensor/linux-x86_64/']
 sources = ['libcutensor-linux-x86_64-%(version)s-archive.tar.xz']
 checksums = [
     '4fdebe94f0ba3933a422cff3dd05a0ef7a18552ca274dd12564056993f55471d' #sources
