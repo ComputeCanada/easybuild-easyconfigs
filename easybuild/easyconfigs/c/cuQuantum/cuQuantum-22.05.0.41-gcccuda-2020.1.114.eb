@@ -70,7 +70,7 @@ sanity_check_paths = {
 
 sanity_check_commands = [
     'python -c "from cuquantum import custatevec"',
-    'echo $PYTHONPATH && python -c "from cuquantum import cutensornet"',
+    ',python -c "from cuquantum import cutensornet"',
     'python -c "from cuquantum import contract"',
     'python -c "from cuquantum import Network"',
 ]
