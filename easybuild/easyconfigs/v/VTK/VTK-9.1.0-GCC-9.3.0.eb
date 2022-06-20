@@ -55,6 +55,7 @@ configopts = ' '.join([
 preinstallopts = "export PYTHONPATH=%(installdir)s/lib/python%(pyshortver)s/site-packages:$PYTHONPATH && "
 
 local_egg_info_src = '%(builddir)s/VTK-%(version)s/vtk-version.egg-info'
+
 postinstallcmds = [
     '/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/lib --add_path %(installdir)s/lib --any_interpreter',
 ] + [
