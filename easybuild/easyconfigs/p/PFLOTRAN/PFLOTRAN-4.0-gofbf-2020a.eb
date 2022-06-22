@@ -26,21 +26,14 @@ checksums = ['5f1d9882505e145d6b57a03496167e5b38e013f6408a4a97359b834e2d7ac377']
 
 dependencies = [
     ('PETSc', '3.17.1'),
+    ('HDF5', '1.12.1', '-mpi'), #explicitely required for linking PFLOTRAN with HDF5 libs
 ]
 
 skipsteps = ['configure']
 
 start_dir = 'src/pflotran'
 
-buildopts = 'pflotran LIBS="-L${EBROOTHDF5}/lib -lhdf5hl_fortran -lhdf5_hl -lhdf5_fortran -lhdf5 -lz -lgfortran"'
-
-#runtest = False #one separately
-
-#install_cmd = ' && '.join([
-#    'mkdir -p %(installdir)s/bin',
-#    'cd %(builddir)s/%(namelower)s-%(version)s',
-#    'src/pflotran/pflotran %(installdir)s/bin'
-#])
+buildopts = 'pflotran LIBS="-lhdf5_fortran"'
 
 files_to_copy = [(['pflotran'], 'bin')]
 
@@ -48,5 +41,9 @@ sanity_check_paths = {
     'files': ['bin/pflotran'],
     'dirs': [],
 }
+
+sanity_check_commands = [
+    'pflotran -pflotranin $(find %(builddir)s -name vsat_flow.in | grep shortcourse)',
+]
 
 moduleclass = 'geo'
