@@ -6,13 +6,15 @@ description = """The MATLAB Runtime is a standalone set of shared libraries
  that enables the execution of compiled MATLAB applications
  or components on computers that do not have MATLAB installed."""
 
-toolchain = {'name': 'dummy', 'version': ''}
+toolchain = SYSTEM
 
 source_urls = [
     'http://www.mathworks.com/supportfiles/MCR_Runtime/%(version)s/',
 ]
 sources = ['%(name)s_%(version)s_glnxa64_installer.zip']
 
-dependencies = [('Java', '1.8.0_31')]
+dependencies = [('Java', '1.8.0_121')]
+
+postinstallcmds = ["chmod -R u+rwX %(installdir)s"]
 
 moduleclass = 'math'

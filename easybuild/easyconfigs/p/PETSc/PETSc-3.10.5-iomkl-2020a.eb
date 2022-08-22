@@ -1,0 +1,73 @@
+name = 'PETSc'
+version = '3.10.5'
+
+homepage = 'http://www.mcs.anl.gov/petsc'
+description = """PETSc, pronounced PET-see (the S is silent), is a suite of data structures and routines for the
+ scalable (parallel) solution of scientific applications modeled by partial differential equations."""
+
+toolchain = {'name': 'iomkl', 'version': '2020a'}
+toolchainopts = {'usempi': True, 'pic': True}
+
+source_urls = ['http://ftp.mcs.anl.gov/pub/petsc/release-snapshots']
+sources = [SOURCELOWER_TAR_GZ]
+patches = ['petsc-3.10.5.patch']
+checksums = [
+    '3a81c8406410e0ffa8a3e9f8efcdf2e683cc40613c9bb5cb378a6498f595803e',  # petsc-3.10.5.tar.gz
+    'eb4e6ddddf2c11b43692aa717a64c3247f815d019619f6aefa4ee3b0b1101ab5',  # petsc-3.10.5.patch
+]
+
+builddependencies = [
+    ('CMake', '3.16.3'),
+]
+
+dependencies = [
+    ('HDF5', '1.10.6', '-mpi'),
+    ('FFTW', '3.3.8', '-mpi'),
+    ('Python', '3.7.9'),
+    ('SciPy-Stack', '2020a')
+]
+
+configopts = " ".join([
+    '--with-mkl_pardiso=1',
+    '--with-mkl_pardiso-dir=$MKLROOT',
+    '--with-mkl_cpardiso=1',
+    '--with-mkl_cpardiso-dir=$MKLROOT',
+    '--with-cxx-dialect=C++11',
+    "--with-hdf5=1",
+    "--with-hdf5-dir=$EBROOTHDF5",
+#    "--download-hypre=https://github.com/hypre-space/hypre/archive/refs/tags/v2.14.0.tar.gz ",
+    "--with-mpi4py=0",
+#    "--with-mpi4p-dir=$EBROOTMPI4PY",
+    '--with-mkl_sparse-optimize=1',
+    '--with-memalign=64',
+])
+
+download_deps = ['triangle']
+
+postinstallcmds = [
+    'ln -sf %(installdir)s/lib/%(namelower)s/bin %(installdir)s/bin'
+]
+
+keepsymlinks = True
+
+shared_libs = 1
+
+download_deps_static = [
+    'mumps',
+    'ptscotch',
+    'superlu',
+    'superlu_dist',
+    'parmetis',
+    'metis',
+    'ml',
+    'SuiteSparse',
+#    'hypre',
+    'prometheus',
+    'spooles',
+    'chaco',
+]
+
+moduleclass = 'numlib'
+modluafooter = """
+family("%(namelower)s")
+"""
