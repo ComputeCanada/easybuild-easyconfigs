@@ -16,28 +16,4 @@ source_urls = ['https://developer.download.nvidia.com/compute/cuda/%(version)s/l
 sources = ['cuda_%%(version)s_%s_linux%%(cudaarch)s.run' % local_nv_version]
 checksums = ['087fdfcbba1f79543b1f78e43a8dfdac5f6db242d042dde820e16dc185892f26']
 
-multi_deps = {'Python': ['3.8', '3.9', '3.10'] }
-multi_deps_extensions_only = True
-
-exts_defaultclass = 'PythonPackage'
-exts_list = [
-    ('cuda-python', '11.7.1', {
-        'modulename': 'cuda',
-        'source_urls': ['https://github.com/NVIDIA/cuda-python/archive/refs/tags'],
-        'sources': [{'filename': 'cuda-python-%(version)s.tar.gz', 'download_filename': 'v%(version)s.tar.gz'}],
-        'checksums': ['6a138fd2c831b668b80bc82251e3050c410d17f1ae3b36d0e00106a168ec36f0'],
-        'preinstallopts': 'pip install --no-index cython --prefix=%(installdir)s && ',
-        'installopts': ' ', # Make sure to override installopts inherited from EB_CUDA
-        'use_pip': True,
-    }),
-]
-exts_filter = ("python -c 'import %(ext_name)s'", '')
-
-sanity_check_commands = [
-    "python -c 'import cuda,cython'",
-    "python -c 'from cuda import cuda, cudart, nvrtc'",
-]
-
-modextrapaths = {'EBPYTHONPREFIXES':''}
-
 moduleclass = 'system'
