@@ -26,7 +26,7 @@ modextrapaths = {
 }
 
 configopts = '-DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=ON -DPYTHON_EXECUTABLE=$EBROOTPYTHON/bin/python '
-postinstallcmds = ['/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/lib/ --add_path %(installdir)s/lib64']
+postinstallcmds = ['/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/lib64 --add_path %(installdir)s/lib64']
 
 sanity_check_paths = {
     'files': ['lib/libnlopt.%s' % SHLIB_EXT, 'include/nlopt.h'],
