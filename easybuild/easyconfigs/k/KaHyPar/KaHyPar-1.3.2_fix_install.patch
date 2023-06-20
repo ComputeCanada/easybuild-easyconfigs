@@ -12,6 +12,14 @@ diff -ru kahypar-1.3.2.old/CMakeLists.txt kahypar-1.3.2/CMakeLists.txt
  
  if(NOT CMAKE_BUILD_TYPE OR 
    ((NOT CMAKE_BUILD_TYPE STREQUAL "Debug") AND 
+@@ -33,6 +31,7 @@
+ 
+ # add third-party algorithms to project
+ include_directories(external_tools)
++include_directories(..) #for WHFC
+ 
+ option(KAHYPAR_PYTHON_INTERFACE
+   "Enable building the python interface" OFF)
 diff -ru kahypar-1.3.2.old/python/CMakeLists.txt kahypar-1.3.2/python/CMakeLists.txt
 --- kahypar-1.3.2.old/python/CMakeLists.txt	2023-06-02 12:58:59.786465212 +0000
 +++ kahypar-1.3.2/python/CMakeLists.txt	2023-06-02 13:16:33.120468249 +0000

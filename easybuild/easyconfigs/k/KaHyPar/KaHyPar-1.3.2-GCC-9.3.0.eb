@@ -8,35 +8,40 @@ description = "KaHyPar is a multilevel hypergraph partitioning framework providi
 
 toolchain = {'version': '9.3.0', 'name': 'GCC'}
 
-source_urls = ['https://github.com/kahypar/%(namelower)s/archive/']
-sources = ['%(version)s.tar.gz']
-patches = ['KaHyPar-1.3.2_fix_install.patch']
+sources = [
+    {   #KaHyPar sources
+        'source_urls': ['https://github.com/kahypar/%(namelower)s/archive/'],
+	'filename': '%(version)s.tar.gz',
+    },
+    {   #WHFC sources
+        'source_urls': ['https://github.com/larsgottesbueren/WHFC/archive/'],
+	'filename': 'parallel_plain_flow_experiments.tar.gz',
+	'extract_cmd': "tar -xf %s &&  mv WHFC-parallel_plain_flow_experiments WHFC",
+    },
+]
+patches = [
+    'KaHyPar-1.3.2_fix_install.patch',
+    'KaHyPar-1.3.2_fix_tests.patch',
+]
 checksums = [
-    'd1a0681ff56d6b50ad5e00e10c26eb40f990ba401c1e28c6028d58d96783de75', #source
-    'b5ea98ee6aca1283a45d4b2b6337e9861998b08e01756e7ff48d16e1f02f6216', #patch
+    'd1a0681ff56d6b50ad5e00e10c26eb40f990ba401c1e28c6028d58d96783de75', #KaHyPar sources
+    '883c2b54124504f7e360c3c2751d83a0a43917eb51eddf47c3321b76eea16b9a', #WHFC sources
+    '599592bd0dc34c5c58f3fee9563169807a4423368a825cd72638c6e549a6bcbb', #fix_install patch,
+    '1daed98fb010afd06d7754de78fc620e12eefab955e447ba4739f60157f51445', #fix_tests patch
 ]
 
 dependencies = [
     ('Boost', '1.72.0'),
-    ('googletest', '1.13.0'),
 ]
 
 builddependencies = [
     ('CMake', '3.23.1'),
     ('python-build-bundle', '2023a'),
+    ('googletest', '1.13.0'),
 ]
 
 multi_deps = {'Python': ['3.8','3.9','3.10','3.11']}
 
-#download the header only library WHFC
-#there is hardcodded path in some test, fix that
-preconfigopts = " && ".join([
-    "git clone --branch parallel_plain_flow_experiments https://github.com/larsgottesbueren/WHFC.git %(start_dir)s/external_tools/WHFC",
-    "sed -i 's/\.\.\/tests/\.\.\/kahypar-1.3.2\/tests/' $(grep -rlF '../tests' %(start_dir)s/tests)",
-    "sed -i 's/\.\.\/config/\.\.\/kahypar-1.3.2\/config/' $(grep -rlF '../config' %(start_dir)s/tests)",
-    "sed -i 's/\.\.\/special_instances/\.\.\/kahypar-1.3.2\/special_instances/' $(grep -rlF '../special_instances' %(start_dir)s/tests)",
-    "",
-])
 configopts = "-DCMAKE_BUILD_TYPE=Release -DKAHYPAR_PYTHON_INTERFACE=1"
 
 # make install does not copy the python librairies
@@ -44,6 +49,7 @@ configopts = "-DCMAKE_BUILD_TYPE=Release -DKAHYPAR_PYTHON_INTERFACE=1"
 # of multideps iterations which erase previous libs
 install_cmd = " && ".join([
     "make install",
+    "echo %(builddir)s",
     "mkdir -p %(installdir)s/lib/python%(pyshortver)s/site-packages",
     "cp %(builddir)s/easybuild_obj/python/kahypar.cpython-*-x86_64-linux-gnu.so %(installdir)s/lib/python%(pyshortver)s/site-packages",
 ])
