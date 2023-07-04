@@ -30,11 +30,8 @@ checksums = [
     '1daed98fb010afd06d7754de78fc620e12eefab955e447ba4739f60157f51445', #fix_tests patch
 ]
 
-dependencies = [
-    ('Boost', '1.72.0'),
-]
-
 builddependencies = [
+    ('Boost', '1.72.0'),
     ('CMake', '3.23.1'),
     ('python-build-bundle', '2023a'),
     ('googletest', '1.13.0'),
@@ -49,7 +46,6 @@ configopts = "-DCMAKE_BUILD_TYPE=Release -DKAHYPAR_PYTHON_INTERFACE=1"
 # of multideps iterations which erase previous libs
 install_cmd = " && ".join([
     "make install",
-    "echo %(builddir)s",
     "mkdir -p %(installdir)s/lib/python%(pyshortver)s/site-packages",
     "cp %(builddir)s/easybuild_obj/python/kahypar.cpython-*-x86_64-linux-gnu.so %(installdir)s/lib/python%(pyshortver)s/site-packages",
 ])
