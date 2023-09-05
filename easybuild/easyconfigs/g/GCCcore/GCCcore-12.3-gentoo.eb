@@ -2,6 +2,7 @@ easyblock = 'SystemCompiler'
 
 name = 'GCCcore'
 version = '12.3'
+versionsuffix = '-gentoo'
 
 homepage = 'https://gcc.gnu.org/'
 description = """The GNU Compiler Collection includes front ends for C, C++, Objective-C, Fortran, Java, and Ada,
