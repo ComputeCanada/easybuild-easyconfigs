@@ -1,0 +1,22 @@
+{
+  "distlib-0.3.7.tar.gz": "9dafe54b34a028eafd95039d5e5d4851a13734540f1331060d31c9916e7147a8",
+  "editables-0.5.tar.gz": "309627d9b5c4adc0e668d8c6fa7bac1ba7c8c5d415c2d27f60f081f8e80d1de2",
+  "filelock-3.12.2.tar.gz": "002740518d8aa59a26b0c76e10fb8c6e15eae825d34b6fdf670333fd7b938d81",
+  "flit_core-3.9.0.tar.gz": "72ad266176c4a3fcfab5f2930d76896059851240570ce9a98733b658cb786eba",
+  "hatch_vcs-0.3.0.tar.gz": "cec5107cfce482c67f8bc96f18bbc320c9aa0d068180e14ad317bbee5a153fee",
+  "hatchling-1.18.0.tar.gz": "50e99c3110ce0afc3f7bdbadff1c71c17758e476731c27607940cfa6686489ca",
+  "packaging-23.1.tar.gz": "a392980d2b6cffa644431898be54b0045151319d1e7ec34f0cfed48767dd334f",
+  "pathspec-0.11.2.tar.gz": "e0d8d0ac2f12da61956eb2306b69f9469b42f4deb0f3cb6ed47b9cce9996ced3",
+  "pip-23.2.1.tar.gz": "fb0bd5435b3200c602b5bf61d2d43c2f13c02e29c1707567ae7fbc514eb9faf2",
+  "platformdirs-3.10.0.tar.gz": "b45696dab2d7cc691a3226759c0d3b00c47c8b6e293d96f6436f733303f77f6d",
+  "pluggy-1.3.0.tar.gz": "cf61ae8f126ac6f7c451172cf30e3e43d3ca77615509771b3a984a0730651e12",
+  "pyparsing-3.1.1.tar.gz": "ede28a1a32462f5a9705e07aea48001a08f7cf81a021585011deba701581a0db",
+  "setuptools-68.1.2.tar.gz": "3d4dfa6d95f1b101d695a6160a7626e15583af71a5f52176efa5d39a054d475d",
+  "setuptools_scm-7.1.0.tar.gz": "6c508345a771aad7d56ebff0e70628bf2b0ec7573762be9960214730de278f27",
+  "six-1.16.0.tar.gz": "1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926",
+  "tomli-2.0.1.tar.gz": "de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f",
+  "trove_classifiers-2023.8.7-py3-none-any.whl": "a676626a31286130d56de2ea1232484df97c567eb429d56cfcb0637e681ecf09",
+  "typing_extensions-4.7.1.tar.gz": "b75ddc264f0ba5615db7ba217daeb99701ad295353c45f9e95963337ceeeffb2",
+  "virtualenv-20.24.3.tar.gz": "e5c3b4ce817b0b328af041506a2a299418c98747c4b1e68cb7527e74ced23efc",
+  "wheel-0.41.2.tar.gz": "0c5ac5ff2afb79ac23ab82bab027a0be7b5dbcf2e54dc50efe4bf507de1f7985"
+}
