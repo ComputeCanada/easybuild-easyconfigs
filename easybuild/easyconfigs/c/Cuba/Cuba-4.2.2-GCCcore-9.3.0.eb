@@ -19,6 +19,7 @@ checksums = [
     '8d9f532fd2b9561da2272c156ef7be5f3960953e4519c638759f1b52fe03ed52', #source
 ]
 
+preconfigopts = 'export CFLAGS="$CFLAGS -fPIC" && '
 build_cmd = 'make lib'
 
 runtest = 'check'
