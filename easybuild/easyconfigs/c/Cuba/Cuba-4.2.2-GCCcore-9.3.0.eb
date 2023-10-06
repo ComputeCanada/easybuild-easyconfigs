@@ -23,7 +23,10 @@ preconfigopts = 'export CFLAGS="$CFLAGS -fPIC" && '
 
 parallel = 1
 build_cmd = 'make lib'
-buildopts = ' && '.join([ #build a shared library
+
+#Also build a shared lib, commands from
+#https://github.com/JohannesBuchner/cuba/blob/master/makesharedlib.sh
+buildopts = ' && '.join([
     '',
     'FILES=$(ar xv libcuba.a |sed "s/x - //g")',
     '$CC -shared -Wall $FILES -lm -o libcuba.so',
