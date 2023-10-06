@@ -1,0 +1,11 @@
+--- a/util/Makefile	2023-03-16 01:47:22.000000000 +0000
++++ b/util/Makefile	2023-10-06 20:45:55.326134733 +0000
+@@ -27,7 +27,7 @@
+ 	$(CC) $(CFLAGS) -std=c99 $(INCLUDES) -o $@ $^ -lz
+ 
+ bam_sort: bam_sort.c ../lib/bsort.c $(HTSDIR)/libhts.a
+-		$(CC) $(CFLAGS) -o $@ $^ -I $(HTSDIR) $(INCLUDES) -lpthread -lm -lz
++		$(CC) $(CFLAGS) -o $@ $^ -I $(HTSDIR) $(INCLUDES) -lpthread -lm -lz -lcrypto -ldeflate -lcurl
+ 
+ # align: realign.c ../lib/ovl.c ../lib/bseq.c ../lib/align.c
+ # 	$(CC) $(CFLAGS) -Wno-unused-function -o $@ $^ -lz
