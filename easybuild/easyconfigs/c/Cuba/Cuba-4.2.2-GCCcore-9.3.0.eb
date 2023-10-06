@@ -20,12 +20,24 @@ checksums = [
 ]
 
 preconfigopts = 'export CFLAGS="$CFLAGS -fPIC" && '
+
+parallel = 1
 build_cmd = 'make lib'
+buildopts = ' && '.join([ #build a shared library
+    '',
+    'FILES=$(ar xv libcuba.a |sed "s/x - //g")',
+    '$CC -shared -Wall $FILES -lm -o libcuba.so',
+])
+
+install_cmd = ' && '.join([
+    'make install',
+    'cp libcuba.so %(installdir)s/lib',
+])
 
 runtest = 'check'
 
 sanity_check_paths = {
-    'files': ['lib/libcuba.a', 'include/cuba.h'],
+    'files': ['lib/libcuba.a', 'lib/libcuba.so', 'include/cuba.h'],
     'dirs': [],
 }
 
