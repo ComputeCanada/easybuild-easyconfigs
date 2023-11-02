@@ -16,7 +16,7 @@ toolchainopts = {'pic': True}
 builddependencies = [
     ('SciPy-Stack', '2023a'),
 ]
-multi_deps = {'Python': ['3.8', '3.9', '3.10']} #Python extention not compatible with Python 3.11
+multi_deps = {'Python': ['3.9', '3.10']} #Python extention not compatible with Python 3.11
 
 source_urls = [
     'https://github.com/primme/primme/archive/refs/tags/',
@@ -60,7 +60,7 @@ sanity_check_paths = {
 }
 
 sanity_check_commands = [
-    ('module', 'load', 'scipy-stack/2023a', '&&', 'python','%(builddir)s/primme-%(version)s/Python/examples.py'),
+    ('module load scipy-stack/2023a && python %(builddir)s/primme-%(version)s/Python/examples.py'),
 ]
 
 modextrapaths = {'EBPYTHONPREFIXES': ''}
