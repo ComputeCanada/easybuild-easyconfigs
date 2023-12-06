@@ -26,7 +26,7 @@ patches = [
 checksums = [
     'd1a0681ff56d6b50ad5e00e10c26eb40f990ba401c1e28c6028d58d96783de75', #KaHyPar sources
     '883c2b54124504f7e360c3c2751d83a0a43917eb51eddf47c3321b76eea16b9a', #WHFC sources
-    '147d798ee752e4dede9a4a843ad5fa031eb8762a505fe3f6b2a0ba1b80bc46f3', #fix_install patch,
+    '60dd6959faaa55dce847cf3260475fa52aaea9b4365879f719a9515e4bdfb4fa', #fix_install patch,
     '1daed98fb010afd06d7754de78fc620e12eefab955e447ba4739f60157f51445', #fix_tests patch
 ]
 
