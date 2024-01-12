@@ -1,0 +1,96 @@
+easyblock = 'Tarball'
+
+name = 'cuQuantum'
+version = '23.10.0.6'
+
+homepage = 'https://developer.nvidia.com/cuquantum-sdk'
+description = """NVIDIA cuQuantum SDK is a high-performance library for 
+quantum information science and beyond"""
+
+toolchain = {'name': 'gompic', 'version': '2023a'}
+toolchainopts = {'optarch': 'False'}
+local_cuda_major = '12'
+
+# By downloading, you accept the cuQuantum Software License Agreement
+# (https://developer.nvidia.com/cuquantum-license-agreement)
+# accept_eula = True
+source_urls = ['https://developer.download.nvidia.com/compute/cuquantum/redist/cuquantum/linux-x86_64/']
+sources = ['cuquantum-linux-x86_64-%%(version)s_cuda%s-archive.tar.xz' %local_cuda_major]
+checksums = [
+    '5ff77bd5cf62fab02e598fe5e1b1617d521207552808173e135f9a9607f56bad', #sources
+]
+
+dependencies = [
+    ('cuTENSOR', '1.7.0.1'),
+    ('SciPy-Stack', '2023b'),
+]
+
+builddependencies = { #required by Python extension
+    ('python-build-bundle', '2023b'),
+    ('pytest', '7.4.0'),
+}
+
+multi_deps = {'Python' : ['3.10']}#, '3.11']}
+
+#build optional cutensornet-mpi library
+preinstall_cmd = ' && '.join([
+    'cd distributed_interfaces',
+    'export MPI_PATH=$EBROOTOPENMPI',
+    'bash activate_mpi.sh',
+])
+
+multi_deps_extensions_only = True
+
+postinstallcmds = [
+    'mv %(installdir)s/distributed_interfaces/libcutensornet_distributed_interface_mpi.so %(installdir)s/lib',
+    '/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/lib --any_interpreter --add_path $EBROOTCUDA/lib:%(installdir)s/lib:$EBROOTCUTENSOR/lib',
+]
+
+local_extoptions = ' && '.join([
+    'export CUQUANTUM_ROOT=$EBROOTCUQUANTUM',
+    'export CUTENSOR_ROOT=$EBROOTCUTENSOR',
+    'cd python',
+    #cupy is required for cuquantum python extension
+    'pip install cupy==12.2.0 --no-index --prefix=%(installdir)s',
+    '', #for trailing character
+])
+
+exts_defaultclass = "PythonPackage"
+exts_list = [
+    ('cuquantum', '23.10.0', {
+        'source_urls' : ['https://github.com/NVIDIA/cuQuantum/archive/refs/tags/'],
+        'sources' : ["v%(version)s.tar.gz"],
+        'checksums' : ['837d345eb520388c4dfac33fdd1e8b90c001cb751dd90626589870f35ac9b3e0'],
+        'prebuildopts' : local_extoptions,
+        'preinstallopts' : local_extoptions,
+	'use_pip' : True,
+        'installopts' : '--no-deps',
+    }),
+]
+
+keepsymlinks = True
+
+sanity_check_paths = {
+    'files': [
+        'include/cutensornet.h',
+        'include/custatevec.h',
+        'lib/libcutensornet.so',
+        'lib/libcustatevec.so',
+        'lib/libcutensornet_distributed_interface_mpi.so',
+        'lib/libcutensornet_static.a',
+        'lib/libcustatevec_static.a',
+    ],
+    'dirs': ['include', 'lib'],
+}
+
+sanity_check_commands = [
+    'python -c "from cuquantum import custatevec"',
+    'python -c "from cuquantum import cutensornet"',
+    'python -c "from cuquantum import contract"',
+    'python -c "from cuquantum import Network"',
+]
+
+modextrapaths = {'EBPYTHONPREFIXES': ''}
+modextravars = {'CUTENSORNET_COMM_LIB': '%(installdir)s/lib/libcutensornet_distributed_interface_mpi.so'}
+
+moduleclass = 'numlib'

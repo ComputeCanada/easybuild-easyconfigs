@@ -46,12 +46,12 @@ multi_deps_extensions_only = True
 
 exts_defaultclass = 'PythonPackage'
 exts_list = [
-    ('symengine', '0.10.0', {
+    ('symengine', '0.11.0', {
         'sources': [{
             'source_urls': ["https://github.com/symengine/symengine.py/releases/download/v%(version)s/"],
-            'filename': "symengine.py-0.10.0.tar.gz",
+            'filename': "symengine.py-0.11.0.tar.gz",
         }],
-        'checksums': ['923944ab54aa0a787629424c101f5ec6a87b44177c669d21c7d3b0257f725927'],
+        'checksums': ['702fc5e5640e81714eacecf9da03ba1d9cc2f49fc8c4c6154b57d3d7dfacc698'],
         'use_pip': True,
     }),
 ]
