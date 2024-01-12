@@ -30,7 +30,7 @@ builddependencies = { #required by Python extension
     ('pytest', '7.4.0'),
 }
 
-multi_deps = {'Python' : ['3.10']}#, '3.11']}
+multi_deps = {'Python' : ['3.10', '3.11']}
 
 #build optional cutensornet-mpi library
 preinstall_cmd = ' && '.join([
@@ -63,7 +63,7 @@ exts_list = [
         'checksums' : ['837d345eb520388c4dfac33fdd1e8b90c001cb751dd90626589870f35ac9b3e0'],
         'prebuildopts' : local_extoptions,
         'preinstallopts' : local_extoptions,
-	'use_pip' : True,
+        'use_pip' : True,
         'installopts' : '--no-deps',
     }),
 ]
