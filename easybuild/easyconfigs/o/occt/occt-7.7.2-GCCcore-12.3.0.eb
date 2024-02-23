@@ -1,0 +1,72 @@
+easyblock = 'CMakeMake'
+
+name = 'occt'
+version = '7.7.2'
+
+homepage = 'https://www.opencascade.com/'
+description = """Open CASCADE Technology (OCCT) is an object-oriented C++
+class library designed for rapid production of sophisticated domain-specific
+CAD/CAM/CAE applications."""
+
+toolchain = {'name': 'GCCcore', 'version': '12.3.0'}
+
+sources = [{
+    'source_urls': ['https://git.dev.opencascade.org/gitweb'],
+    'download_filename': '?p=occt.git;a=snapshot;h=refs/tags/V%s;sf=tgz' % version.replace('.','_'),
+    'filename': 'opencascade-%(version)s.tgz'
+}]
+
+builddependencies = [
+    ('CMake', '3.27.7'),
+    ('Doxygen', '1.8.16'),
+    ('tbb', '2021.10.0'),
+]
+
+dependencies = [
+    ('Mesa', '19.1.7'),
+    ('freetype', '2.10.1'),
+    ('Tcl', '8.6.9'),
+    ('Tk', '8.6.9'),
+    ('FreeImage', '3.18.0'),
+    ('RapidJSON', '1.1.0'),
+    ('SWIG', '4.1.1'),
+
+]
+
+separate_build_dir = True
+
+configopts = "-DUSE_FREEIMAGE=ON " #-D3RDPARTY_FREEIMAGE_DIR=$EBROOTFREEIMAGE "
+configopts += "-D3RDPARTY_TBB_DIR=$EBROOTTBB "
+configopts += "-DBUILD_RELEASE_DISABLE_EXCEPTIONS=OFF "
+#configopts += "-D3RDPARTY_TCL_DIR=$EBROOTTCL "
+#configopts += "-D3RDPARTY_TK_DIR=$EBROOTTK "
+#configopts += "-D3RDPARTY_FREETYPE_DIR=$EBROOTFREETYPE "
+
+multi_deps = {'Python': ['3.10', '3.11']}
+multi_deps_load_default = False
+multi_deps_extensions_only = True
+
+exts_defaultclass = 'CMakeMake'
+exts_list = [
+    ('pythonocc-core', version, {
+        'sources': {
+            'filename': 'pythonocc-core-%(version)s.tar.gz',
+	    'source_urls': ['https://github.com/tpaviot/pythonocc-core/archive/refs/tags'],
+	    'download_filename': '%(version)s.tar.gz'
+        },
+	'configopts': ' '.join([
+	    '-DOCCT_INCLUDE_DIR=%(installdir)s/include/opencascade',
+	    '-DOCCT_LIBRARY_DIR=%(installdir)s/lib',
+	    '-DPYTHONOCC_BUILD_TYPE=Release',
+	    '-DPYTHONOCC_INSTALL_DIRECTORY=%(installdir)s/lib/python%(pythonshortver)s/site-packages',
+	])
+    })
+]
+
+
+sanity_check_paths = {
+    'files': ['bin/DRAWEXE', 'bin/env.sh'],
+    'dirs': ['lib/cmake/opencascade'],
+}
+
+moduleclass = 'cae'
