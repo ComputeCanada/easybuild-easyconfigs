@@ -1,0 +1,69 @@
+easyblock = 'CMakeNinja'
+
+name = 'DuckDB'
+version = '0.10.1'
+
+homepage = 'https://duckdb.org/'
+description = """DuckDB supports a feature-rich SQL dialect complemented with deep integrations into client APIs"""
+
+toolchain = {'name': 'GCCcore', 'version': '12.3.0'}
+toolchainopts = {'pic': True}
+
+source_urls = ['https://github.com/duckdb/duckdb/archive/refs/tags']
+sources = ['v%(version)s.tar.gz']
+checksums = ['83bd4944c070fd0bd287fbe62919fa887f35d7422ba0fa66e13d4ed098f3791a']
+
+builddependencies = [
+    ('CMake', '3.27.7'),
+    ('python-build-bundle', '2023b'),
+]
+multi_deps = {'Python': ['3.10', '3.11'] }
+multi_deps_extensions_only = True
+
+# Extensions built by default when -DBUILD_PYTHON=ON
+configopts = ' '.join([
+    "-DFORCE_COLORED_OUTPUT=ON",
+    "-DENABLE_EXTENSION_AUTOLOADING=OFF",
+    "-DENABLE_EXTENSION_AUTOINSTALL=OFF",
+    "-DBUILD_PYTHON=OFF",
+    "-DLOCAL_EXTENSION_REPO="" ",
+    # "-DOVERRIDE_GIT_DESCRIBE="" ",
+    "-DBUILD_EXTENSIONS=';parquet;icu;fts;tpch;tpcds;json'",
+    "-DBUILD_SHELL=ON",
+    "-DBUILD_UNITTESTS=OFF",
+])
+
+# installopts = " && DUCKDB_BINARY_DIR=%(installdir)s pip install tools/pythonpkg"
+
+# exts_defaultclass = 'PythonPackage'
+# exts_list = [
+#     ("%(namelower)s", version, {
+#         'nosource': True, # bundled already
+#         'sources': ['v%(version)s.tar.gz'],
+#         'start_dir': 'tools/pythonpkg/',
+#         'preconfigopts': 'export DUCKDB_BINARY_DIR=%(installdir)s &&',
+#         'use_pip': True,
+#     }),
+# ]
+# exts_filter = ("python -c 'import %(ext_name)s'", '')
+
+sanity_check_paths = {
+    'files': [
+        'bin/%(namelower)s',
+        'include/duckdb.h',
+        'lib/libduckdb.so',
+        'lib/libduckdb_static.a'
+    ],
+    'dirs': [
+        'lib/cmake',
+        'lib/python%(pyshortver)s/site-packages'
+    ]
+}
+
+sanity_check_commands = ["duckdb --version"]
+
+modextrapaths = {
+    'EBPYTHONPREFIXES': '',
+}
+
+moduleclass = 'tools'
