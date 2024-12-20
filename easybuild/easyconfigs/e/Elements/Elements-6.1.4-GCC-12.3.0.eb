@@ -1,0 +1,37 @@
+easyblock = 'CMakeMake'
+name = 'Elements'
+version = '6.1.4'
+
+homepage = 'https://github.com/astrorama/Elements'
+description = """Elements is a C++/Python build framework. It helps to organize the software into modules which are gathered into projects."""
+
+toolchain = {'name': 'GCC', 'version': '12.3.0'}
+
+source_urls = ['https://github.com/astrorama/Elements/archive/refs/tags']
+sources = ['%(version)s.tar.gz']
+
+builddependencies = [
+    ('pytest', '8.2.2'),
+    ('CMake', '3.31.0'),
+]
+
+dependencies = [
+    ('Boost', '1.82.0'),
+    ('log4cpp', '1.1.4'),
+]
+
+multi_deps = {'Python': ['3.10', '3.11', '3.12']}
+
+configopts = ' -DUSE_SPHINX=OFF '
+
+sanity_check_paths = {
+    'files': ['lib64/libElementsKernel.%s' % SHLIB_EXT, ],
+    'dirs': ['bin', 'include', 'lib/python%(pyshortver)s/site-packages', 'lib64', 'share'],
+}
+
+sanity_check_commands = ["python%(pyshortver)s -c 'import ElementsKernel'"]
+
+modextrapaths = {'EBPYTHONPREFIXES': ['']}
+
+moduleclass = 'devel'
+
