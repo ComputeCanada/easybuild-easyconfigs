@@ -1,0 +1,41 @@
+easyblock = 'Binary'
+name = 'quantumatk'
+version = '2024.09'
+homepage = 'https://www.synopsys.com/silicon/quantumatk.html'
+description = """QuantumATK is a complete atomistic simulation toolkit. QuantumATK addresses key applications in the semiconductor industry and is a core component of the Synopsys Design-Technology Co-Optimization (DTCO) solution. Atomic-scale modeling tools in QuantumATK range from classical force fields for handling large and to some extent more realistic materials systems to ab initio tools that provide highly accurate results for smaller systems. """
+
+toolchain = {'name': 'iimpi', 'version': '2023a'}
+sources = ['SynopsysInstaller_v5.8.run', f'quantumatk_vW-{version}_common.spf', f'quantumatk_vW-{version}_common.spf.part00', f'quantumatk_vW-{version}_common.spf.part01', f'quantumatk_vW-{version}_common.spf.part02']
+extract_sources = False
+checksums = ['377d6cbe51d5d6a2bba777f8d29ab70b', 'ff87f95b5bae56a41da753af0148fb1d', '4898fb9d79e2263f4842ba491ad99c1d', 'a1f56d6bc11fcf851913a56689d1f941', '3f94239302bfe69a7a54b602069e0c2c']
+
+#install_cmd = './SynopsysInstaller_v5.8.run -dir %(installdir)s; echo "SiteId      :001" > ./site_info.txt; echo "q\nA" | %(installdir)s/installer -source . -target %(installdir)s -site_info /home/willis2/easybuild-easyconfigs/easybuild/easyconfigs/q/QuantumATK/site_info.txt'
+install_cmd = './SynopsysInstaller_v5.8.run -dir %(installdir)s; echo "SiteId      :001" > ./site_info.txt; echo "q\nA" | %(installdir)s/installer -source . -target %(installdir)s -site_info ./site_info.txt'
+
+#postinstallcmds =['sed -i \'2 i export LD_LIBRARY_PATH="${EBROOTIMPI}/intel64/lib:${EBROOTIMPI}/intel64/lib/release:+:$LD_LIBRARY_PATH}"\' %(installdir)s/quantumatk/W-2024.09/bin/atkpython && sed -i \'2 i export LD_LIBRARY_PATH="${EBROOTIMPI}/intel64/lib:${EBROOTIMPI}/intel64/lib/release:+:$LD_LIBRARY_PATH}"\' %(installdir)s/quantumatk/W-2024.09/bin/quantumatk']
+
+#We need to remove internal intelmpi libraries since they do not work in our system
+#postinstallcmds += ["chmod -R u+x %(installdir)s/quantumatk/W-2023.09/lib/*.so*; chmod -R u+x %(installdir)s/quantumatk/W-2024.09/libexec/*"]
+#postinstallcmds += ["/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/ "]
+#postinstallcmds += ["rm %(installdir)s/quantumatk/W-2024.09/mpi/lib/libmpicxx* %(installdir)s/quantumatk/W-2024.09/mpi/lib/libmpifort* %(installdir)s/quantumatk/W-2024.09/mpi/lib/libmpi_ilp64* %(installdir)s/quantumatk/W-2024.09/mpi/lib/libmpi.*"]
+
+sanity_check_paths = {
+      'files': ['quantumatk/W-2024.09/bin/quantumatk','quantumatk/W-2024.09/bin/atkpython'],
+      'dirs': []
+}
+
+modextrapaths = {'PATH': '$%(installdir)s/quantumatk/W-2024.09/bin'}
+moduleclass = 'phys'
+
+modluafooter = """
+require("SitePackage")
+local found, path = find_and_define_license_file("SNPSLMD_LICENSE_FILE","quantumatk")
+if (not found) then
+        local error_message = [[
+        We did not find a suitable license for QuantumATK. If you have access to one, you can create the file $HOME/.licenses/quantumatk.lic  with the license information. If you think you should have access to one as    part of your institution, please write to support@computecanada.ca so that we can configure it.
+
+        Nous n'avons pas trouve de licence utilisable pour QuantumATK. Si vous avez acces a une licence de QuantumATK, vous pouvez creer le fichier $HOME/.licenses/quantumatk.lic avec l'information de la licence. Si vous    pensez que vous devriez automatiquement avoir acces a une licence via votre institution, veuillez ecrire a support@calculcanada.ca pour que nous puissions la configurer.
+        ]]
+        LmodError(error_message)
+end
+"""
