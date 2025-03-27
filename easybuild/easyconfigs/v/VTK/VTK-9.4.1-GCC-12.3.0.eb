@@ -22,19 +22,15 @@ checksums = [
     {'VTKData-9.4.1.tar.gz': '188ef68f3decea56c7218877598ec0a84d838d35ff5d4f688d8867986c743114'},
 ]
 
-multi_deps = { 'Python': ['3.13', '3.12', '3.11'] }
-
-multi_deps_load_default = False
-
-modextrapaths = {'EBPYTHONPREFIXES': ['']}
-
-builddependencies = [('CMake', '3.27.7')]
-
-dependencies = [
-    ('SciPy-Stack', '2024b'),
+builddependencies = [
+    ('CMake', '3.27.7'),
+    ('numpy', '2.1.1'),
     ('HDF5', '1.14.2'),
     ('netCDF', '4.9.2'),
 ]
+
+multi_deps = { 'Python': ['3.13', '3.12', '3.11'] }
+multi_deps_load_default = False
 
 separate_build_dir = True
 
@@ -58,17 +54,18 @@ preinstallopts = "export PYTHONPATH=%(installdir)s/lib/python%(pyshortver)s/site
 postinstallcmds = [
     '/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/lib --add_path %(installdir)s/lib --any_interpreter',
 ] + [
-    "mkdir -p %(installdir)s/lib/python{py}/site-packages/{dist}-%(version)s.dist-info && echo -e 'Metadata-Version: 2.3\nName: {dist}\nVersion: %(version)s' > %(installdir)s/lib/python{py}/site-packages/{dist}-%(version)s.dist-info/METADATA".format(py=py, dist=name.lower())
+    "mkdir -p %(installdir)s/lib/python{py}/site-packages/{dist}-%(version)s.dist-info && echo -e 'Metadata-Version: 2.4\nName: {dist}\nVersion: %(version)s' > %(installdir)s/lib/python{py}/site-packages/{dist}-%(version)s.dist-info/METADATA".format(py=py, dist=name.lower())
     for py in multi_deps['Python']
 ]
 
 sanity_check_paths = {
-    'files': ['bin/vtk%s-%%(version_major_minor)s' % x for x in
-              ['WrapJava', 'ParseJava', 'WrapPythonInit', 'WrapPython', 'WrapHierarchy']] +
+    'files': ['bin/vtk%s-%%(version_major_minor)s' % x for x in ['WrapJava', 'ParseJava', 'WrapPythonInit', 'WrapPython', 'WrapHierarchy']] +
              ['bin/vtkpython'],
     'dirs': ['lib/python%(pyshortver)s/site-packages/', 'include/vtk-%(version_major_minor)s'],
 }
 
-sanity_check_commands = [('python', "-c 'import %(namelower)s'")]
+sanity_check_commands = ["module load scipy-stack && python -c 'import %(namelower)s'"]
+
+modextrapaths = {'EBPYTHONPREFIXES': ['']}
 
 moduleclass = 'vis'
