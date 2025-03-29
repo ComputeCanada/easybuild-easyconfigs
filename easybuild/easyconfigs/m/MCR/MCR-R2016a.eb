@@ -13,6 +13,7 @@ source_urls = [
 ]
 sources = ['%(name)s_%(version)s_glnxa64_installer.zip']
 
-dependencies = [('Java', '1.8.0_92')]
+dependencies = [('Java', '1.8.0_121')]
 
+postinstallcmds = ["chmod -R u+rwX %(installdir)s"]
 moduleclass = 'math'

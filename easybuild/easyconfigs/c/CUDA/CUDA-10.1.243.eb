@@ -24,4 +24,6 @@ checksums = [
     }
 ]
 
+postinstallcmds = [ '/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s' ]
+hidden = True
 moduleclass = 'system'

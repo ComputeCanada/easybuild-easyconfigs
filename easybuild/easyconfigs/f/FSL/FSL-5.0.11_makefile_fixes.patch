@@ -243,8 +243,8 @@ diff -ur fsl/src/mist-clean/Makefile fsl.new/src/mist-clean/Makefile
  NLOPT_LIB = ${FSLEXTLIB}
 -SQLITE_INC = ${FSLEXTINC}/libsqlite
 -SQLITE_LIB = ${FSLEXTLIB}
-+SQLITE_INC = ${EBROOTSQLITE}/include
-+SQLITE_LIB = ${EBROOTSQLITE}/lib
++SQLITE_INC = ${EBROOTNIXPKGS}/include
++SQLITE_LIB = ${EBROOTNIXPKGS}/lib
  
  PROJNAME = mist
  
@@ -257,3 +257,12 @@ diff -ur fsl/src/mist-clean/Makefile fsl.new/src/mist-clean/Makefile
  USRINCFLAGS = -I${FSLDIR}/include/newimage -I${INC_NEWMAT} -I${INC_ZLIB} -I${INC_GDC} -I${INC_GD} -I${SQLITE_INC} -I${NLOPT_INC} -I${VTKDIR_INC} -Icommon
  USRLDFLAGS = -L${LIB_NEWMAT} -L${LIB_ZLIB} -L${LIB_BOOST} -L${LIB_GDC} -L${LIB_GD} -L${NLOPT_LIB} -L${VTKDIR_LIB}
  
+@@ -26,7 +26,7 @@
+ 			-lboost_log -lboost_log_setup -lboost_thread -lboost_filesystem -lboost_date_time -lboost_chrono \
+ 			-lboost_system -lboost_serialization -lboost_regex -lwarpfns -lbasisfield -lnewimage -lmiscmaths \
+ 			-lnewmat -lgdc -lgd -lpng -lfslio -lniftiio -lutils -lznz -lm -lz -lnlopt -lpthread -ldl \
+-			${SQLITE_LIB}/libsqlite3.a ${LIBRT}
++			-lsqlite3 ${LIBRT} -lboost_regex
+ 
+ HDRS = common/gibbsshapemodel.h common/mrfshapemodel.h common/mvnshapemodel.h common/plotting.h common/profilefilters.h common/profilemixtures.h common/profilemodel.h common/profilepriors.h common/serialisation.h common/shape.h common/shapemodel.h common/stats.h common/transformation.h mist/builddate.h
+

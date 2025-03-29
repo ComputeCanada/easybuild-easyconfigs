@@ -20,11 +20,14 @@ toolchain = SYSTEM
 
 source_urls = ['http://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/%(version)s/']
 sources = ['sratoolkit.%(version)s%(versionsuffix)s.tar.gz']
+
 checksums = ['b053061aae7c6d00162fe0f514be4128a60365b4b2b5b36e7f4798b348b55cf5']
 
 sanity_check_paths = {
     'files': ['bin/abi-load', 'bin/fastq-dump', 'bin/sff-load', 'bin/vdb-dump'],
     'dirs': []
 }
+
+postinstallcmds = ['$(dirname $EASYBUILD_CONFIGFILES)/bin/setrpaths.sh --path %(installdir)s']
 
 moduleclass = 'bio'

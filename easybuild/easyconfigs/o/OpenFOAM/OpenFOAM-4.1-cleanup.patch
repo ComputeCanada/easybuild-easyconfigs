@@ -11,12 +11,12 @@ diff -ur OpenFOAM-4.x-version-4.1.org/applications/utilities/mesh/manipulation/s
  # use readline if available
  #
 -if [ -f /usr/include/readline/readline.h ]
-+if [ -f $EBROOTLIBREADLINE/include/readline/readline.h ]
++if [ -f $NIXUSER_PROFILE/include/readline/readline.h ]
  then
      echo "Found <readline/readline.h>  --  enabling readline support."
      export COMP_FLAGS="-DHAS_READLINE"
 -    export LINK_FLAGS="-lreadline"
-+    export LINK_FLAGS="-L$EBROOTLIBREADLINE/lib -lreadline -L$EBROOTNCURSES -lncurses"
++    export LINK_FLAGS="-lreadline -lncurses"
  fi
 
  wmake
@@ -105,8 +105,8 @@ diff -ur OpenFOAM-4.x-version-4.1.org/etc/config.sh/gperftools OpenFOAM-4.x-vers
 -
 -export PATH=$GPERFTOOLS_ARCH_PATH/bin:$PATH
 -export LD_LIBRARY_PATH=$GPERFTOOLS_ARCH_PATH/lib:$LD_LIBRARY_PATH
-+GPERFTOOLS_VERSION=gperftools-$EBVERSIONGPERFTOOLS
-+GPERFTOOLS_ARCH_PATH=$EBROOTGPERFTOOLS
++GPERFTOOLS_VERSION=gperftools-2.4
++GPERFTOOLS_ARCH_PATH=$NIXUSER_PROFILE
 
  #------------------------------------------------------------------------------
 diff -ur OpenFOAM-4.x-version-4.1.org/etc/config.sh/metis OpenFOAM-4.x-version-4.1/etc/config.sh/metis
@@ -160,56 +160,6 @@ diff -ur OpenFOAM-4.x-version-4.1.org/etc/config.sh/paraview OpenFOAM-4.x-versio
 
  #- ParaView version, automatically determine major version
  #export ParaView_VERSION=3.12.0
-@@ -64,7 +49,7 @@
- #export ParaView_VERSION=4.3.1
- #export ParaView_VERSION=4.4.0
- #export ParaView_VERSION=5.0.0
--export ParaView_VERSION=5.0.1
-+export ParaView_VERSION=$EBVERSIONPARAVIEW
- export ParaView_MAJOR=detect
-
-
-@@ -105,21 +90,15 @@
- paraviewInstDir=$WM_THIRD_PARTY_DIR/ParaView-$ParaView_VERSION
- paraviewArchName=ParaView-$ParaView_VERSION
-
--export ParaView_DIR=$WM_THIRD_PARTY_DIR/platforms/$WM_ARCH$WM_COMPILER/$paraviewArchName
-+export ParaView_DIR=$EBROOTPARAVIEW
-
- # Set paths if binaries or source are present
- if [ -r $ParaView_DIR -o -r $paraviewInstDir ]
- then
-     export ParaView_INCLUDE_DIR=$ParaView_DIR/include/paraview-$ParaView_MAJOR
--    if [ ! -d $ParaView_INCLUDE_DIR -a -d $ParaView_DIR/include/paraview-3.0 ]
--    then
--        export ParaView_INCLUDE_DIR=$ParaView_DIR/include/paraview-3.0
--    fi
-
-     ParaView_LIB_DIR=$ParaView_DIR/lib/paraview-$ParaView_MAJOR
-
--    export PATH=$ParaView_DIR/bin:$PATH
--    export LD_LIBRARY_PATH=$ParaView_LIB_DIR:$LD_LIBRARY_PATH
-     export PV_PLUGIN_PATH=$FOAM_LIBBIN/paraview-$ParaView_MAJOR
-
-     if [ "$FOAM_VERBOSE" -a "$PS1" ]
-@@ -131,17 +110,6 @@
-         echo "    PV_PLUGIN_PATH       : $PV_PLUGIN_PATH"
-     fi
-
--    # Add in python libraries if required
--    paraviewPython=$ParaView_DIR/Utilities/VTKPythonWrapping
--    if [ -r $paraviewPython ]
--    then
--        if [ "$PYTHONPATH" ]
--        then
--            export PYTHONPATH=$PYTHONPATH:$paraviewPython:$ParaView_LIB_DIR
--        else
--            export PYTHONPATH=$paraviewPython:$ParaView_LIB_DIR
--        fi
--    fi
- else
-     unset PV_PLUGIN_PATH
- fi
 diff -ur OpenFOAM-4.x-version-4.1.org/etc/config.sh/scotch OpenFOAM-4.x-version-4.1/etc/config.sh/scotch
 --- OpenFOAM-4.x-version-4.1.org/etc/config.sh/scotch	2016-10-16 16:11:45.000000000 +0200
 +++ OpenFOAM-4.x-version-4.1/etc/config.sh/scotch	2017-04-10 14:51:01.473221230 +0200

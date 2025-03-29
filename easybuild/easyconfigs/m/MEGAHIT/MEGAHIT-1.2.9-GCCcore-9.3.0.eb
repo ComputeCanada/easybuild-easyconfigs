@@ -25,6 +25,10 @@ builddependencies = [
     ('zlib', '1.2.11'),
 ]
 
+configopts = " -DCMAKE_BUILD_TYPE=Release"
+
+#buildopts = ' && make simple_test '
+
 dependencies = [
     ('bzip2', '1.0.8'),
     ('gzip', '1.10'),

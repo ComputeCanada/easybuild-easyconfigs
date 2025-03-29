@@ -16,14 +16,15 @@ description = """
 """
 
 toolchain = {'name': 'GCCcore', 'version': '9.3.0'}
-toolchainopts = {'openmp': True}
+toolchainopts = {'optarch': True, 'pic': True}
+#toolchainopts = {'openmp': True}
 
-source_urls = ['https://github.com/gmarcais/mummer/releases/download/v%(version)s/']
+source_urls = ['https://github.com/mummer4/mummer/releases/download/v%(version)s/']
 sources = ['%(namelower)s-%(version)s.tar.gz']
 checksums = ['cece76e418bf9c294f348972e5b23a0230beeba7fd7d042d5584ce075ccd1b93']
 
 builddependencies = [('binutils', '2.34')]
-
+dependencies = [('gnuplot', '5.2.8')]
 sanity_check_paths = {
     'files': ['bin/mummer', 'bin/annotate', 'bin/combineMUMs', 'bin/delta-filter',
               'bin/repeat-match', 'bin/show-aligns', 'bin/show-coords',

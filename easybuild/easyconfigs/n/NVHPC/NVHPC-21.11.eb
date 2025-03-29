@@ -26,7 +26,7 @@ checksums = [
     }
 ]
 
-local_gccver = '11.2.0'
+local_gccver = '10.3.0'
 dependencies = [
     ('GCCcore', local_gccver),
     ('binutils', '2.37', '', ('GCCcore', local_gccver)),

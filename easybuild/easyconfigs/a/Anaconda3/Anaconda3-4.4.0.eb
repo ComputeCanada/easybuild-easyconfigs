@@ -18,3 +18,7 @@ sources = ['%(name)s-%(version)s-Linux-x86_64.sh']
 checksums = ['3301b37e402f3ff3df216fe0458f1e6a4ccbb7e67b4d626eae9651de5ea3ab63']
 
 moduleclass = 'lang'
+
+postinstallcmds = [
+	'/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s'
+]

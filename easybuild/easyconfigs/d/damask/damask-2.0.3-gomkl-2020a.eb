@@ -1,0 +1,62 @@
+easyblock = 'CMakeMakeCp'
+
+name = 'damask'
+version = '2.0.3'
+
+homepage = 'https://damask.mpie.de/Home/WebHome'
+description = """DAMASK is a flexible and hierarchically structured model of material point behavior for the solution of elastoplastic boundary value problems along with damage and thermal physics. """
+
+toolchain = {'version': '2020a', 'name': 'gomkl'}
+toolchainopts = {'pic': True, 'openmp': True}
+
+source_urls = ['https://damask2.mpie.de/pub/Download/Current/']
+sources = ['%(name)s-%(version)s.tar.xz']
+patches = ['damask-2.0.3.patch']
+checksums = [
+    'c3f487ad1487586fbde696b1402d4dda8c3463ad0710b001ee8e4203eee413c8',  # damask-2.0.3.tar.xz
+    'c52d32b0714ff475e4b4d128da072f50cfd94801db4ecf581afb48c35b9f38b8',  # damask-2.0.3.patch
+]
+
+dependencies = [
+    ('Python', '3.9.6'),
+    ('VTK', '8.2.0'),
+    ('ParaView', '5.8.0'),
+]
+
+builddependencies = [
+    ('PETSc', '3.10.5'),
+    ('HDF5', '1.10.6', '-mpi'),
+]
+
+skipsteps = ['configure', 'install']
+
+parallel = 1
+ 
+prebuildopts = [
+    "export PYTHONPATH=python:%(installdir)s/lib/python%(pyshortver)s/site-packages/:$PYTHONPATH && " +
+    "pip install numpy --prefix=%(installdir)s && " +
+    "pip install scipy --prefix=%(installdir)s && " +
+    "pip install h5py  --prefix=%(installdir)s && " +
+    "pip install vtk   --prefix=%(installdir)s && " +
+    " ./installation/symlink_Processing.py     && " +
+    " cp -r env CONFIG %(installdir)s/ && " + 
+    " source %(installdir)s/env/DAMASK.sh && "
+]
+
+modextrapaths = {'PYTHONPATH': ['lib/python%(pyshortver)s/site-packages']}
+
+files_to_copy = [
+    (['python/damask'], 'lib/python%(pyshortver)s/site-packages'), 
+    (['VERSION'], 'lib/python%(pyshortver)s'), 
+    'bin', 
+    'examples',
+]
+
+postinstallcmds = ["mkdir -p %(installdir)s/bin && cp -R bin/* %(installdir)s/bin/"]
+
+sanity_check_paths = {
+    'files': ['bin/DAMASK_FEM', 'bin/DAMASK_spectral'],
+    'dirs': []
+}
+
+moduleclass = 'math'

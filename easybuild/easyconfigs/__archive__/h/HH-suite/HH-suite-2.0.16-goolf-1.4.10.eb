@@ -22,9 +22,10 @@ description = """HH-suite is an open-source software package for sensitive prote
 toolchain = {'name': 'goolf', 'version': '1.4.10'}
 
 sources = ["hhsuite-%(version)s.tar.gz"]
-source_urls = ["ftp://toolkit.genzentrum.lmu.de/pub/HH-suite/releases"]
+source_urls = ["http://wwwuser.gwdg.de/~compbiol/data/hhsuite/releases/all"]
 
 skipsteps = ['configure']
+buildopts = " all WITH_SSE41=1"
 installopts = "INSTALL_DIR=%(installdir)s"
 
 sanity_check_paths = {

@@ -26,4 +26,13 @@ sanity_check_paths = {
 
 sanity_check_commands = ['cellranger testrun --id=tiny']
 
+postinstallcmds = ["chmod -R go+X %(installdir)s"]
+
+modloadmsg = """ To initialize CellRanger,
+
+  do:
+       source $EBROOTCELLRANGER/sourceme.bash
+
+"""
+
 moduleclass = 'bio'
