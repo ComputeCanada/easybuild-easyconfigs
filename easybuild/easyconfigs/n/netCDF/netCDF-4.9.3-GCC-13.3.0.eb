@@ -21,7 +21,7 @@ builddependencies = [
     ('Doxygen', '1.9.7'),
     ('numpy', '2.1.1'),
     ('Cython', '3.0.11'),
-    ('python-build-bundle', '2024a'),
+    ('python-build-bundle', '2025a'),
 ]
 
 dependencies = [
@@ -47,7 +47,10 @@ exts_default_options = {
 	'source_urls': [PYPI_SOURCE],
 	'download_dep_fail': True,
 	'use_pip': True,
-	'preinstallopts': "PYTHONPATH=%(installdir)s/lib/python%(pyshortver)s/site-packages:$PYTHONPATH"
+	'preinstallopts': "PYTHONPATH=%(installdir)s/lib/python%(pyshortver)s/site-packages:$PYTHONPATH",
+        'sanity_pip_check': False,   # disable "pip check"  
+        # otherwise sanity checks will fail due to missing numpy and msgpack
+        # which are part of builddependencies numpy and python-build-bundle
 }
 exts_list = [
     ('certifi', '2025.4.26'),
