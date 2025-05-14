@@ -6,8 +6,8 @@ description = """NetCDF (network Common Data Form) is a set of software librarie
  and machine-independent data formats that support the creation, access, and sharing of array-oriented
  scientific data."""
 
-toolchain = {'name': 'GCC', 'version': '13.3.0'}
-toolchainopts = {'pic': True }
+toolchain = {'name': 'gompi', 'version': '2024a'}
+toolchainopts = {'pic': True, 'usempi': True}
 
 source_urls = ['https://github.com/Unidata/netcdf-c/archive/']
 sources = ['v%(version)s.tar.gz']
@@ -21,7 +21,8 @@ builddependencies = [
     ('Doxygen', '1.9.7'),
     ('numpy', '2.1.1'),
     ('Cython', '3.0.11'),
-    ('python-build-bundle', '2025a'),
+    ('mpi4py', '4.0.0'),
+    # ('python-build-bundle', '2025a'),
 ]
 
 dependencies = [
@@ -33,7 +34,7 @@ dependencies = [
     ('libxml2', '2.11.4'),
 ]
 
-local_python_versions = ['3.10', '3.11', '3.12', '3.13']
+local_python_versions = ['3.10', '3.11', '3.12'] # our mpi4py module doesn't have Python 3.13 yet
 # make sure both static and shared libs are built
 local_configopts = [
     "-DBUILD_SHARED_LIBS=OFF",
@@ -49,8 +50,6 @@ exts_default_options = {
     'use_pip': True,
     'preinstallopts': "PYTHONPATH=%(installdir)s/lib/python%(pyshortver)s/site-packages:$PYTHONPATH",
     'sanity_pip_check': False,   # disable "pip check"
-    # otherwise sanity checks will fail due to missing numpy and msgpack
-    # which are part of builddependencies numpy and python-build-bundle
 }
 exts_list = [
     ('certifi', '2025.4.26'),
@@ -61,7 +60,7 @@ exts_list = [
     }),
 ]
 
-exts_filter = ("module load python-build-bundle/2024a numpy/.2.1.1; python -c 'import netCDF4'", '')
+exts_filter = ("module load mpi4py/4.0.0 numpy/.2.1.1; python -c 'import netCDF4'", '')
 
 modextrapaths = {'EBPYTHONPREFIXES': ''}
 
