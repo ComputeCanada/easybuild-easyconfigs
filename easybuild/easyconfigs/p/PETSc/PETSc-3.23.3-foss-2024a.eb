@@ -1,11 +1,11 @@
 name = 'PETSc'
-version = "3.23.1"
+version = "3.23.3"
 
 homepage = 'http://www.mcs.anl.gov/petsc'
 description = """PETSc, pronounced PET-see (the S is silent), is a suite of data structures and routines for the
  scalable (parallel) solution of scientific applications modeled by partial differential equations."""
 
-toolchain = {'name': 'gompi', 'version': '2024a'}
+toolchain = {'name': 'foss', 'version': '2024a'}
 toolchainopts = {'usempi': True, 'pic': True}
 
 source_urls = ['https://web.cels.anl.gov/projects/%(namelower)s/download/release-snapshots/']
@@ -15,9 +15,10 @@ dependencies = [
     ('HDF5', '1.14.5', '-mpi'),
     ('netCDF', '4.9.3', '-mpi'),
     ('netCDF-Fortran', '4.6.2', '-mpi'),
-    ('FFTW.MPI', '3.3.10'),
-    ('FlexiBLAS', '3.4.4'),
-    ('ScaLAPACK', '2.2.0', '-fb', ('gompi', '2024a')),
+    ('PnetCDF', '1.14.0', '', ('gompi', '2024a')),
+#    ('FlexiBLAS', '3.4.4'),
+#    ('FFTW.MPI', '3.3.10'),
+#    ('ScaLAPACK', '2.2.0', '-fb', ('gompi', '2024a')),
 ]
 
 # For the extension
@@ -29,7 +30,7 @@ builddependencies = [
     # ('python-build-bundle', '2025a'),
 ]
 
-multi_deps = {'Python': ['3.10', '3.11', '3.12']}
+multi_deps = {'Python': ['3.11', '3.12', '3.13']}
 multi_deps_extensions_only = True
 
 # preconfigopts = "pip install --no-index numpy Cython --prefix=%(installdir)s ; "
@@ -45,12 +46,13 @@ configopts = " ".join([
     '--with-hdf5-dir=$EBROOTHDF5',
     '--with-netcdf=1',
     '--with-netcdf-dir=$EBROOTNETCDF',
+    '--with-pnetcdf=1',
+    '--with-pnetcdf-dir=$EBROOTPNETCDF',
     '--with-fftw=1',
     '--with-fftw-dir=$EBROOTFFTW',
     '--with-zlib-dir=$EBROOTGENTOO',
     '--with-blaslapack-pkg-config=$EBROOTFLEXIBLAS/lib64/pkgconfig',
     '--with-scalapack=1',
-    '--with-scalapack-dir=$EBROOTSCALAPACK',
     '--with-cxx-dialect=C++14',
     '--with-memalign=64',
     '--with-python=no',
