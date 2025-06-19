@@ -34,7 +34,7 @@ dependencies = [
     ('libxml2', '2.11.4'),
 ]
 
-local_python_versions = ['3.10', '3.11', '3.12'] # our mpi4py module doesn't have Python 3.13 yet
+local_python_versions = ['3.10', '3.11', '3.12', '3.13']
 # make sure both static and shared libs are built
 local_configopts = [
     "-DBUILD_SHARED_LIBS=OFF",
