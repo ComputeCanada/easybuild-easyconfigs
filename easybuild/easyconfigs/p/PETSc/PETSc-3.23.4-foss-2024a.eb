@@ -1,7 +1,7 @@
 name = 'PETSc'
-version = "3.23.3"
+version = "3.23.4"
 
-homepage = 'http://www.mcs.anl.gov/petsc'
+homepage = 'https://petsc.org/release/'
 description = """PETSc, pronounced PET-see (the S is silent), is a suite of data structures and routines for the
  scalable (parallel) solution of scientific applications modeled by partial differential equations."""
 
@@ -14,7 +14,7 @@ sources = [SOURCELOWER_TAR_GZ]
 dependencies = [
     ('HDF5', '1.14.5', '-mpi'),
     ('netCDF', '4.9.3', '-mpi'),
-    ('netCDF-Fortran', '4.6.2', '-mpi'),
+    # ('netCDF-Fortran', '4.6.2', '-mpi'),
     ('PnetCDF', '1.14.0', '', ('gompi', '2024a')),
 #    ('FlexiBLAS', '3.4.4'),
 #    ('FFTW.MPI', '3.3.10'),
@@ -57,6 +57,7 @@ configopts = " ".join([
     '--with-memalign=64',
     '--with-python=no',
     '--with-mpi4py=no',
+    'LDFLAGS=${LDFLAGS}',
 ])
 
 
@@ -109,7 +110,7 @@ exts_list = [
         'source_urls': ['https://pypi.python.org/packages/source/%(nameletter)s/%(name)s'],
     }),
     # slepc4py version should matched version of slepc pulled by petsc. SLEPC 3.21.1 is pulled
-    ('slepc4py', '3.23.1', {
+    ('slepc4py', '3.23.2', {
         'buildopts': '#',
         'check_ldshared': False,
         'modulename': 'slepc4py',
@@ -117,7 +118,7 @@ exts_list = [
         'runtest': False,
         'source_urls': ['https://pypi.python.org/packages/source/%(nameletter)s/%(name)s'],
         'use_pip': True,
-        'checksums': ['da3ac9854ad120699359c112be857298bd3e4b62c0cecee752f34ad2dec81cd9'],
+        'checksums': ['6c98e6c728b9d440d1680047f623aead03d9870c0c4d2ea97c754bab291d1fb5'],
         'preinstallopts': 'SLEPC_DIR=$PETSC_DIR PETSC_ARCH="installed-arch-linux2-c-opt" ',
     }),
 ]
