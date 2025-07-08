@@ -14,11 +14,7 @@ sources = [SOURCELOWER_TAR_GZ]
 dependencies = [
     ('HDF5', '1.14.5', '-mpi'),
     ('netCDF', '4.9.3', '-mpi'),
-    # ('netCDF-Fortran', '4.6.2', '-mpi'),
     ('PnetCDF', '1.14.0', '', ('gompi', '2024a')),
-#    ('FlexiBLAS', '3.4.4'),
-#    ('FFTW.MPI', '3.3.10'),
-#    ('ScaLAPACK', '2.2.0', '-fb', ('gompi', '2024a')),
 ]
 
 # For the extension
@@ -40,8 +36,9 @@ preconfigopts = " ".join([
 ])
 
 configopts = " ".join([
-    '--with-fortran-bindings=0', #TODO: maybe have PETSc build its own netcdf
+    '--with-fortran-bindings=0', # doesn't work and isn't needed for Firedrake
     '--with-shared-libraries=1',
+    '--with-strict-petscerrorcode',
     '--with-hdf5=1',
     '--with-hdf5-dir=$EBROOTHDF5',
     '--with-netcdf=1',
@@ -109,7 +106,7 @@ exts_list = [
         'use_pip': True,
         'source_urls': ['https://pypi.python.org/packages/source/%(nameletter)s/%(name)s'],
     }),
-    # slepc4py version should matched version of slepc pulled by petsc. SLEPC 3.21.1 is pulled
+    # slepc4py version should matched version of slepc pulled by petsc. SLEPC 3.23.2 is pulled
     ('slepc4py', '3.23.2', {
         'buildopts': '#',
         'check_ldshared': False,
