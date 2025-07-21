@@ -14,14 +14,13 @@ sources = [SOURCELOWER_TAR_GZ]
 dependencies = [
     ('HDF5', '1.14.5', '-mpi'),
     ('netCDF', '4.9.3', '-mpi'),
-    ('PnetCDF', '1.14.0', '', ('gompi', '2024a')),
 ]
 
 # For the extension
 builddependencies = [
     ('numpy', '2.1.1'),
     ('mpi4py', '4.0.0'),
-    ('CMake', '3.27.7'),
+    ('CMake', '3.31.1'),
     ('Cython', '3.0.11'),
     # ('python-build-bundle', '2025a'),
 ]
@@ -43,8 +42,6 @@ configopts = " ".join([
     '--with-hdf5-dir=$EBROOTHDF5',
     '--with-netcdf=1',
     '--with-netcdf-dir=$EBROOTNETCDF',
-    '--with-pnetcdf=1',
-    '--with-pnetcdf-dir=$EBROOTPNETCDF',
     '--with-fftw=1',
     '--with-fftw-dir=$EBROOTFFTW',
     '--with-zlib-dir=$EBROOTGENTOO',
@@ -62,6 +59,9 @@ download_deps = [
     'triangle',
     'hpddm',
     'strumpack',
+    'hwloc',
+    'zlib',
+    'pnetcdf',
 ]
 
 postinstallcmds = [
