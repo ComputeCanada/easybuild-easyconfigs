@@ -1,0 +1,13 @@
+$ diff -ru arrayfire-full-3.10.0.orig/CMakeLists.txt arrayfire-full-3.10.0/CMakeLists.txt
+--- arrayfire-full-3.10.0.orig/CMakeLists.txt   2025-09-09 15:32:15.419391809 -0230
++++ arrayfire-full-3.10.0/CMakeLists.txt        2025-09-10 16:17:40.074358056 -0230
+@@ -316,7 +316,7 @@
+     URI https://github.com/martinmoene/span-lite
+     REF "ccf2351"
+     )
+-  add_subdirectory(${span-lite_SOURCE_DIR} ${span-lite_BINARY_DIR} EXCLUDE_FROM_ALL)
++  add_subdirectory(${span-lite_SOURCE_DIR} ${span-lite_BINARY_DIR} build EXCLUDE_FROM_ALL)
+   get_property(span_include_dir
+     TARGET span-lite
+     PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+
