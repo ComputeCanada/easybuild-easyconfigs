@@ -18,12 +18,12 @@ sources = ['%(namelower)s-full-%(version)s.tar.bz2']
 #patches = ['%(name)s-%(version)s-CMakeList.patch']
 
 builddependencies = [
-    ('CMake', '3.27.7'),
+    ('CMake', '3.31.0'),
 ]
 dependencies = [
     ('Boost', '1.85.0'),
     ('FFTW', '3.3.10'),
-    ('cuDNN', '9.5.1.17'),
+    ('cuDNN', '9.10.0.56'),
     ('GLFW', '3.4'),
 
     # arrayfire 3.9.0 doesn't build against spdlog 1.12.0
