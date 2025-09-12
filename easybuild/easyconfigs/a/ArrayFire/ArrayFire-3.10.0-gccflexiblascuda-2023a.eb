@@ -11,7 +11,7 @@ description = """
  including CPUs, GPUs, and other hardware acceleration devices.
 """
 
-toolchain = {'name': 'gccflexiblascuda', 'version': '2023.2.126'}
+toolchain = {'name': 'gccflexiblascuda', 'version': '2023a'}
 
 source_urls = ['https://github.com/arrayfire/arrayfire/releases/download/v%(version)s/']
 sources = ['%(namelower)s-full-%(version)s.tar.bz2']
@@ -21,10 +21,10 @@ builddependencies = [
     ('CMake', '3.27.7'),
 ]
 dependencies = [
-    ('Boost', '1.85.0'),
+    ('Boost', '1.82.0'),
     ('FFTW', '3.3.10'),
-    ('cuDNN', '9.5.1.17'),
-    ('GLFW', '3.4'),
+    ('cuDNN', '9.2.1.18'),
+    ('GLFW', '3.3.8'),
 
     # arrayfire 3.9.0 doesn't build against spdlog 1.12.0
     # https://github.com/arrayfire/arrayfire/issues/3516
