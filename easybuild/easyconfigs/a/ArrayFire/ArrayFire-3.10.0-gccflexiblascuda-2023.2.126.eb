@@ -15,7 +15,6 @@ toolchain = {'name': 'gccflexiblascuda', 'version': '2023.2.126'}
 
 source_urls = ['https://github.com/arrayfire/arrayfire/releases/download/v%(version)s/']
 sources = ['%(namelower)s-full-%(version)s.tar.bz2']
-#patches = ['%(name)s-%(version)s-CMakeList.patch']
 
 builddependencies = [
     ('CMake', '3.31.0'),
@@ -31,7 +30,7 @@ dependencies = [
     ('spdlog', '1.11.0'),
 ]
 # Python extension hangs on import with this version
-#multi_deps = {'Python': ['3.10', '3.11'] }
+#multi_deps = {'Python': ['3.11', '3.12', '3.13'] }
 #multi_deps_extensions_only = True
 #exts_defaultclass = 'PythonPackage'
 #exts_default_options = {'source_urls': [PYPI_SOURCE]}

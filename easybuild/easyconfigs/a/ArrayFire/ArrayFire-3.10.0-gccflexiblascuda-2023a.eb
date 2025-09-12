@@ -15,7 +15,6 @@ toolchain = {'name': 'gccflexiblascuda', 'version': '2023a'}
 
 source_urls = ['https://github.com/arrayfire/arrayfire/releases/download/v%(version)s/']
 sources = ['%(namelower)s-full-%(version)s.tar.bz2']
-#patches = ['%(name)s-%(version)s-CMakeList.patch']
 
 builddependencies = [
     ('CMake', '3.27.7'),
