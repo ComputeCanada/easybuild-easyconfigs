@@ -21,7 +21,10 @@ toolchain = {'name': 'gofb', 'version': '2023a'}
 toolchainopts = {'usempi': 'True'}
 
 source_urls = ['https://github.com/%(namelower)s/plumed2/releases/download/v%(version)s/']
-sources = [SOURCE_TGZ]
+sources = [
+    SOURCE_TGZ,
+    'libtorch-2.7.1-x86-64-v3.tar.gz',
+]
 # checksums are now on checksums.json
 
 builddependencies = [
@@ -40,7 +43,8 @@ multi_deps = {
         '3.11', '3.12', '3.13'
     ]}
 
-preconfigopts = 'env FC=$MPIF90 LIBS="$LIBLAPACK $LIBS" '
+preconfigopts = 'cp -rv ../torch/* %(installdir)s && '
+preconfigopts += 'env FC=$MPIF90 LIBS="$LIBLAPACK $LIBS" '
 configopts = " ".join([
     "--exec-prefix=%(installdir)s",
     "--enable-gsl",
@@ -48,6 +52,7 @@ configopts = " ".join([
 #   "--enable-boost_graph", # Bug in 2.10.0: https://github.com/plumed/plumed2/issues/1294
     "--enable-boost_serialization",
     "--enable-asmjit",
+    "--enable-libtorch",
 ])
 
 prebuildopts = "source sourceme.sh && "
