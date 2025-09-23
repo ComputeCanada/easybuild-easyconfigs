@@ -1,0 +1,118 @@
+# Built with EasyBuild version 5.1.1 on 2025-09-14_15-13-05
+name = 'PETSc'
+version = "3.16.6"
+versionsuffix = '-64bits'
+
+homepage = 'http://www.mcs.anl.gov/petsc'
+description = """PETSc, pronounced PET-see (the S is silent), is a suite of data structures and routines for the
+ scalable (parallel) solution of scientific applications modeled by partial differential equations."""
+
+toolchain = {'name': 'foss', 'version': '2023a'}
+toolchainopts = {'usempi': True, 'pic': True}
+
+source_urls = ['https://web.cels.anl.gov/projects/%(namelower)s/download/release-snapshots/']
+sources = [SOURCELOWER_TAR_GZ]
+checksums = [
+    'bfc836b52f57686b583c16ab7fae0c318a7b28141ca01656ad673c8ca23037fa',
+]
+
+dependencies = [
+    ('HDF5', '1.14.2', '-mpi'),
+]
+
+# For the extension
+builddependencies = [
+    ('SciPy-Stack', '2025a'),
+    ('mpi4py', '4.0.3'),
+]
+
+multi_deps = {'Python': ['3.10']}
+multi_deps_extensions_only = True
+
+configopts = " ".join([
+    '--with-hdf5=1',
+    '--with-hdf5-dir=$EBROOTHDF5',
+    '--with-cxx-dialect=C++14',
+    '--with-memalign=64',
+    '--with-python=no',
+    '--with-mpi4py=no',
+    '--with-64-bit-indices=1',
+])
+# Fix usage of MAKEFLAGS (can't add to start as may be missing leading dash and can't add to end as contains --)
+prebuildopts = 'sed -i -e \'s/MAKEFLAGS="\\([^"]*\\) $(MAKEFLAGS)" \\+\\([^ ]*\\)/\\2 \\1/\' lib/petsc/conf/* && '
+
+
+download_deps = [
+    'triangle',
+    'hpddm',
+    'strumpack',
+]
+
+postinstallcmds = [
+    'ln -sf %(installdir)s/lib/%(namelower)s/bin %(installdir)s/bin',
+    'ln -sf %(installdir)s/lib/%(namelower)s/conf %(installdir)s/conf',
+]
+
+keepsymlinks = True
+
+shared_libs = 1
+
+download_deps_static = [
+    'f2cblaslapack',
+    'mumps',
+    'ptscotch',
+    #'superlu',
+    'superlu_dist',
+    'parmetis',
+    'metis',
+    #'ml',
+    'SuiteSparse',
+    'hypre',
+    'prometheus',
+    'spooles',
+    #'chaco',
+    'slepc',
+    #'spai',
+    #'party',
+]
+
+exts_defaultclass = 'PythonPackage'
+exts_default_options = {
+    # disable "pip check" which would fail with several:
+    # > $PACKAGE requires (numpy|mpi4py|msgpack), which is not installed 
+    'sanity_pip_check': False,
+}
+exts_list = [
+    ('petsc4py', version, {
+        'buildopts': '#',
+        'check_ldshared': False,
+        'modulename': 'petsc4py',
+        'preconfigopts': '#',
+        #'preconfigopts': 'find -name \'*.c\' -print0 | xargs -0 sed -i -e \'/# *include.*longintrepr/d\'',
+        'use_pip': True,
+        'runtest': False,
+        'source_urls': ['https://pypi.python.org/packages/source/%(nameletter)s/%(name)s'],
+        'checksums' : ['a9b4ed19ca2e62b38da51ac3a70539d9581a1354cc4464c93963d7e95bd8ef66'],
+    }),
+]
+
+exts_filter = ("python -c 'import %(ext_name)s'", '')
+
+sanity_check_paths = {
+    'files': [
+        'lib/libpetsc.so',
+    ],
+    'dirs': [
+        'bin',
+        'conf',
+        'include',
+        'lib',
+        'share',
+        'lib/python%(pyshortver)s/site-packages'
+    ]
+}
+
+moduleclass = 'numlib'
+modluafooter = """
+family("%(namelower)s")
+"""
