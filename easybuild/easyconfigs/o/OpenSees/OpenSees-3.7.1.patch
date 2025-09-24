@@ -1,0 +1,11 @@
+--- CMakeLists.txt.orig	2025-09-22 20:46:58.000000000 -0700
++++ CMakeLists.txt	2025-09-22 20:47:23.000000000 -0700
+@@ -742,7 +742,7 @@
+ #
+ 
+ install (TARGETS OpenSees DESTINATION bin)
+-set (TCL_INIT_FILE "${TCL_INCLUDE_PATH}/../lib/tcl8.6/init.tcl")
++set (TCL_INIT_FILE "${TCL_INCLUDE_PATH}/../lib64/tcl8.6/init.tcl")
+ install(FILES ${TCL_INIT_FILE} DESTINATION lib/tcl8.6)
+ 
+ # Set selected executable to be built by default

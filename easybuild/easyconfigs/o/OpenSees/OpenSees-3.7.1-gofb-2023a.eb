@@ -1,0 +1,37 @@
+easyblock = 'CMakeMake'
+
+name = 'OpenSees'
+version = '3.7.1'
+
+homepage = "https://opensees.berkeley.edu/index.php"
+description = "OpenSees is a software framework for developing applications to simulate the performance of structural and geotechnical systems subjected to earthquakes."
+
+toolchain = {'name': 'foss', 'version': '2023a'}
+toolchainopts = {'usempi': True}
+
+source_urls = ['https://github.com/OpenSees/OpenSees/archive/refs/tags']
+sources = ["v%(version)s.tar.gz"]
+patches = ['%(name)s-%(version)s.patch']
+checksums = [
+    {'v3.7.1.tar.gz': 'fa805d2db131939b06042568f56b875c40d80a46c96b0d60dbfbfa0fbbceaaa6'},
+    {'OpenSees-3.7.1.patch': '0a59fb8319abee09b590e76441dcbb8bfcc4afe475706d8fa360ae0c1590a3e1'},
+]
+
+builddependencies = [
+    ('CMake', '3.31.0'),
+    ('Python', '3.11'),
+    ('HDF5', '1.8.18'),
+    ('Eigen', '3.4.0'),
+    ('MUMPS', '5.7.3', '-metis'),
+]
+separate_build_dir = True
+
+configopts = '-DSCALAPACK_LIBRARIES=-lscalapack '
+configopts += '-DMUMPS_DIR=$EBROOTMUMPS '
+
+sanity_check_paths = {
+    'files': ['bin/OpenSees'],
+    'dirs' : ['lib/tcl8.6'],
+}
+
+moduleclass = 'geo'
