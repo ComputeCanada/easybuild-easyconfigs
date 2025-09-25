@@ -46,7 +46,6 @@ dependencies = [
     # ('libpng', '1.6.43'),
     # ('libjpeg-turbo', '3.0.1'),
     ('netCDF', '4.9.2'), 
-    ('PnetCDF', '1.12.3'),
     ('GSL', '2.7'),
     # ('zlib', '1.3.1'),
     # ('gzip', '1.13'),
@@ -61,7 +60,7 @@ dependencies = [
     # ('PLUMED', '2.9.3'),
     ('n2p2', '2.2.0', '', ('gofb', '2023a')),   # Required for ML-HDNNP
     # ('SciPy-bundle', '2024.05'),
-    ('SciPy-Stack', '2024a'),
+    ('SciPy-Stack', '2025a'),
     # VTK package is auto-disabled if this dep is not available
     ('VTK', '9.3.0'),
     # We use a custom build of MDI:
