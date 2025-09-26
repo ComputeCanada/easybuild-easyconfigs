@@ -1,0 +1,111 @@
+easyblock = 'CMakeMake'
+
+name = 'HDF5'
+# Note: Odd minor releases are only RCs and should not be used.
+version = '1.14.6'
+
+homepage = 'https://portal.hdfgroup.org/display/support'
+description = """HDF5 is a data model, library, and file format for storing and managing data.
+ It supports an unlimited variety of datatypes, and is designed for flexible
+ and efficient I/O and for high volume and complex data."""
+
+toolchain = {'name': 'gompi', 'version': '2025b'}
+toolchainopts = {'pic': True, 'usempi': True}
+
+source_urls = ['https://github.com/HDFGroup/hdf5/archive']
+sources = ['hdf5_%(version)s.tar.gz']
+
+# For the extensions
+builddependencies = [
+    ('CMake', '3.31.0'),
+    ('libaec', '1.0.6'),
+    ('mpi4py', '4.1.0'),
+    ('Cython', '3.1.2'),
+    ('numpy', '2.1.1'),
+    ('python-build-bundle', '2025b'),
+]
+
+dependencies = [
+    ('zlib', '1.3.1'),
+    ('Szip', '2.1.1'),
+]
+
+multi_deps = {'Python': ['3.11', '3.12', '3.13']}
+multi_deps_extensions_only = True
+
+preconfigopts = 'export LDFLAGS="$LDFLAGS -pthread" && '
+preconfigopts += 'export RUNPARALLEL="mpirun -np $${NPROCS:=3}" && '
+configopts = ' '.join([
+    '-DHDF5_BUILD_CPP_LIB=ON',
+    '-DHDF5_BUILD_FORTRAN=ON',
+    '-DHDF5_ENABLE_THREADSAFE=ON',
+    '-DALLOW_UNSUPPORTED=ON',  # fortran+threadsafe requires unsupported
+    '-DHDF5_ENABLE_PARALLEL=ON',
+])
+# h5redeploy is shipped in 1.14.6 but not installed by CMake. This will be removed in a future HDF5 release.
+postinstallcmds = [
+    "cp ../hdf5*/bin/h5redeploy.in %(installdir)s/bin/h5redeploy && chmod +x %(installdir)s/bin/h5redeploy",
+]
+ 
+exts_defaultclass = 'PythonPackage'
+exts_default_options = {
+    'source_urls': [PYPI_SOURCE],
+    'sanity_pip_check': False,
+}
+exts_list = [
+    ('cached-property', '2.0.1', {
+        'sources': ['cached_property-%(version)s.tar.gz'],
+    }),
+    ('ndindex', '1.10.0'),
+    ('py-cpuinfo', '9.0.0', {
+        'modulename': 'cpuinfo',
+    }),
+    ('pkgconfig', '1.5.5'),
+    ('h5py', '3.14.0', {
+        # h5py's setup.py will disable setup_requires if H5PY_SETUP_REQUIRES is set to 0
+        # without this environment variable, pip will fetch the minimum numpy version h5py supports during install,
+        # even though the numpy module provides a newer version that satisfies h5py's install_requires dependency.    
+        'preinstallopts': ('sed -i -e "/cmdclass = CMDCLASS,/a zip_safe = False," setup.py && '
+	                   'HDF5_MPI="ON" H5PY_SETUP_REQUIRES=0 LD_LIBRARY_PATH=%(installdir)s/lib '),
+    }),
+    ('numexpr', '2.13.0'),
+    ('blosc2', '3.8.0'),
+    ('tables', '3.10.2', {
+        'preinstallopts': ('ln -s lib64 %(installdir)s/lib/python%(pyshortver)s/site-packages/tables.libs && '
+                           'unset LIBS && rm -r c-blosc/{blosc,internal-complibs} && '
+                           'sed -i "s@/usr/local@$EBROOTGENTOO@" setup.py && '
+                           'BLOSC2_DIR=%(installdir)s/lib/python%(pyshortver)s/site-packages '),
+    }),
+    ('hdf5-blosc', '1.0.1', {
+        'easyblock': 'CMakePythonPackage',
+        'source_urls': ['https://github.com/Blosc/hdf5-blosc/archive/refs/tags'],
+        'sources': ['v%(version)s.tar.gz'],
+        'configure_cmd': 'cmake',
+        'preconfigopts': '',
+        'configopts': '-DCMAKE_INSTALL_LIBDIR:PATH=lib64 -DPLUGIN_INSTALL_PATH=%(installdir)s/lib/plugin ../hdf5blosc/hdf5-blosc-%(version)s',
+        'use_pip': False,
+        'sanity_check_paths': {
+            'files': ['lib/plugin/libH5Zblosc.%s' % SHLIB_EXT, 'include/blosc_filter.h'],
+            'dirs': [],
+        },
+        'modulename': False, # skips Python-specific sanity check
+    }),
+]
+
+exts_filter = ("""module load python-build-bundle/2025b mpi4py/4.1.0 numpy/.2.1.1;  python -c 'import %(ext_name)s'""", '')
+
+_extra_binaries = ["h5perf", "h5pcc", "h5pfc", "ph5diff"]
+_h5binaries = ["c++", "copy", "debug", "diff", "dump", "import", "jam", "ls", "mkgrp", "perf_serial", "redeploy",
+               "repack", "repart", "stat", "unjam"]
+_binaries = ["h5%s" % x for x in _h5binaries] + _extra_binaries
+_libs = ["libhdf5%s.%s" % (lib, SHLIB_EXT) for lib in ['', '_cpp', '_fortran', '_hl_cpp', '_hl', '_hl_fortran']]
+
+sanity_check_paths = {
+    'files': [f"bin/{x}" for x in _binaries] + [f"lib/{lib}" for lib in _libs],
+    'dirs': ['include'],
+}
+
+modextravars = {'HDF5_DIR': ''}
+modextrapaths = {'EBPYTHONPREFIXES': ''}
+
+moduleclass = 'data'
