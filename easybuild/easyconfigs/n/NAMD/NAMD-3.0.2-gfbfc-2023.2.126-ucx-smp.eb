@@ -1,5 +1,5 @@
 name = 'NAMD'
-version = '3.0.1'
+version = '3.0.2'
 versionsuffix = '-ucx-smp'
 
 homepage = 'http://www.ks.uiuc.edu/Research/namd/'
@@ -10,8 +10,8 @@ toolchain = {'name': 'gfbfc', 'version': '2023.2.126'}
 toolchainopts = {'opt': True,'pic': True}
 
 sources = ['NAMD_%(version)s_Source.tar.gz']
-patches = [('NAMD_3.0.1_add_cuda_12_arch_file.patch',1)]
-checksums = [ '3be0854545c45e58afb439a96708e127aef435d30113cc89adbab8f4b6888733','ca95221091cb96d781627abe2ec50c8b7b81ec1ab4999ef246539a16f8669ae6']
+patches = [('NAMD_3.0.2_add_cuda_12_arch_file.patch',1)]
+checksums = [ '4809360bdbe4f67aebd56847210537a24f6c785c381e501341260a7812879da4','3c27ef918911e1adba10ef8f7524b85a9ba0d9786b4da220addbdadecc8e9752']
 
 dependencies = [
     ('UCX', '1.16.0'),
@@ -30,12 +30,4 @@ modaltsoftname = "namd-ucx-smp"
 
 modluafooter = """
 family("namd")
-if (mode() == "load" and os.getenv("RSNT_INTERCONNECT") == "omnipath") then
-        local warn_message = [[
-    This version of NAMD does not work with this cluster's networking. Please use namd-mpi instead.
-
-    Cette version de NAMD ne fonctionne pas avec la connectique de cette grappe. Utilisez namd-mpi.
-    ]]
-    LmodWarning(warn_message)
-end
 """
