@@ -7,19 +7,17 @@ for argument in "$@"; do
 	if [[ $argument =~ ^--toolkitpath=.*$ ]]; then
 		instdir=${argument/--toolkitpath=/}
 	fi
+	if [[ $argument =~ ^--samplespath=.*$ ]]; then
+		tmpdir=${argument/--samplespath=/}
+	fi
 done
-if [[ -z "$instdir" ]]; then
-	exit 1
-fi
 
 export instdir
-export instdir_parent=$(dirname "$instdir")
-export instdir_orig="$instdir_parent/orig"
+instdir_parent=$(dirname "$instdir")
 
-rmdir $instdir
-bwrap --dev-bind / / --tmpfs "$instdir_parent" --bind "$instdir_parent" "$instdir_orig" bash -c '
+rm -rf $instdir
+bwrap --dev-bind / / --bind "$tmpdir" "$instdir_parent" bash -c '
 	./cuda-installer.orig "$@"
 	for dir in "$instdir"/{bin,nvvm}; do setrpaths.sh --path "$dir"; done
 	for dir in "$instdir"/{c,e,g,nsight,t}*; do setrpaths.sh --path "$dir" --add_origin; done
-	mv "$instdir" "$instdir_orig"
 ' "$0" "$@"
