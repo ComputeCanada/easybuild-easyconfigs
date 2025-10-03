@@ -10,7 +10,7 @@ description = """CUDA (formerly Compute Unified Device Architecture) is a parall
 
 toolchain = {'name': 'NVHPC', 'version': '25.1'}
 
-dependencies = [('CUDAcore', '12.6.2', '', True)]
+dependencies = [('CUDAcore', '12.6.3', '', True)]
 
 altroot = 'CUDAcore'
 modluafooter = 'setenv("NVHPC_CUDA_HOME", os.getenv("EBROOTCUDACORE") or "")'
