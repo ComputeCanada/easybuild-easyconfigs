@@ -1,0 +1,53 @@
+easyblock = 'MakeCp'
+
+name = 'canu'
+version = '2.3'
+
+homepage = 'https://github.com/marbl/canu'
+description = """Canu is a fork of the Celera Assembler, designed for high-noise single-molecule
+ sequencing (such as the PacBio RS II or Oxford Nanopore MinION).
+
+ Canu is a hierarchical assembly pipeline which runs in four steps:
+
+     Detect overlaps in high-noise sequences using MHAP
+     Generate corrected sequence consensus
+     Trim corrected sequences
+     Assemble trimmed corrected sequences
+"""
+
+toolchain = {'name': 'GCCcore', 'version': '13.3.0'}
+
+source_urls = ['https://github.com/marbl/canu/releases/download/v%(version)s']
+sources = ['canu-%(version)s.tar.xz']
+checksums = ['ecb071943cde722152deb861d4ab897090f00b227fd0b261592e1e3fdd3e3e1a']
+
+start_dir = 'src'
+
+files_to_copy = [
+    (['build/bin/*'], 'bin'),
+    'build/lib',
+    'build/share',
+]
+
+dependencies = [
+    ('gnuplot', '6.0.3',)
+]
+
+sanity_check_paths = {
+    'files': ['bin/canu'],
+    'dirs': [
+        "bin",
+        "lib",
+        "share",
+    ]
+}
+
+sanity_check_commands = [
+    'canu --help'
+]
+
+moduleclass = 'bio'
+modluafooter = """
+depends_on("perl")
+depends_on("java")
+"""
