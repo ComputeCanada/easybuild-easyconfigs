@@ -1,0 +1,41 @@
+easyblock = 'CMakeMake'
+
+name = 'raven'
+version = '1.8.3'
+
+homepage = 'https://github.com/lbcb-sci/raven'
+description = """
+Raven is a de novo genome assembler for long uncorrected reads.
+"""
+
+toolchain = {'name': 'GCCcore', 'version': '13.3.0'}
+
+github_account = 'lbcb-sci'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['%(version)s.tar.gz']
+checksums = ['5e7725d1115f7bbd2b6e72d3eb813e99beee552abdb751050d092de2348e5439']
+
+builddependencies = [
+    ('CMake', '3.31.1'),
+    ('Boost', '1.82.0', '-core'),
+]
+
+configopts = ' '.join([
+    "-DRAVEN_BUILD_EXE=ON",
+    "-DRAVEN_BUILD_SHARED_LIBS=OFF",
+    "-DRAVEN_BUILD_PYTHON=OFF",
+    "-DRAVEN_BUILD_TESTS=OFF",
+])
+
+sanity_check_paths = {
+    'files': ['bin/raven'],
+    'dirs': ['bin'],
+}
+
+sanity_check_commands = ['raven']
+
+modextrapaths = {
+    # 'PATH': 'libexec',
+}
+
+moduleclass = 'bio'
