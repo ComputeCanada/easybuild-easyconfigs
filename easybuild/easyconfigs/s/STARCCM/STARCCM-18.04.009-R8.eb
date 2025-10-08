@@ -16,9 +16,14 @@ checksums = ['a68c0e36aa635d30793ef438afffe5c2411305ba1a498e4d77dc52ca585968ed']
 extract_sources = True
 
 postinstallcmds = [
+  # Avoid Gui Startup Message:  libGL error: MESA-LOADER: failed to open swrast:
+  # /cvmfs/restricted.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/starccm/.../star/
+  # /lib/linux-x86_64-2.17/system/gnu11.2-64/libstdc++.so.6: version `GLIBCXX_3.4.30' not found
+  # (required by /cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/lib/llvm/16/lib64/libLLVM-16.so)
+ "find %(installdir)s \( -type f -o -type l \) -name 'libstdc++.so*' -exec mv {} {}.bak \;",
   # Run setrpaths.sh in all directories
  "/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s",
-  # Redirect hard coded /lib64/libc.so.6 to GENTOO
+  # Redirect hard coded /lib64/libc.so.6 in compare_glibc to GENTOO
  "cp -a %(installdir)s/STAR-CCM+%(version)s/star/bin/compare_glibc{,-orig};\
   sed -i \"s|'\/lib64\/libc.so.6'|'\$EBVERSIONGENTOO\/lib64\/libc.so.6'|g\" %(installdir)s/STAR-CCM+%(version)s/star/bin/compare_glibc;\
   sed -i \"s|(\/lib64\/libc.so.6)|(\$EBVERSIONGENTOO\/lib64\/libc.so.6)|g\" %(installdir)s/STAR-CCM+%(version)s/star/bin/compare_glibc;"

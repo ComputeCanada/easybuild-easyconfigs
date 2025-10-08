@@ -16,9 +16,12 @@ checksums = ['77a46b81e93d427a1c33b78fa9ae3fa0c1de4636c749e2f2692728b0f5bb1296']
 
 postinstallcmds = [
   # Run setrpaths.sh in all directories
-  "/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s",
+ "/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s",
+  # Redirect hard coded /lib64/libc.so.6 in compare_glibc to GENTOO
+ "cp -a %(installdir)s/STAR-CCM+%(version)s/star/bin/compare_glibc{,-orig};\
+  sed -i \"s|'\/lib64\/libc.so.6'|'\$EBVERSIONGENTOO\/lib64\/libc.so.6'|g\" %(installdir)s/STAR-CCM+%(version)s/star/bin/compare_glibc;\
+  sed -i \"s|(\/lib64\/libc.so.6)|(\$EBVERSIONGENTOO\/lib64\/libc.so.6)|g\" %(installdir)s/STAR-CCM+%(version)s/star/bin/compare_glibc;"
 ]
-
 
 moduleclass = 'tools'
 modluafooter = """
