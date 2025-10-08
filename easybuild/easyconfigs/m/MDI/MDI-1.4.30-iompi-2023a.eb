@@ -1,0 +1,56 @@
+# MDI package for LAMMPS
+# Author: J. Saßmannshausen (Imperial College London)
+
+easyblock = 'CMakeMake'
+name = 'MDI'
+version = '1.4.30'
+
+homepage = 'https://github.com/MolSSI-MDI/MDI_Library'
+description = """The MolSSI Driver Interface (MDI) project provides a
+standardized API for fast, on-the-fly communication between computational
+chemistry codes. This greatly simplifies the process of implementing
+methods that require the cooperation of multiple software packages and
+enables developers to write a single implementation that works across
+many different codes. The API is sufficiently general to support a wide
+variety of techniques, including QM/MM, ab initio MD, machine learning,
+advanced sampling, and path integral MD, while also being straightforwardly
+extensible. Communication between codes is handled by the MDI Library, which
+enables tight coupling between codes using either the MPI or TCP/IP methods.
+"""
+
+toolchain = {'name': 'iompi', 'version': '2023a'}
+
+source_urls = ['https://github.com/MolSSI-MDI/MDI_Library/archive']
+sources = ['v%(version)s.tar.gz']
+checksums = ['96681171b3735cb1c413311ff44fbcb4401841ffcdbf0c1f395e737a5fab52e8']
+
+builddependencies = [
+    ('CMake', '3.26.3'),
+]
+
+dependencies = [
+    ('Python', '3.11.3'),
+]
+
+# perform iterative build to get both static and shared libraries
+
+local_common_configopts = '-DCMAKE_POSITION_INDEPENDENT_CODE=ON -DPython_EXECUTABLE=$EBROOTPYTHON/bin/python '
+
+configopts = [
+    local_common_configopts + ' -Dlibtype=STATIC',
+    local_common_configopts + ' -DBUILD_SHARED_LIBS=ON',
+]
+
+modextrapaths = {
+    'LD_LIBRARY_PATH': 'lib/mdi',
+    'LIBRARY_PATH': 'lib/mdi',
+}
+
+sanity_check_paths = {
+    'files': ['lib/mdi/libmdi.a', 'lib/mdi/libmdi.%s' % SHLIB_EXT],
+    'dirs': ['include', 'share'],
+}
+
+bin_lib_subdirs = ['lib/mdi']
+
+moduleclass = 'chem'

@@ -1,0 +1,26 @@
+name = 'NAMD'
+version = '3.0.2'
+versionsuffix = '-multicore'
+
+homepage = 'http://www.ks.uiuc.edu/Research/namd/'
+description = """NAMD is a parallel molecular dynamics code designed for high-performance simulation of
+ large biomolecular systems."""
+
+toolchain = {'name': 'gfbf', 'version': '2023a'}
+toolchainopts = {'opt': True,'pic': True}
+
+sources = ['NAMD_%(version)s_Source.tar.gz']
+checksums = [ '4809360bdbe4f67aebd56847210537a24f6c785c381e501341260a7812879da4']
+
+# /bin/csh is required by 'config' script
+osdependencies = ['tcsh']
+charm_arch = "multicore-linux-x86_64"
+
+runtest=False
+
+moduleclass = 'chem'
+modaltsoftname = "namd-multicore"
+
+modluafooter = """
+family("namd")
+"""
