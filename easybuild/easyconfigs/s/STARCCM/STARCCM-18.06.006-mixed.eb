@@ -12,9 +12,10 @@ This version uses mixed precision."""
 
 toolchain = SYSTEM
 
-# sha256sum /cvmfs/restricted.computecanada.ca/easybuild/sources/s/STARCCM/STAR-CCM+18.06.006_01_linux-x86_64.tar.gz
-sources = ['STAR-CCM+%(version)s_01_linux-x86_64.tar.gz']
+# sha256sum
+sources = ['STAR-CCM+18.06.006_01_linux-x86_64.tar.gz']
 checksums = ['476b75b859612cf816ba62ac36fdf98b47dd606114c612dea6869031582db4a5']
+extract_sources = True
 
 postinstallcmds = [
   # Run setrpaths.sh in all directories
@@ -25,6 +26,10 @@ postinstallcmds = [
   sed -i \"s|(\/lib64\/libc.so.6)|(\$EBVERSIONGENTOO\/lib64\/libc.so.6)|g\" %(installdir)s/STAR-CCM+%(version)s/star/bin/compare_glibc;"
 ]
 
+modextrapaths = {
+    'PATH': ['STAR-CCM+%(version)s/star/bin'],
+}
+
 moduleclass = 'tools'
 modluafooter = """
 require("SitePackage")
@@ -33,7 +38,7 @@ if (mode() == "load" and not found) then
         local warning_message = [[
 	We did not find a suitable license file for StarCCM+. If you have access to one, you can create the file $HOME/.licenses/starccm.lic with the license information. You may also define the CDLMD_LICENSE_FILE environment variable yourself. This is only a warning. For more details, see https://docs.alliancecan.ca/wiki/Star-CCM%2B
 	
-	Nous n'avons pas trouve de fichier de license utilisable pour StarCCM+. Si vous avez acces a une license de StarCCM+, vous pouvez creer le fichier $HOME/.licenses/starccm.lic avec l'information de la license. Vous pouvez aussi definir la variable d'environnement CDLMD_LICENSE_FILE. Ceci n'est pas une erreur. Pour plus de details, voir la page https://docs.alliancecan.ca/wiki/Star-CCM%2B
+	Nous n'avons pas trouve de fichier de license utilisable pour StarCCM+. Si vous avez acces a une license de StarCCM+, vous pouvez creer le fichier $HOME/.licenses/starccm.lic avec l'information de la license. Vous pouvez aussi definir la variable d'environnement CDLMD_LICENSE_FILE. Ceci n'est pas une erreur. Pour plus de details, voir la page https://docs.alliancecan.ca/wiki/Star-CCM%2B/fr
 	]]
 	LmodWarning(warning_message)
 end
