@@ -1,8 +1,4 @@
-##
-# This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
-#
-# License::   MIT/GPL
-
+# Built with EasyBuild version 4.3.0-rc09d6ca14937467ccd390604052ab2d1c3a0ba6e on 2020-10-21_18-01-15
 easyblock = 'ConfigureMake'
 
 name = 'PLUMED'
@@ -17,35 +13,32 @@ description = """PLUMED is an open source library for free energy calculations i
  The software, written in C++, can be easily interfaced with both fortran and C/C++ codes.
 """
 
-toolchain = {'name': 'gofb', 'version': '2023a'}
-toolchainopts = {'usempi': 'True'}
+toolchain = {'name': 'iofb', 'version': '2023a'}
+toolchainopts = {'usempi': 'True', 'extra_cflags': '-march=x86-64-v3 -axCore-AVX512 ', 'extra_cxxflags': '-march=x86-64-v3 -axCore-AVX512 ', 'extra_fflags': '-march=core-avx2 -axCore-AVX512 ', 'extra_fcflags': '-march=core-avx2 -axCore-AVX512 ', 'extra_f90flags': '-march=core-avx2 -axCore-AVX512 ', 'optarch': ''}
 
 source_urls = ['https://github.com/%(namelower)s/plumed2/releases/download/v%(version)s/']
 sources = [SOURCE_TGZ]
+
 # checksums are now on checksums.json
 
 builddependencies = [
 ]
-
 dependencies = [
-    ('FFTW', '3.3.10'),
-    ('GSL', '2.7'),
+    ('FFTW', '3.3.10', '', ('intel-compilers', '2023.2.1')),
+    ('GSL', '2.7', '', ('GCC', '12.3.0')),
     ('libmatheval', '1.1.11'),
-    ('SciPy-Stack', '2025a', '', True),
-    ('Boost', '1.82.0'),
-    ('XDRfile', '1.1.4'),
+    ('SciPy-Stack', '2025a', '', SYSTEM),
+    ('Boost', '1.82.0', '', ('GCC', '12.3.0')),
+    ('XDRfile', '1.1.4', '', ('GCCcore', '12.3.0')),
 ]
-multi_deps = {
-    'Python': [
-        '3.11', '3.12', '3.13'
-    ]}
+multi_deps = {'Python': ['3.11', '3.12', '3.13']}
 
 preconfigopts = 'env FC=$MPIF90 LIBS="$LIBLAPACK $LIBS" '
 configopts = " ".join([
     "--exec-prefix=%(installdir)s",
     "--enable-gsl",
     "--enable-modules=all",
-#   "--enable-boost_graph", # Bug in 2.10.0: https://github.com/plumed/plumed2/issues/1294
+#    "--enable-boost_graph", # Bug in 2.10.0: https://github.com/plumed/plumed2/issues/1294
     "--enable-boost_serialization",
     "--enable-asmjit",
 ])
@@ -53,8 +46,8 @@ configopts = " ".join([
 prebuildopts = "source sourceme.sh && "
 
 # copy GROMACS patches to applying them to latest GROMACS releases.
-preinstallopts =  'cp    patches/gromacs-2024.3.config   patches/gromacs-2024.6.config && '
-preinstallopts += 'cp -r patches/gromacs-2024.3.diff     patches/gromacs-2024.6.diff   && '
+# preinstallopts =  'cp    patches/gromacs-2022.5.config   patches/gromacs-2022.6.config && '
+# preinstallopts += 'cp -r patches/gromacs-2022.5.diff     patches/gromacs-2022.6.diff   && '
 
 multi_deps_load_default = False
 multi_deps_extensions_only = True
@@ -84,6 +77,7 @@ sanity_check_commands = ["python%(pyshortver)s -c 'import %(namelower)s'"]
 modextrapaths = {
     'EBPYTHONPREFIXES': [''],
 }
+
 modextravars = {
     'PLUMED_KERNEL': '%(installdir)s/lib/libplumedKernel.' + SHLIB_EXT,
     'PLUMED_ROOT': '%(installdir)s/lib/%(namelower)s',
@@ -91,4 +85,3 @@ modextravars = {
 }
 
 moduleclass = 'chem'
-
