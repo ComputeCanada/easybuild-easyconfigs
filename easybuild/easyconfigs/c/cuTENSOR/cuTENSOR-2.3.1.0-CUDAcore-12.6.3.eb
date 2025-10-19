@@ -21,12 +21,6 @@ checksums = [
     'b1d7ad37b24cd66a446ae76ac33bd5125aa58007a604cb64fc9c014a8d685940' #sources
 ]
 
-preinstall_cmd = ' && '.join([
-    'mv lib/{} lib_tmp'.format(local_cuda_major), #move the right lib in source folder
-    'rm -r lib', #remove other libs
-    'mv lib_tmp lib',
-])
-
 sanity_check_paths = {
     'files': ['include/cutensor.h', 'lib/libcutensor.so'],
     'dirs': ['include', 'lib'],
