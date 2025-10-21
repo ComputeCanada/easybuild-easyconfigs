@@ -57,12 +57,12 @@ dependencies = [
     ('Voro++', '0.4.6'),
     ('kim-api', '2.4.1'),
     ('Eigen', '3.4.0'),
-    # ('PLUMED', '2.9.3'),
+    ('PLUMED', '2.9.4'),
     ('n2p2', '2.2.0', '', ('gofb', '2023a')),   # Required for ML-HDNNP
     # ('SciPy-bundle', '2024.05'),
     ('SciPy-Stack', '2025a'),
     # VTK package is auto-disabled if this dep is not available
-    ('VTK', '9.3.0'),
+    ('VTK', '9.3.1', '-mpi'),
     # We use a custom build of MDI:
     ('MDI', '1.4.30'),
     ('tbb', '2021.10.0'),
@@ -97,6 +97,7 @@ configopts = ' '.join([
     '-DN2P2_DIR=$EBROOTN2P2', 
     '-DKokkos_ENABLE_OPENMP=no',
     '-DPKG_KOKKOS=on',
+    '-DDOWNLOAD_QUIP=yes',
 ])
 
 # Include the following extra packages into the build:
