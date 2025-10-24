@@ -41,6 +41,9 @@ postinstallcmds = [
   "find %(installdir)s \( -type f -o -type l \) -name 'libgfortran.so*' -exec mv {} {}.bak \;",
   "find %(installdir)s \( -type f -o -type l \) -name 'libgfortran.so.3*bak' -print0 | while IFS= \
    read -r -d $'\\0' file; do echo \"Removing bak from $file\"; mv \"$file\" \"${file%.bak}\"; done;",
+  # Look for latest libstdc++.so.X.Y.Z under $EBROOTGENTOO instead of root filesystem
+  "grep -riIlZ 'find /usr/lib64 /usr/lib' %(installdir)s | while IFS= read -r -d $'\\0' file; do echo \"$file\"; \
+   sed -i \"s|find \/usr\/lib64 \/usr\/lib|find \$EBROOTGENTOO\/usr\/lib64 \$EBROOTGENTOO\/usr\/lib|g\" \"$file\"; done;",
   # Find all non-binary files containing  [:"]/usr/lib or [:"]/lib on one line and remove them from the paths
   "for f in $(grep -rIl '[:\"]/usr/lib\|[:\"]/lib' %(installdir)s); do echo Modifying file $f; \
    sed -i -e '/[:\"]\/usr\/lib/s/:*\/usr\/lib[^:\"]*//g' -e '/[:\"]\/lib/s/:*\/lib[^:\"]*//g' $f; done",
@@ -96,9 +99,9 @@ postinstallcmds = [
    mv libjpeg.so.62 libjpeg.so.62-orig;\
    ln -s $EPREFIX/usr/lib64/libjpeg.so.62 libjpeg.so.62;",
   # Make sharcnet license the default for coupled solvers
-  "cd %(installdir)s/shared_files/licensing;\
-   echo 'SERVER=1055@license3.sharcnet.ca' > ansyslmd.ini;\
-   echo 'ANSYSLI_SERVERS=2325@license3.sharcnet.ca' >> ansyslmd.ini;"
+  #"cd %(installdir)s/shared_files/licensing;\
+  #echo 'SERVER=1055@license3.sharcnet.ca' > ansyslmd.ini;\
+  #echo 'ANSYSLI_SERVERS=2325@license3.sharcnet.ca' >> ansyslmd.ini;"
   # Replace "$1" with ${1} to Avoid newer grep: warning: stray \ before -
   "cp -a %(installdir)s/v242/ansys/bin/anssh.ini{,-orig};\
    sed -i 's|grep \"$1\"|grep \${1}|g' \"%(installdir)s/v242/ansys/bin/anssh.ini\";",
