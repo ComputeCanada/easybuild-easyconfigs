@@ -20,9 +20,8 @@ functionality.
 """
 
 toolchain = {'name': 'iofb', 'version': '2023a'}
-#toolchainopts = {'openmp': True, 'usempi': True}
-toolchainopts = {'openmp': True, 'usempi': True, 'extra_cflags': '-march=x86-64-v3 -axCore-AVX512 ', 'extra_cxxflags': '-march=x86-64-v3 -axCore-AVX512 ', 'extra_fflags': '-march=core-avx2 -axCore-AVX512 ', 'extra_fcflags': '-march=core-avx2 -axCore-AVX512 ', 'extra_f90flags': '-march=core-avx2 -axCore-AVX512 ', 'optarch': ''}
- 
+toolchainopts = {'openmp': True, 'usempi': True}
+
 # 'https://github.com/lammps/lammps/archive/'
 
 source_urls = ['https://github.com/%(namelower)s/%(namelower)s/archive/refs/tags/']
@@ -47,6 +46,7 @@ dependencies = [
     # ('libpng', '1.6.43'),
     # ('libjpeg-turbo', '3.0.1'),
     ('netCDF', '4.9.2'),
+    ('PnetCDF', '1.12.3'),
     ('GSL', '2.7'),
     # ('zlib', '1.3.1'),
     # ('gzip', '1.13'),
@@ -58,8 +58,8 @@ dependencies = [
     ('Voro++', '0.4.6'),
     ('kim-api', '2.4.1'),
     ('Eigen', '3.4.0'),
-    # ('PLUMED', '2.9.3'),
-    ('n2p2', '2.2.0', '', ('iofb', '2023a')),   # Required for ML-HDNNP
+    ('PLUMED', '2.9.4'),
+    ('n2p2', '2.2.0'),   # Required for ML-HDNNP
     # ('SciPy-bundle', '2024.05'),
     ('SciPy-Stack', '2025a'),
     # VTK package is auto-disabled if this dep is not available
@@ -67,7 +67,7 @@ dependencies = [
     # We use a custom build of MDI:
     ('MDI', '1.4.30'),
     ('tbb', '2021.10.0'),
-    ('ScaFaCoS', '1.0.4'),
+    #('ScaFaCoS', '1.0.4'),
 ]
 
 # To use additional custom configuration options, use the 'configopts' easyconfig parameter
@@ -163,7 +163,7 @@ general_packages = [
     'ML-IAP',
     'ML-PACE',
     'ML-POD',
-    # 'ML-QUIP',
+#    'ML-QUIP',
     'ML-RANN',
     'ML-SNAP',
     'ML-UF3',
@@ -178,7 +178,7 @@ general_packages = [
     'PERI',
     'PHONON',
     'PLUGIN',
-    # 'PLUMED',
+    'PLUMED',
     'POEMS',
     'PTM',
     'PYTHON',
@@ -189,7 +189,7 @@ general_packages = [
     'REPLICA',
     'RHEO',
     'RIGID',
-    # 'SCAFACOS',
+#    'SCAFACOS',
     'SHOCK',
     'SMTBQ',
     'SPH',
@@ -198,7 +198,7 @@ general_packages = [
     'TALLY',
     'UEF',
     'VORONOI',
-    #'VTK',
+#    'VTK',
     'YAFF',
 ]
 

@@ -10,10 +10,13 @@ toolchain = {'name': 'gofb', 'version': '2023a'}
 toolchainopts = {'pic': True, 'usempi': True}
 
 local_download_suffix = 'download.php?submit=Download&version=v%(version_major_minor)s&type=source&os=all&downloadFile='
-source_urls = ['https://www.paraview.org/paraview-downloads/%s' % local_download_suffix]
-sources = ["%(name)s-v%(version)s.tar.gz"]
-checksums = [
-    {'ParaView-v6.0.0.tar.gz': 'b89d83d0ad7123c1ce33cba2e6a610b646877ef88c6e96026ac4fe9612665978'},
+source_urls = [
+     'https://www.paraview.org/files/dependencies/',
+     'https://www.paraview.org/paraview-downloads/%s' % local_download_suffix,
+]
+sources = [
+    "%(name)s-v%(version)s.tar.gz",
+    "nvidia-index-libs-6.0.0.20250604-linux.tar.bz2",
 ]
 
 builddependencies = [
@@ -22,7 +25,7 @@ builddependencies = [
 ]
 
 dependencies = [
-    ('Boost', '1.85.0', '', ('GCC', '12.3.0')),
+    ('Boost', '1.82.0', '', ('GCC', '12.3.0')),
     ('SciPy-Stack', '2025a'),
     ('XZ', '5.6.3'),
     ('HDF5', '1.14.2'),
@@ -39,14 +42,14 @@ dependencies = [
 ]
 
 # these libraries depend on a specific version of python, move them to their own directory
-python_dependent_libs = ['libpqComponents-pv6.0.so*', 'libpqCore-pv6.0.so*', 'libpqPython-pv6.0.so*', 'libpqWidgets-pv6.0.so*', 'libvtkFiltersPython-pv6.0.so*', 'libvtkPVAdaptorsCTH-pv6.0.so*', 'libvtkPVAdaptorsCam-pv6.0.so*', 'libvtkPVAdaptorsNPIC-pv6.0.so*', 'libvtkPVAdaptorsPagosa-pv6.0.so*', 'libvtkPVAdaptorsParticle-pv6.0.so*', 'libvtkPVAdaptorsPhasta-pv6.0.so*', 'libvtkPVCatalyst-pv6.0.so*', 'libvtkPVClientWeb-pv6.0.so*', 'libvtkPVInSitu-pv6.0.so*', 'libvtkPVPythonCatalyst-pv6.0.so*', 'libvtkPVVTKExtensionsExtraction-pv6.0.so*', 'libvtkPVVTKExtensionsExtractionPython-pv6.0.so*', 'libvtkPVVTKExtensionsFiltersGeneral-pv6.0.so*', 'libvtkPVVTKExtensionsFiltersParallel-pv6.0.so*', 'libvtkPVVTKExtensionsFiltersParallelDIY2-pv6.0.so*', 'libvtkPVVTKExtensionsFiltersPython-pv6.0.so*', 'libvtkPVVTKExtensionsFiltersRendering-pv6.0.so*', 'libvtkPVVTKExtensionsIOAMR-pv6.0.so*', 'libvtkPVVTKExtensionsIOCore-pv6.0.so*', 'libvtkPVVTKExtensionsIOExodus-pv6.0.so*', 'libvtkPVVTKExtensionsIOGeneral-pv6.0.so*', 'libvtkPVVTKExtensionsIOImage-pv6.0.so*', 'libvtkPVVTKExtensionsIOImport-pv6.0.so*', 'libvtkPVVTKExtensionsIOSPCTH-pv6.0.so*', 'libvtkPVVTKExtensionsMisc-pv6.0.so*', 'libvtkPythonInterpreter-pv6.0.so*', 'libvtkRemotingApplication-pv6.0.so*', 'libvtkRemotingApplicationComponents-pv6.0.so*', 'libvtkRemotingCore-pv6.0.so*', 'libvtkRemotingExport-pv6.0.so*', 'libvtkRemotingImport-pv6.0.so*', 'libvtkRemotingLive-pv6.0.so*', 'libvtkRemotingMisc-pv6.0.so*', 'libvtkRemotingServerManager-pv6.0.so*', 'libvtkRemotingServerManagerPython-pv6.0.so*', 'libvtkRemotingSettings-pv6.0.so*', 'libvtkRemotingViews-pv6.0.so*', 'libvtkRemotingViewsPython-pv6.0.so*', 'libvtkRenderingMatplotlib-pv6.0.so*', 'libvtkUtilitiesPythonInitializer-pv6.0.so*', 'libvtkUtilitiesPythonInterpreterPath-pv6.0.so*']
-installopts = ' install && mkdir %(installdir)s/lib-py%(pyshortver)s && cd %(installdir)s/lib && cp -a ' + ' '.join(python_dependent_libs) +  ' %(installdir)s/lib-py%(pyshortver)s #'
+local_python_dependent_libs = ['libpqComponents-pv6.0.so*', 'libpqCore-pv6.0.so*', 'libpqPython-pv6.0.so*', 'libpqWidgets-pv6.0.so*', 'libvtkFiltersPython-pv6.0.so*', 'libvtkPVAdaptorsCTH-pv6.0.so*', 'libvtkPVAdaptorsCam-pv6.0.so*', 'libvtkPVAdaptorsNPIC-pv6.0.so*', 'libvtkPVAdaptorsPagosa-pv6.0.so*', 'libvtkPVAdaptorsParticle-pv6.0.so*', 'libvtkPVAdaptorsPhasta-pv6.0.so*', 'libvtkPVCatalyst-pv6.0.so*', 'libvtkPVClientWeb-pv6.0.so*', 'libvtkPVInSitu-pv6.0.so*', 'libvtkPVPythonCatalyst-pv6.0.so*', 'libvtkPVVTKExtensionsExtraction-pv6.0.so*', 'libvtkPVVTKExtensionsExtractionPython-pv6.0.so*', 'libvtkPVVTKExtensionsFiltersGeneral-pv6.0.so*', 'libvtkPVVTKExtensionsFiltersParallel-pv6.0.so*', 'libvtkPVVTKExtensionsFiltersParallelDIY2-pv6.0.so*', 'libvtkPVVTKExtensionsFiltersPython-pv6.0.so*', 'libvtkPVVTKExtensionsFiltersRendering-pv6.0.so*', 'libvtkPVVTKExtensionsIOAMR-pv6.0.so*', 'libvtkPVVTKExtensionsIOCore-pv6.0.so*', 'libvtkPVVTKExtensionsIOExodus-pv6.0.so*', 'libvtkPVVTKExtensionsIOGeneral-pv6.0.so*', 'libvtkPVVTKExtensionsIOImage-pv6.0.so*', 'libvtkPVVTKExtensionsIOImport-pv6.0.so*', 'libvtkPVVTKExtensionsIOSPCTH-pv6.0.so*', 'libvtkPVVTKExtensionsMisc-pv6.0.so*', 'libvtkPythonInterpreter-pv6.0.so*', 'libvtkRemotingApplication-pv6.0.so*', 'libvtkRemotingApplicationComponents-pv6.0.so*', 'libvtkRemotingCore-pv6.0.so*', 'libvtkRemotingExport-pv6.0.so*', 'libvtkRemotingImport-pv6.0.so*', 'libvtkRemotingLive-pv6.0.so*', 'libvtkRemotingMisc-pv6.0.so*', 'libvtkRemotingServerManager-pv6.0.so*', 'libvtkRemotingServerManagerPython-pv6.0.so*', 'libvtkRemotingSettings-pv6.0.so*', 'libvtkRemotingViews-pv6.0.so*', 'libvtkRemotingViewsPython-pv6.0.so*', 'libvtkRenderingMatplotlib-pv6.0.so*', 'libvtkUtilitiesPythonInitializer-pv6.0.so*', 'libvtkUtilitiesPythonInterpreterPath-pv6.0.so*']
+installopts = ' install && mkdir %(installdir)s/lib-py%(pyshortver)s && cd %(installdir)s/lib && cp -a ' + ' '.join(local_python_dependent_libs) +  ' %(installdir)s/lib-py%(pyshortver)s #'
 
 multi_deps = {'Python': ['3.10', '3.11', '3.12', '3.13'] }
 
 postinstallcmds = ['/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %%(installdir)s/lib/python%s --add_path %%(installdir)s/lib-py%s:%%(installdir)s/lib' % (v, v) for v in multi_deps['Python']]
 postinstallcmds += ['/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %%(installdir)s/lib-py%s --add_origin' % v for v in multi_deps['Python']]
-
+postinstallcmds += ['cp %(builddir)s/nvidia-index-libs-6.0*/lib/* %(installdir)s/lib64']
 
 _copts = [
     # Basic configuration
@@ -67,6 +70,22 @@ _copts = [
     '-DVTK_USE_X=ON',
 ]
 configopts = ' '.join(_copts)
+
+exts_defaultclass = 'PythonPackage'
+exts_default_options = {
+    'source_urls': [PYPI_SOURCE],
+}
+exts_list = [
+    ('openpmd_api', '0.16.1.post1', {
+        'sources': ['openpmd_api-%(version)s.tar.gz'],
+        'preinstallopts': 'openPMD_USE_MPI=ON ',
+	'installopts': '',
+        'sanity_pip_check': False,
+    }),
+]
+exts_filter = ("python -c 'import %(ext_name)s'", "")
+
+modextravars = {'NVINDEX_PVPLUGIN_HOME':'/cvmfs/restricted.computecanada.ca/config/licenses/nvidia-index/'}
 
 sanity_check_paths = {
     'files': ['bin/paraview', 'bin/pvserver', 'bin/pvpython', 'bin/pvbatch'],

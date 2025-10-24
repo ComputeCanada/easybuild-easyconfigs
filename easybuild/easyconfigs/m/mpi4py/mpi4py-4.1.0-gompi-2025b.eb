@@ -14,7 +14,7 @@ source_urls = [PYPI_SOURCE]
 sources = [SOURCE_TAR_GZ]
 
 builddependencies = [
-	('Cython', '3.0.10'),
+	('Cython', '3.1.2'),
 ]
 multi_deps = {'Python': ['3.10', '3.11', '3.12', '3.13'] }
 
@@ -29,7 +29,7 @@ sanity_check_paths = {
 # check that timed pingpong routines that are added via the patch are available
 sanity_check_commands = [
     'python -c "from mpi4py.MPI import Comm;"',
-    'mpiexec -n 5 python -m mpi4py.bench helloworld',
+    'mpiexec --oversubscribe -n 5 python -m mpi4py.bench helloworld',
 ]
 
 moduleclass = 'lib'
