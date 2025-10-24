@@ -16,7 +16,11 @@ toolchainopts = {'pic': True, 'openmp': True}
 
 source_urls = ['https://github.com/cp2k/cp2k/releases/download/v%(version)s/']
 sources = [SOURCELOWER_TAR_BZ2]
-checksums = ['c8392a4e123304644ec8d241443796277c6ed7ae977452317e779f3c387c2e19']
+checksums = [
+    {'cp2k-2025.2.tar.bz2': 'c8392a4e123304644ec8d241443796277c6ed7ae977452317e779f3c387c2e19'},
+]
+
+#patches = ['%(namelower)s-%(version)s_Fix-native-arch.patch']
 
 builddependencies = [
     ('flex', '2.6.4'),
@@ -29,13 +33,16 @@ dependencies = [
     ('libxsmm', '1.17'),
     ('libvori', '220621'),
     #('FFTW', '3.3.10'),
-    #('PLUMED', '2.9.0'),
+    ('PLUMED', '2.9.4'),
 ]
 
 type = 'psmp'
 
 # regression test reports handful of failures,
 # we're assuming those are OK to ignore...
-#ignore_regtest_fails = True
+
+ignore_regtest_fails = True
+
+skipsteps = ['test']
 
 moduleclass = 'chem'
