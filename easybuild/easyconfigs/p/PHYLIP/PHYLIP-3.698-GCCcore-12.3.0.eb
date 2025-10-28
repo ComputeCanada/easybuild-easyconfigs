@@ -1,0 +1,27 @@
+easyblock = 'MakeCp'
+
+name = 'PHYLIP'
+version = '3.698'
+
+homepage = 'https://phylipweb.github.io/phylip'
+description = "PHYLIP is a free package of programs for inferring phylogenies."
+
+toolchain = {'name': 'GCCcore', 'version': '12.3.0'}
+# -fcommon is required to avoid 'multiple definitions' linking error
+toolchainopts = {'extra_cflags': "-fcommon"}
+
+source_urls = ['https://phylipweb.github.io/phylip/download/']
+sources = ['%(namelower)s-%(version)s.zip']
+checksums = ['cb12e5105d25872eed705d243ca32b400e180d38c3437d58335f11a431df0e46']
+
+buildopts = '-Csrc -fMakefile.unx all CFLAGS="$CFLAGS" && make -Csrc -fMakefile.unx install'
+
+files_to_copy = [(['exe/*'], 'bin'), (['src/libdrawgram.%s' % SHLIB_EXT, 'src/libdrawtree.%s' % SHLIB_EXT], 'lib')]
+
+sanity_check_paths = {
+    'files': ['bin/dnapars', 'bin/fitch', 'bin/gendist', 'bin/penny', 'bin/seqboot',
+              'lib/libdrawgram.%s' % SHLIB_EXT, 'lib/libdrawtree.%s' % SHLIB_EXT],
+    'dirs': ['bin'],
+}
+
+moduleclass = 'bio'
