@@ -13,6 +13,7 @@ toolchain = SYSTEM
 source_urls = ['https://ssd.mathworks.com/supportfiles/downloads/%%(version)s/Release/%s/deployment_files/'
                'installer/complete/glnxa64/' % local_update]
 sources = ['MATLAB_Runtime_%s_Update_%s_glnxa64.zip' % (version, local_update)]
+preinstallopts = "chmod u+w ./bin/glnxa64/MATLABRuntimeInstaller && /cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path ./bin/glnxa64/MATLABRuntimeInstaller && "
 checksums = ['282924d4c7ffa0ab378f8b527c31a7976edadb8bb3fb150c9a46fe19e5926c5e']
 
 moduleclass = 'math'
