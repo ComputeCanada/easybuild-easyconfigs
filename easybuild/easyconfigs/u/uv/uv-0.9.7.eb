@@ -8,16 +8,16 @@ description = """An extremely fast Python package installer and resolver, writte
 
 toolchain = SYSTEM
 
+source_urls = ['https://github.com/astral-sh/uv/releases/download/%(version)s']
 sources = [
     '%(name)s-x86_64-unknown-linux-musl.tar.gz',
     {'filename': '%(name)s.toml', 'extract_cmd': 'cp -v %s uv.toml'},
     {'filename': '%(name)s.sh', 'extract_cmd': 'cp -v %s uv.sh'},
 ]
-source_urls = ['https://github.com/astral-sh/uv/releases/download/%(version)s']
 checksums = [
-    '611d1e4d340c6b78519891d37d512c184f58b5424aebecdbd983585ff659ff16',
-    '9f50bcb34466d1f2a1d96011ebf4a87db7e559d7de6a3af48ab34a7fd1e35502',
-    '32ea5755edbdfd491f7d1860d6151237a25b26446c46da1f5e1713803a165817',
+    {'uv-x86_64-unknown-linux-musl.tar.gz': '611d1e4d340c6b78519891d37d512c184f58b5424aebecdbd983585ff659ff16'},
+    {'uv.toml': '9f50bcb34466d1f2a1d96011ebf4a87db7e559d7de6a3af48ab34a7fd1e35502'},
+    {'uv.sh': '886d76cfdd2816194dbaaf766ca767d7397e1684eaa15ae87cac063101fa552a'},
 ]
 
 extract_sources = True
