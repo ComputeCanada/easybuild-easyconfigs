@@ -1,0 +1,54 @@
+easyblock = 'Binary'
+
+name = 'uv'
+version = '0.9.7'
+
+homepage = 'https://github.com/astral-sh/uv'
+description = """An extremely fast Python package installer and resolver, written in Rust."""
+
+toolchain = SYSTEM
+
+sources = [
+    '%(name)s-x86_64-unknown-linux-musl.tar.gz',
+    {'filename': '%(name)s.toml', 'extract_cmd': 'cp -v %s uv.toml'},
+    {'filename': '%(name)s.sh', 'extract_cmd': 'cp -v %s uv.sh'},
+]
+source_urls = ['https://github.com/astral-sh/uv/releases/download/%(version)s']
+checksums = [
+    '611d1e4d340c6b78519891d37d512c184f58b5424aebecdbd983585ff659ff16',
+    '9f50bcb34466d1f2a1d96011ebf4a87db7e559d7de6a3af48ab34a7fd1e35502',
+    '32ea5755edbdfd491f7d1860d6151237a25b26446c46da1f5e1713803a165817',
+]
+
+extract_sources = True
+install_cmd = " && ".join([
+    "cp -v %(builddir)s/%(name)s.sh %(installdir)s/uv",
+    "cp -v %(builddir)s/%(name)s.toml %(installdir)s",
+    "cp -v %(builddir)s/%(name)s-x86_64-unknown-linux-musl/%(name)s %(installdir)s/.exe",
+])
+
+postinstallcmds = [
+    'setrpaths.sh --path %(installdir)s --any_interpreter',
+    'chmod +x %(installdir)s/uv',
+]
+
+sanity_check_paths = {
+    'files': ['uv', 'uv.toml'],
+    'dirs': [],
+}
+
+sanity_check_commands = [
+    'uv --version',
+]
+
+modextrapaths = {
+    'PATH': '',
+    'UV_CONFIG_FILE': '%(installdir)s/uv.toml',
+}
+
+modluafooter = """
+if convertToCanonical(LmodVersion()) >= convertToCanonical("8.2.9") then
+  depends_on("python")
+end
+"""
+moduleclass = 'tools'
