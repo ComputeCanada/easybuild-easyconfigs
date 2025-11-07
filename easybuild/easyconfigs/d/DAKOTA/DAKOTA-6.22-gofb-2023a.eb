@@ -1,0 +1,62 @@
+easyblock = 'CMakeMake'
+
+name = 'DAKOTA'
+version = "6.22.0"
+
+homepage = 'https://dakota.sandia.gov/'
+description = """The Dakota project delivers both state-of-the-art research and robust, usable software for optimization and UQ. 
+Broadly, the Dakota software's advanced parametric analyses enable design exploration, model calibration, risk analysis, and 
+quantification of margins and uncertainty with computational models. The Dakota toolkit provides a flexible, extensible 
+interface between such simulation codes and its iterative systems analysis methods, which include:
+
+- optimization with gradient and nongradient-based methods;
+- uncertainty quantification with sampling, reliability, stochastic expansion, and epistemic methods;
+- parameter estimation using nonlinear least squares (deterministic) or Bayesian inference (stochastic); and
+- sensitivity/variance analysis with design of experiments and parameter study methods.
+These capabilities may be used on their own or as components within advanced strategies such as hybrid optimization, 
+surrogate-based optimization, mixed integer nonlinear programming, or optimization under uncertainty."""
+
+toolchain = {'name': 'gofb', 'version': '2023a'}
+
+source_urls = ['https://github.com/snl-dakota/dakota/releases/download/v%(version)s/']
+sources = ['%(namelower)s-%(version)s-public-src-cli.tar.gz']
+checksums = ['31d76636e4d22e6e847de3ada8cbf35a6e6c2c805ccd8677c8c4210f0ff53e07']
+
+builddependencies = [
+    ('Python', '3.11'),
+    ('Boost.MPI', '1.82.0', '', ('gompi', '2023a')),
+    ('GSL', '2.7'),
+    ('HDF5','1.14.2'),
+    ('Perl', '5.36.1'),
+    ('CMake', '3.31.0'),
+]
+
+separate_build_dir = True
+
+preconfigopts = 'CXXFLAGS="$CXXFLAGS $LIBS"'
+
+configopts  = ' '.join([
+    '-DBLAS_LIBRARY_NAMES=flexiblas',
+    '-DBLAS_LIBS:STRING=-lflexiblas',
+    '-DLAPACK_LIBRARY_NAMES=flexiblas',
+    '-DLAPACK_LIBS:STRING=-lflexiblas',
+    "-DPERL_EXECUTABLE=$EBROOTPERL/bin/perl ",
+    "-DPYTHON_EXECUTABLE=$EBROOTPYTHON/bin/python ",
+    "-DDAKOTA_HAVE_MPI=ON",
+    "-DDAKOTA_HAVE_GSL=ON",
+    "-DHAVE_QUESO=ON",
+    '-DCMAKE_BUILD_TYPE=RELEASE',
+    '-DBUILD_STATIC_LIBS:BOOL=ON',
+    '-DBUILD_SHARED_LIBS:BOOL=ON',
+    '-DDAKOTA_API_JAVA=OFF ',
+])
+
+# Dakota unnecessarily copies libraries from the OS to the bin folder. Deleting them.
+postinstallcmds = ["chmod u+w -R %(installdir)s; rm -rf %(installdir)s/bin/lib*.so*"]
+
+sanity_check_paths = {
+    'files': ['bin/dakota'],
+    'dirs': [],
+}
+
+moduleclass = 'math'
