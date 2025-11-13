@@ -10,6 +10,6 @@ description = """MATLAB is a high-level language and interactive environment
 
 toolchain = SYSTEM
 
-dependencies = [('MATLAB', '2023b.2')]
+dependencies = [('MATLAB', '2024b.1')]
 
 moduleclass = 'lang'
