@@ -1,0 +1,38 @@
+easyblock = 'MakeCp'
+
+name = 'RAxML'
+version = "8.2.13"
+
+homepage = 'https://github.com/stamatak/standard-RAxML'
+description = "RAxML search algorithm for maximum likelihood based inference of phylogenetic trees."
+
+toolchain = {'name': 'gompi', 'version': '2023a'}
+toolchainopts = {'usempi': True}
+
+source_urls = ['https://github.com/stamatak/standard-RAxML/archive/']
+sources = ['v%(version)s.zip']
+checksums = ['47dee79c3851e1353870e1f5b8d61a8b621d3035aebe61cab536b056b7e89820']
+import os
+if os.getenv('RSNT_ARCH') == 'avx512':
+    local_arch_cflags ='"-march=x86-64-v4"'
+elif os.getenv('RSNT_ARCH') == 'avx2':
+    local_arch_cflags ='"-march=x86-64-v3"'
+ 
+
+buildopts = '-f Makefile.MPI.gcc CC="$CC" ARCH_CFLAGS=%s' % local_arch_cflags
+
+files_to_copy = [(["raxmlHPC-MPI"], "bin"), "usefulScripts", "README.md", "manual"]
+
+postinstallcmds =  ['ln -sf %(installdir)s/bin/raxmlHPC-MPI %(installdir)s/bin/raxmlHPC && chmod u+x %(installdir)s/usefulScripts/*.*']
+
+modextrapaths = {'PATH': 'usefulScripts'}
+
+sanity_check_paths = {
+    'files': ["bin/raxmlHPC-MPI"],
+    'dirs': [],
+}
+
+moduleclass = 'bio'
+modluafooter = """
+depends_on("perl")
+"""
