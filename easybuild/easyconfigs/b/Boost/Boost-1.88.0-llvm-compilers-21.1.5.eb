@@ -1,0 +1,31 @@
+name = 'Boost'
+version = '1.88.0'
+
+homepage = 'https://www.boost.org/'
+description = """Boost provides free peer-reviewed portable C++ source libraries."""
+
+toolchain = {'name': 'llvm-compilers', 'version': '21.1.5'}
+toolchainopts = {'pic': True}
+
+source_urls = ['https://archives.boost.io/release/%(version)s/source/']
+sources = ['%%(namelower)s_%s.tar.gz' % '_'.join(version.split('.'))]
+checksums = ['3621533e820dcab1e8012afd583c0c73cf0f77694952b81352bf38c1488f9cb4']
+
+# In order to build `libboost_numpy*`
+builddependencies = [('numpy', '2.1.1'),]
+
+dependencies = [
+    ('bzip2', '1.0.8'),
+    ('zlib', '1.3.1'),
+    ('XZ', '5.8.1'),
+    ('zstd', '1.5.7'),
+    ('ICU', '77.1'),
+]
+
+multi_deps = {'Python': ['3.10', '3.11', '3.12', '3.13']}
+
+# disable MPI, build Boost libraries with tagged layout
+boost_mpi = False
+tagged_layout = True
+
+moduleclass = 'devel'
