@@ -27,6 +27,11 @@ checksums = [
 preinstallopts = "chmod u+w bin/glnxa64/MathWorksProductInstaller && setrpaths.sh --path bin/glnxa64/MathWorksProductInstaller && "
 postinstallcmds = [
 	'chmod -R u+w %(installdir)s ',
+	# install Statistics and Machine learning toolbox, missing in ISO
+	# see /cvmfs/restricted.computecanada.ca/easybuild/sources/m/MATLAB/R2025b_Update_1/README.txt
+	# how to download
+	'srcdir=/cvmfs/restricted.computecanada.ca/easybuild/sources/m/MATLAB/R2025b_Update_1 && ' +
+	'$srcdir/mpm/glnxa64/mpm install --matlabroot %(installdir)s --products Statistics_and_Machine_Learning_Toolbox --source $srcdir',
 	# install the python engines with both python 3.10, 3.11
 	'module load python/3.10 && pushd %(installdir)s/extern/engines/python && python setup.py install --prefix=%(installdir)s/extern/engines/python && popd ', 
 	'module load python/3.11 && pushd %(installdir)s/extern/engines/python && python setup.py install --prefix=%(installdir)s/extern/engines/python && popd ', 
