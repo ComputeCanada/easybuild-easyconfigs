@@ -1,0 +1,81 @@
+easyblock = 'CMakeMake'
+
+name = 'casacore'
+version = '3.7.1'
+
+homepage = 'https://github.com/casacore/casacore'
+description = """A suite of C++ libraries for radio astronomy data processing.
+The ephemerides data needs to be in DATA_DIR and the location must be specified at runtime.
+Thus user's can update them.
+"""
+
+toolchain = {'name': 'gccflexiblas', 'version': '2023a'}
+
+source_urls = ['https://github.com/%(name)s/%(name)s/archive']
+sources = ['v%(version)s.tar.gz']
+checksums = ['ad7ad865d5d8517524bdde71e0083a69442648b693850660dadb0ce6109d91c7']
+
+builddependencies = [
+    ('CMake', '3.27.7'),
+    ('numpy', '2.1.1'),
+    ('CFITSIO', '4.3.0'),
+    ('WCSLIB', '8.3'),
+    ('HDF5', '1.14.2'),
+    ('GSL', '2.7'),
+    ("Boost", "1.87.0", "-core"),
+    ('FFTW', '3.3.10'),
+    ('python-build-bundle', '2025a')
+]
+
+multi_deps = {'Python': ['3.13', '3.11', '3.12'] }
+multi_deps_extensions_only = True
+
+configopts = ' '.join([
+    '-DBUILD_PYTHON=OFF',
+    '-DBUILD_PYTHON3=ON',
+    '-DUSE_OPENMP=ON',
+    '-DUSE_HDF5=ON',
+    '-DUSE_MPI=OFF',
+    '-DDATA_DIR=%(installdir)s/data',
+])
+
+# Install casacore data
+postinstallcmds = [
+    'wget --retry-connrefused ftp://anonymous@ftp.astron.nl/outgoing/Measures/WSRT_Measures.ztar -O /tmp/WSRT_Measures.ztar',
+    "tar xfvz /tmp/WSRT_Measures.ztar --one-top-level=%(installdir)s/data",
+]
+
+exts_defaultclass = 'PythonPackage'
+exts_list = [
+    ('python_casacore', version, {
+        'modulename': 'casacore',
+        'preinstallopts': "unset CASACORE_DATA && ",
+        'source_urls': ['https://pypi.python.org/packages/source/%(nameletter)s/%(name)s'],
+        'use_pip': True,
+        'checksums': ['6c4e060cba73c0ab9d944eb4b6aa97f20c12b761e671587f313bfc59e3a775c3'],
+        'sanity_pip_check' : False,
+    }),
+]
+
+sanity_check_paths = {
+    'files': [
+        'lib/libcasa_casa.%s' % SHLIB_EXT,
+        'lib/libcasa_mirlib.%s' % SHLIB_EXT,
+        'lib/libcasa_ms.%s' % SHLIB_EXT,
+    ],
+    'dirs': ['bin', 'include/%(name)s'],
+}
+
+sanity_check_commands = [
+    ('measuresdata', ''),
+    "module load scipy-stack && python -c 'import casacore'",
+]
+
+modextravars = {
+    'CASACORE_DATA': '%(installdir)s/data',
+}
+modextrapaths = {
+    'EBPYTHONPREFIXES': '',
+}
+
+moduleclass = 'lib'
