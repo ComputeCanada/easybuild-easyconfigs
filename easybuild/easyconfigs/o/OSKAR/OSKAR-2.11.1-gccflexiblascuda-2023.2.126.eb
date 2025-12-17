@@ -1,0 +1,51 @@
+easyblock = 'CMakeMake'
+
+name = 'OSKAR'
+version = '2.11.1'
+
+homepage = 'https://ska-telescope.gitlab.io/sim/oskar/'
+description = """The OSKAR package consists of a number of applications for the simulation of astronomical radio interferometers. OSKAR has been designed primarily to produce simulated data from telescopes that use aperture arrays, as envisaged for the SKA."""
+
+toolchain = {'name': 'gccflexiblascuda', 'version': '2023.2.126'}
+toolchainopts = {'cstd': 'c++20'}
+
+source_urls = ['https://github.com/OxfordSKA/OSKAR/archive/refs/tags/']
+sources = ["%(version)s.tar.gz"]
+checksums = ["c14cdffef5ceb424a23085c2afea63ac3860586c6159967a7252480ed50fb2f0"]
+
+multi_deps = {'Python': ['3.11', '3.12', '3.13']}
+builddependencies = [
+    ('CMake', '3.31.1'),
+    ('GSL', '2.7'),
+    ('casacore', '3.7.1'),
+    ('HDF5', '1.14.2'),
+]
+
+# must use std20
+configopts = '-DCUDA_ARCH="%(cuda_cc_semicolon_sep)s" -DCMAKE_CXX_STANDARD=20'
+installopts = " && ".join([
+    "",
+    "export OSKAR_INC_DIR=%(installdir)s/include",
+    "export OSKAR_LIB_DIR=%(installdir)s/lib",
+    "pip install --no-deps %(builddir)s/%(name)s-%(version)s/python/ --prefix=%(installdir)s",
+])
+
+separate_build_dir = False
+
+sanity_check_paths = {
+    'files': [
+        'include/oskar/oskar.h',
+        'lib/liboskar.so'
+    ],
+    'dirs': [
+        'bin',
+        'include',
+        'lib'
+    ],
+}
+
+sanity_check_commands = ['module load scipy-stack && python -c "import oskar"']
+
+modextrapaths = {"EBPYTHONPREFIXES": ""}
+
+moduleclass = 'phys'
