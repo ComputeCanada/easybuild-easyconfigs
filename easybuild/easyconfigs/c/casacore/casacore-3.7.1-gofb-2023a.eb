@@ -10,6 +10,7 @@ Thus user's can update them.
 """
 
 toolchain = {'name': 'gofb', 'version': '2023a'}
+toolchainopts = {'cstd': 'c++20'}
 
 source_urls = ['https://github.com/%(name)s/%(name)s/archive']
 sources = ['v%(version)s.tar.gz']
