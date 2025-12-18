@@ -19,18 +19,12 @@ sources = [
         'download_filename': 'download'
     },
 ]
-#patches = ['WSClean-3.5_cmake-fixes-python-and-boost.patch']
 checksums = [
     {'wsclean-v3.6.tar.bz2': 'f7db476b99bcc839aeb1da435dab0cbf9770c1734225bada58e4222830f078f2'},
-#    {'WSClean-3.5_cmake-fixes-python-and-boost.patch':
-#     '21cd5a9b3e94bab4ebe7d16cd24995a16726f290a432a50b407005d45144e3c7'},
 ]
 
 builddependencies = [
     ('CMake', '3.31.0'),
-]
-
-dependencies = [
     ('casacore', '3.6.1'),
     ('EveryBeam', '0.7.4'),
     ('Boost', '1.85.0'),
@@ -40,7 +34,6 @@ dependencies = [
     ('Python', '3.11'),
     ('IDG', '1.2.0'),
 ]
-
 
 sanity_check_paths = {
     'files': ['include/wscleaninterface.h', 'bin/%(namelower)s'],
