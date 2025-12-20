@@ -1,0 +1,35 @@
+easyblock = 'ConfigureMake'
+name = 'tpp'
+version = '7.3.0'
+
+homepage = 'http://ww.peptideatlas.org/'
+description = """The Trans-Proteomic Pipeline (TPP) is a collection of integrated tools for MS/MS proteomics, developed at the SPC. On Fir we can also provide TPP web interface (tpp_gui) per group upon user request"""
+
+toolchain = {'name': 'GCC', 'version': '12.3.0'}
+
+source_urls = ['https://sourceforge.net/projects/sashimi/files/Trans-Proteomic%20Pipeline%20%28TPP%29/TPP%20v7.3%20%28Trade%20Wind%29%20rev%200/']
+sources = ['TPP_%(version)s-src.tgz']
+patches = ['%(name)s-%(version)s.patch']
+checksums = [
+    {'TPP_7.3.0-src.tgz': '625744b0ccf29dd8cb34f9082da85d910133c4f303a64ea05f56da719283f2fe'},
+    {'tpp-7.3.0.patch': '3131af193b55be3b4fb572a2c5aae601466455bacc78ce0b0d7c1f313dc9fe3c'},
+]
+
+builddependencies = [
+    ('zlib', '1.2.11'),
+    ('HDF5', '1.14.2'),
+]
+skipsteps = ['configure']
+prebuildopts = "unset LIBS && unset CC && "
+buildopts = "INSTALL_DIR=%(installdir)s OS=Linux all"
+preinstallopts = prebuildopts
+installopts = "INSTALL_DIR=%(installdir)s"
+max_parallel=1
+
+sanity_check_paths = {
+   'files': ['bin/%s' % x for x in ["add_mz", "ASAPRatioPeptideParser", "ASAPRatioProteinRatioParser", "ASAPRatioPvalueParser", "assess_swathlib.pl", "batchcoverage", "calculate_pi", "checkdb", "clips.pl", "clustalo", "clustalo-README.txt", "CombineOut", "comet", "CompactParser", "comparePeps_Categories.pl", "compareProts_ClusterHM.pl", "compareProts.pl", "compute_p", "createChargeFile.pl", "crypt", "DatabaseParser", "decoyFASTA", "decoyFastaGenerator.pl", "DIALib-QC_RPlot.pl", "DidIScanThat", "digestdb", "DiscoFilter", "dta2mzxml", "EnzymeDigestionParser", "exporTPP.pl", "fileDownloader.pl", "fixPepXMLScan", "get_prots.pl", "hardklor", "idconvert", "indexmzXML", "InteractParser", "InterProphetParser", "Kojak", "Lib2HTML", "LibraPeptideParser", "LibraProteinRatioParser", "Mascot2XML", "Mayu.pl", "mergeCharges.pl", "MikesMagicalMzMLShrinker", "msconvert", "MzXML2Search", "novor2xml.pl", "out2summary", "Out2XML", "pep_dbcount", "pepExtract", "PeptideMapper", "PeptideProphetParser", "plotspectrast", "promast.pl", "ProphetModels.pl", "ProteinProphet", "ProtProphModels.pl", "ptm2plot.pl", "PTMProphetParser", "Q3ProteinRatioParser", "qtofpeakpicker", "QuanticParser", "QuanticProteinParser", "quiddist.pl", "readmzXML", "RefreshParser", "renamedat.pl", "replaceall.pl", "RespectParser", "RTCalc", "RTCatalogParser", "runMzIndex.pl", "Sequest2XML", "SPACEPro", "spectrast", "Sqt2XML", "SSRCalc3.par", "SSRCalc3.pl", "StPeter", "StPeter2Matrix", "subsetdb", "tandem", "Tandem2XML", "test_tpi.pl", "tpp2mzid", "tpp_hostname", "tpp_models.pl", "tpptray.bat", "translateDNA2AA-FASTA", "updatepaths.pl", "xinteract", "XPressPeptideParser", "XPressProteinRatioParser"]],
+
+   'dirs': [],
+   }
+moduleclass = 'bio'
+

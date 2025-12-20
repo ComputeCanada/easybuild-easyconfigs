@@ -1,0 +1,99 @@
+diff -ur release_7-3-0.orig/common.mk release_7-3-0/common.mk
+--- release_7-3-0.orig/common.mk	2024-07-01 04:20:16.000000000 +0000
++++ release_7-3-0/common.mk	2025-12-19 15:21:04.726863124 +0000
+@@ -355,7 +355,7 @@
+  
+ endif
+ 
+-LDFLAGS += -static -ffunction-sections -fdata-sections -Wl,--gc-sections
++LDFLAGS += -ffunction-sections -fdata-sections -Wl,--gc-sections
+ 
+ #ifneq ($(ARCH),darwin)
+    # on os x 10.7, make will balk at "-lz" as a build dependency
+@@ -431,7 +431,7 @@
+ 
+ ifneq ($(MZ5_SUPPORT),)
+ HDF5_CXXFLAGS :=
+-HDF5_LDFLAGS  := -lhdf5_cpp -lhdf5 -lz
++HDF5_LDFLAGS  := -lhdf5_cpp -lhdf5 -lz -lsz
+ ifneq ($(SYSTEM),mingw32)
+ HDF5_LDFLAGS  += -ldl
+ ifneq ($(OS),Darwin)
+diff -ur release_7-3-0.orig/extern/Hardklor/Makefile release_7-3-0/extern/Hardklor/Makefile
+--- release_7-3-0.orig/extern/Hardklor/Makefile	2024-02-29 02:28:58.000000000 +0000
++++ release_7-3-0/extern/Hardklor/Makefile	2025-12-19 15:20:14.590304820 +0000
+@@ -8,13 +8,13 @@
+ ifeq (${OS},Darwin)
+ LDFLAGS =
+ else
+-LDFLAGS =  -static -ffunction-sections -fdata-sections -Wl,--gc-sections
++LDFLAGS =  -ffunction-sections -fdata-sections -Wl,--gc-sections
+ endif
+ 
+ ifeq (${OS},Windows_NT)
+ FLAGS = $(OPT) -static -D_NOSQLITE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DGCC -D__MINGW__
+ else
+-FLAGS = $(OPT) -static -ffunction-sections -fdata-sections -Wl,--gc-sections -D_NOSQLITE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DGCC 
++FLAGS = $(OPT) -ffunction-sections -fdata-sections -Wl,--gc-sections -D_NOSQLITE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DGCC 
+ endif
+ #Path to MSTocvolkit
+ 
+diff -ur release_7-3-0.orig/extern/Makefile release_7-3-0/extern/Makefile
+--- release_7-3-0.orig/extern/Makefile	2025-04-09 07:29:39.000000000 +0000
++++ release_7-3-0/extern/Makefile	2025-12-19 15:19:27.346721030 +0000
+@@ -64,11 +64,10 @@
+ ifeq ($(OS),Linux)
+ # Set MZ5_SUPPORT if you want to build TPP with HDF5 to support parsing of
+ # files in MZ5 format
+-   EXTERN_ALL ?= boost comet d3 expat fann gsl gzstream \
+-		 $(if $(MZ5_SUPPORT),hdf5) \
++   EXTERN_ALL ?= boost comet d3 fann gsl gzstream \
+ 		 $(if $(ANDRD_BUILD),bzip2) \
+ 		 $(if $(ANDRD_BUILD),argtable2) \
+-                 libarchive libgd mayu pwiz hardklor spare \
++                 mayu pwiz hardklor spare \
+ 		 clustalo magnum kojak seq2ms
+ else ifeq ($(OS),Darwin)
+    EXTERN_ALL ?= apache boost comet d3 expat fann gsl gzstream \
+@@ -1206,7 +1205,7 @@
+ 	   --prefix=$(BUILD_DIR) \
+ 	   --includedir=$(BUILD_DIR)/include \
+ 	   --libdir=$(BUILD_LIB) \
+-	   --with-png=$(BUILD_DIR) \
++	   --with-png=$(EBROOTGENTOO) \
+ 	   --without-x
+ 	$(foreach P, $(LIBGD_PATCHES), 					\
+ 	   @echo "### ...applying GD patch $(notdir $(P))" $(nl) 	\
+@@ -1220,7 +1218,7 @@
+ 	)
+ 
+ # libpng has to come before libgd because of LIBPNG_LIB requirement
+-$(LIBGD_LIB) : $(LIBPNG_LIB) | $(LIBGD_SRC)/
++$(LIBGD_LIB) : $(LIBGD_SRC)/
+ 	make -C $(LIBGD_SRC) 
+ 	make -C $(LIBGD_SRC) install
+ 
+diff -ur release_7-3-0.orig/extern/MSToolkit/Makefile release_7-3-0/extern/MSToolkit/Makefile
+--- release_7-3-0.orig/extern/MSToolkit/Makefile	2024-02-29 02:28:58.000000000 +0000
++++ release_7-3-0/extern/MSToolkit/Makefile	2025-12-19 15:20:39.199088019 +0000
+@@ -60,7 +60,7 @@
+ 
+ OPT = $(if $(DEBUG),-g -pg -DDEBUG,-O3)
+ 
+-CFLAGS = $(OPT) -static -ffunction-sections -fdata-sections -Wl,--gc-sections -I. -I$(HEADER_PATH) -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DGCC -DHAVE_EXPAT_CONFIG_H
++CFLAGS = $(OPT) -ffunction-sections -fdata-sections -Wl,--gc-sections -I. -I$(HEADER_PATH) -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DGCC -DHAVE_EXPAT_CONFIG_H
+ LIBS = -lm -lpthread -ldl
+ 
+ .PHONY: mstoolkit mstoolkit-lite mstoolkit-clean mstoolkit-realclean
+diff -ru release_7-3-0.orig/src/Visualization/Makefile release_7-3-0/src/Visualization/Makefile
+--- release_7-3-0.orig/src/Visualization/Makefile	2025-12-18 14:01:01.376213863 +0000
++++ release_7-3-0/src/Visualization/Makefile	2025-12-18 14:03:03.076181136 +0000
+@@ -273,7 +273,7 @@
+ 	$(LD) $(LDFLAGS) $^ $(LIBARCHIVE_LDFLAGS) \
+ 	   $(PWIZ_LDFLAGS) -L$(BUILD_DIR)/lib $(GSL_LDFLAGS) $(FANN_LDFLAGS)  \
+ 		$(GZSTREAM_LDFLAGS) $(BOOST_LDFLAGS) \
+-			$(LZO2_LDFLAGS) -lz -lbz2 -o $@
++			$(LZO2_LDFLAGS) -lz -lbz2 -llzo2 -o $@
+ 
+ 
+ VISUAL_ALL += $(BUILD_CGI)/ShowXIC.cgi
