@@ -1,0 +1,45 @@
+easyblock = 'CMakeMake'
+
+name = 'WSClean'
+version = "3.6"
+
+homepage = 'https://wsclean.readthedocs.io/'
+description = """WSClean (w-stacking clean) is a fast generic widefield imager.
+It implements several gridding algorithms and offers fully-automated multi-scale
+multi-frequency deconvolution."""
+
+toolchain = {'name': 'foss', 'version': '2023a'}
+
+# Regular source tarballs don't include the git submodules. Check https://gitlab.com/aroffringa/wsclean/-/packages/
+# for the right path to a tarball that does contain it
+sources = [
+    {
+        'source_urls': ['https://gitlab.com/aroffringa/%(namelower)s/-/package_files/173938999/'],
+        'filename': '%(namelower)s-v%(version)s.tar.bz2',
+        'download_filename': 'download'
+    },
+]
+checksums = [
+    {'wsclean-v3.6.tar.bz2': 'f7db476b99bcc839aeb1da435dab0cbf9770c1734225bada58e4222830f078f2'},
+]
+
+builddependencies = [
+    ('CMake', '3.31.0'),
+    ('casacore', '3.6.1'),
+    ('EveryBeam', '0.7.4'),
+    ('Boost', '1.85.0'),
+    ('CFITSIO', '4.3.0'),
+    ('GSL', '2.7'),
+    ('HDF5', '1.14.2'),
+    ('Python', '3.11'),
+    ('IDG', '1.2.0'),
+]
+
+sanity_check_paths = {
+    'files': ['include/wscleaninterface.h', 'bin/%(namelower)s'],
+    'dirs': ['bin'],
+}
+
+sanity_check_commands = [('%(namelower)s', '--version')]
+
+moduleclass = 'astro'

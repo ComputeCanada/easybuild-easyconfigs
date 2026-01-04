@@ -1,0 +1,45 @@
+easyblock = 'CMakeMake'
+
+name = 'QuEST'
+version = "4.2.0"
+
+homepage = 'https://quest.qtechtheory.org/'
+description = """The Quantum Exact Simulation Toolkit (QuEST) is a high-performance simulator of quantum statevectors and density matrices. It hybridises multithreading, GPU acceleration and distribution to run lightning fast on laptops, desktops and supercomputers, parallelising over multiple cores, CPUs and GPUs. Behind the scenes, QuEST leverages OpenMP, MPI, CUDA, HIP, Thrust, cuQuantum and GPUDirect for cutting-edge performance on modern multi-GPU clusters, and compatibility with older NVIDIA and AMD GPUs. These deployments can be combined in any combination, or automatically decided at runtime, yet are abstracted behind a single, seamless interface, accessible by both C and C++ and all the major compilers."""
+
+toolchain = {'name': 'gofbc', 'version': '2023a'}
+toolchainopts = {'cstd': 'c++17'}
+
+source_urls = ['https://github.com/QuEST-Kit/QuEST/archive/refs/tags/']
+sources = ['v%(version)s.tar.gz']
+checksums = ['2c812a7ec4d727e0947ffd0daf05452963c3f1c10e428c8bc30c35164921fcba']
+
+builddependencies = [
+    ('CMake', '3.31.0'),
+    ('cuQuantum', '24.03.0.4', '', ('gcccorecuda', '2023a')),
+]
+
+separate_build_dir = False
+
+configopts  = ' '.join([
+    '-DENABLE_CUDA=ON',
+    '-DCMAKE_CUDA_ARCHITECTURES="%(cuda_int_semicolon_sep)s"',
+    '-DENABLE_CUQUANTUM=ON',
+    '-DCUQUANTUM_ROOT=$EBROOTCUQUANTUM',
+    '-DCUQUANTUM_DIR=$EBROOTCUQUANTUM',
+    '-DENABLE_DISTRIBUTION=ON',
+])
+
+# remove appended sub-directory
+postinstallcmds = [
+    'mv %(installdir)s/%(namelower)s/* %(installdir)s',
+    'rmdir %(installdir)s/%(namelower)s',
+]
+
+sanity_check_paths = {
+    'files': ['lib/libQuEST.so'],
+    'dirs': ['include', 'lib'],
+}
+
+sanity_check_commands = ['min_example']
+
+moduleclass = 'math'

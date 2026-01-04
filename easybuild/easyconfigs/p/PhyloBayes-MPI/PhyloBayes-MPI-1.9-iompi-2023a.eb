@@ -1,0 +1,30 @@
+easyblock = 'MakeCp'
+
+name = 'PhyloBayes-MPI'
+version = '1.9'
+
+homepage = 'https://github.com/bayesiancook/pbmpi'
+description = "A Bayesian software for phylogenetic reconstruction using mixture models"
+
+toolchain = {'version': '2023a', 'name': 'iompi'}
+
+source_urls = ['https://github.com/bayesiancook/pbmpi/archive/refs/tags/']
+sources = ['v%(version)s.tar.gz']
+checksums = ['567d8db995f23b2b0109c1e6088a7e5621e38fec91d6b2f27abd886b90ea31ce']
+
+# get rid of included binaries to ensur they're recompiled
+
+prebuildopts = "rm -f data/* &&"
+
+buildopts = 'CC="$MPICXX" CPPFLAGS="$CXXFLAGS -c" LDFLAGS="$CXXFLAGS"'
+
+start_dir = 'sources'
+
+files_to_copy = [(['data/*'], 'bin')]
+
+sanity_check_paths = {
+    'files': ['bin/bpcomp', 'bin/cvrep', 'bin/pb_mpi', 'bin/readpb_mpi', 'bin/tracecomp'],
+    'dirs': [],
+}
+
+moduleclass = 'bio'

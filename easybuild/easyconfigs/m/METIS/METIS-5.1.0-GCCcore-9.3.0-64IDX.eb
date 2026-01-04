@@ -1,6 +1,7 @@
 name = 'METIS'
 version = '5.1.0'
 modaltsoftname = "METIS-64idx"
+versionsuffix = '-64idx'
 
 homepage = 'http://glaros.dtc.umn.edu/gkhome/metis/metis/overview'
 

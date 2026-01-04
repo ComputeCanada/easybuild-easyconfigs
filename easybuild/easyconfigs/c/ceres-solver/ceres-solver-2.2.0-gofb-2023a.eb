@@ -1,0 +1,48 @@
+easyblock = 'CMakeMake'
+
+name = 'ceres-solver'
+version = '2.2.0'
+
+homepage = 'https://ceres-solver.googlesource.com/ceres-solver/'
+description = """Ceres Solver is an open source C++ library for modeling and solving large, complicated optimization problems. It is a feature rich, mature and performant library which has been used in production at Google since 2010. Ceres Solver can solve two kinds of problems:
+ - Non-linear Least Squares problems with bounds constraints.
+ - General unconstrained optimization problems.
+"""
+
+toolchain = {'name': 'gofb', 'version': '2023a'}
+toolchainopts = {'cstd': 'c++11', 'pic': True, 'openmp': True}
+
+source_urls = [homepage + '/+archive']
+sources = [ version + '.tar.gz']
+checksums = ['91bd76cbd215f6bff420a218dd5ec6c67be6f3a107cb0708d9ffb9b50aae2703']
+
+dependencies = [
+    ('METIS', '5.1.0', '-32idx'),
+    ('SuiteSparse', '7.6.0', '-32idx'),
+]
+builddependencies = [
+    ('CMake', '3.31.0'),
+    ('Eigen', '3.4.0'),
+]
+
+configopts  = ''
+configopts += '-DBUILD_EXAMPLES=ON '
+configopts += '-DBUILD_TESTING=ON -DSUITESPARSE=ON '
+#configopts += '-DGLOG_INCLUDE_DIR=$EBROOTGENTOO/include '
+#configopts += '-DGLOG_LIBRARY=$EBROOTGENTOO/lib/libglog.so '
+#configopts += '-DSUITESPARSEQR_INCLUDE_DIR=$EBROOTSUITESPARSE/SPQR/include '
+#configopts += '-DSUITESPARSEQR_LIBRARY=$EBROOTSUITESPARSE/SPQR/lib/libspqr.a '
+#configopts += '-DSUITESPARSE_CONFIG_INCLUDE_DIR=$EBROOTSUITESPARSE/SuiteSparse_config '
+#configopts += '-DSUITESPARSE_CONFIG_LIBRARY=$EBROOTSUITESPARSE/SuiteSparse_config/libsuitesparseconfig.a '
+
+separate_build_dir = True
+
+postinstallcmds = ['cd %(installdir)s/ && ln -s lib64 lib']
+
+sanity_check_paths = {
+    # 'files': ['include/ceres/ceres.h', 'lib64/libceres.%s' % SHLIB_EXT],
+    'files': ['include/ceres/ceres.h', 'lib64/libceres.a'],
+    'dirs': ['include', 'lib64'],
+}
+
+moduleclass = 'math'

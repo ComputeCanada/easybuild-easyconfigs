@@ -1,0 +1,16 @@
+easyblock = 'ModuleRC'
+
+name = 'RStudio-Server'
+version = 'default'
+
+homepage = 'https://www.rstudio.com/'
+description = """RStudio Server enables you to provide a browser
+based interface to a version of R running on a remote Linux
+server, bringing the power and productivity of the
+RStudio IDE to server-based deployments of R."""
+
+toolchain = SYSTEM
+
+dependencies = [('RStudio-Server', '4.4', '', ('gcccoreflexiblas', '2023a'))]
+
+moduleclass = 'lang'
