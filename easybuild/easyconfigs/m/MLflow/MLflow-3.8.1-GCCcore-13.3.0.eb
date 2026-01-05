@@ -1,4 +1,4 @@
-easyblock = 'PythonPackage'
+easyblock = 'Binary'
 
 name = 'MLflow'
 version = '3.8.1'
@@ -15,25 +15,29 @@ toolchain = {'name': 'GCCcore', 'version': '13.3.0'}
 # this is a bundle of Python packages
 exts_defaultclass = 'PythonPackage'
 
-multi_deps = {
-	'Python': ['3.11', '3.12', '3.13']
-}
-builddependencies = [('Arrow', '21.0.0')]
+builddependencies = [
+  ('Arrow', '21.0.0'),
+  ('Python', '3.11'),
+]
 
-multi_deps_load_default = False
-installopts = '--no-index --no-deps'
+preinstallopts = ['python -m venv %(installdir)s && source %(installdir)s/bin/activate && ']
+install_cmd = 'pip install'
+installopts = '--no-index --no-deps -r requirements-%(version)s.txt'
 sources = ['requirements-%(version)s.txt']
 
-exts_filter = ('EBPYTHONPREFIXES=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/arrow/21.0.0:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2025a:$EBPYTHONPREFIXES python -c "import mlflow"', "")
+postinstallcmds = [
+  "echo '#!/bin/sh' >> %(installdir)s/bin/mlflow-server",
+  "echo export EBPYTHONPREFIXES=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/arrow/21.0.0:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2025a:%(installdir)s >> %(installdir)s/bin/mlflow-server",
+  'echo exec %(installdir)s/bin/mlflow \${1+\\"\$@\\"} >> %(installdir)s/bin/mlflow-server',
+  "chmod +x %(installdir)s/bin/mlflow-server"
+]
 
-unpack_sources = False
-use_pip = True
-use_pip_for_deps = True
-use_pip_requirement = True
-fix_python_shebang_for = ['bin/*']
-sanity_pip_check = False
 sanity_check_paths = {
     'files': ['bin/mlflow'],
+    'dirs': ['lib'],
 }
-
 moduleclass = 'lib'
+modluafooter = """
+depends_on("python")
+"""
+
