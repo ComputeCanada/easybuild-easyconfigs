@@ -1,0 +1,39 @@
+easyblock = 'PythonPackage'
+
+name = 'MLflow'
+version = '3.8.1'
+
+homepage = 'https://mlflow.org/'
+
+description = """MLflow is an open-source developer platform to build AI/LLM applications and models 
+with confidence. Enhance your AI applications with end-to-end experiment tracking, observability, 
+and evaluations, all in one integrated platform.
+"""
+
+toolchain = {'name': 'GCCcore', 'version': '13.3.0'}
+
+# this is a bundle of Python packages
+exts_defaultclass = 'PythonPackage'
+
+multi_deps = {
+	'Python': ['3.11', '3.12', '3.13']
+}
+builddependencies = [('Arrow', '21.0.0')]
+
+multi_deps_load_default = False
+installopts = '--no-index --no-deps'
+sources = ['requirements-%(version)s.txt']
+
+exts_filter = ('EBPYTHONPREFIXES=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/arrow/21.0.0:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2025a:$EBPYTHONPREFIXES python -c "import mlflow"', "")
+
+unpack_sources = False
+use_pip = True
+use_pip_for_deps = True
+use_pip_requirement = True
+fix_python_shebang_for = ['bin/*']
+sanity_pip_check = False
+sanity_check_paths = {
+    'files': ['bin/mlflow'],
+}
+
+moduleclass = 'lib'
