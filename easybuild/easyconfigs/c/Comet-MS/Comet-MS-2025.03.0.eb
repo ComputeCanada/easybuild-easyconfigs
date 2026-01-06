@@ -1,0 +1,22 @@
+easyblock = 'Binary'
+
+name = 'Comet-MS'
+version = '2025.03.0'
+
+homepage = 'https://github.com/UWPR/Comet/'
+description = """Comet is an open source tandem mass spectrometry (MS/MS) sequence database search tool written primarily in C/C++. """
+
+toolchain = SYSTEM
+
+preinstallopts = ['mkdir %(installdir)s/bin && ']
+install_cmd = 'cp'
+installopts = 'comet.linux.exe %(installdir)s/bin/comet.exe'
+source_urls = ['https://github.com/UWPR/Comet/releases/download/v%(version)s/']
+sources = ['comet.linux.exe']
+checksums = ['d477f7385b04dd2462d547caa6dcf2d30ded52e2e5e3fa06deb46bb0c5ba7a04']
+
+sanity_check_paths = {
+    'files': ['bin/comet.exe'],
+    'dirs': ['bin']
+}
+moduleclass = 'bio'
