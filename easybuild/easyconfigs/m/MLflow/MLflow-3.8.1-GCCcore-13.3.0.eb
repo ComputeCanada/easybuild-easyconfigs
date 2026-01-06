@@ -27,7 +27,7 @@ sources = ['requirements-%(version)s.txt']
 
 postinstallcmds = [
   "echo '#!/bin/sh' >> %(installdir)s/bin/mlflow-server",
-  "echo export EBPYTHONPREFIXES=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/arrow/21.0.0:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2025a:%(installdir)s >> %(installdir)s/bin/mlflow-server",
+  "echo export EBPYTHONPREFIXES=$EBROOTARROW:$EBROOTSCIPYMINSTACK:%(installdir)s >> %(installdir)s/bin/mlflow-server",
   'echo exec %(installdir)s/bin/mlflow server \${1+\\"\$@\\"} >> %(installdir)s/bin/mlflow-server',
   "chmod +x %(installdir)s/bin/mlflow-server"
 ]
