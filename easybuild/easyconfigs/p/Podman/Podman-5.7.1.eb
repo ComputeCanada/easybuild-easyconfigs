@@ -93,7 +93,7 @@ postinstallcmds = [
     'cat > %(installdir)s/etc/containers/storage.conf <<EOF' + local_storage_conf + 'EOF',
     'cat > %(installdir)s/etc/containers/containers.conf <<EOF' + local_containers_conf + 'EOF',
     'curl -o %(installdir)s/etc/containers/policy.json https://raw.githubusercontent.com/containers/skopeo/main/default-policy.json',
-    'curl -o %(installdir)s/etc/containers/registries.conf https://raw.githubusercontent.com/containers/image/main/registries.conf',
+    'curl -o %(installdir)s/etc/containers/registries.conf https://src.fedoraproject.org/rpms/containers-common/raw/f39/f/registries.conf',
     'ln -s $EBROOTGENTOO/bin/false %(installdir)s/libexec/podman/netavark',
 ]
 
