@@ -1,0 +1,11 @@
+absl_py==2.3.1+computecanada
+grpcio==1.73.0+computecanada
+markdown==3.9+computecanada
+MarkupSafe==3.0.2+computecanada
+numpy==2.3.3+computecanada
+packaging==25.0+computecanada
+pillow==11.1.0+computecanada
+protobuf==6.33.2+computecanada
+tensorboard==2.20.0+computecanada
+tensorboard_data_server==0.7.2+computecanada
+werkzeug==3.1.4+computecanada
