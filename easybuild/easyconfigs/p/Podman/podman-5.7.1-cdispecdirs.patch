@@ -1,0 +1,20 @@
+--- podman-5.5.0/vendor/tags.cncf.io/container-device-interface/pkg/cdi/spec-dirs.go.orig	2025-05-13 18:59:13.000000000 +0000
++++ podman-5.5.0/vendor/tags.cncf.io/container-device-interface/pkg/cdi/spec-dirs.go	2025-05-27 13:32:04.156010076 +0000
+@@ -28,6 +28,8 @@
+ 	DefaultStaticDir = "/etc/cdi"
+ 	// DefaultDynamicDir is the default directory for generated CDI Specs
+ 	DefaultDynamicDir = "/var/run/cdi"
++	// DefaultDynamicTmpDir is the default directory for temporary generated CDI Specs
++	DefaultDynamicTmpDir = "/var/tmp/cdi"
+ )
+ 
+ var (
+@@ -36,7 +38,7 @@
+ 	// the preferred way of overriding the default directories is
+ 	// to use a WithSpecDirs options. Otherwise the change is only
+ 	// effective if it takes place before creating the cache instance.
+-	DefaultSpecDirs = []string{DefaultStaticDir, DefaultDynamicDir}
++	DefaultSpecDirs = []string{DefaultStaticDir, DefaultDynamicDir, DefaultDynamicTmpDir}
+ 	// ErrStopScan can be returned from a ScanSpecFunc to stop the scan.
+ 	ErrStopScan = errors.New("stop Spec scan")
+ )
