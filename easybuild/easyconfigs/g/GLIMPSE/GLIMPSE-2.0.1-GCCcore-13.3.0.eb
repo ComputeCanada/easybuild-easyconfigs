@@ -1,0 +1,56 @@
+easyblock = "MakeCp"
+
+name = 'GLIMPSE'
+version = '2.0.1'
+
+homepage = 'https://odelaneau.github.io/GLIMPSE/'
+description = """
+GLIMPSE is a phasing and imputation method for large-scale low-coverage sequencing studies.
+
+Main features of the method:
+
+1. Accurate imputed genotype calls. Our method takes advantage of reference panels to produce high quality genotype calls.
+2. Accurate phasing. GLIMPSE outputs accurate phased haplotypes for the low-coverage sequenced dataset.
+3. Low-coverage sequencing outperforms SNP arrays. Imputation using low-coverage sequencing data is competitive to SNP array imputation. Results for European and African-American populations are interactively available on the website.
+4. A cost-effective paradigm. GLIMPSE realises whole genome imputation from the HRC reference panel for less than 1$.
+5. An easy-to-use framework for diploid, haploid and mixed ploidy imputation. Our method is able to perform imputation of samples with different ploidy without the need to split the data.
+"""
+
+toolchain = {'name': 'GCCcore', 'version': '13.3.0'}
+
+source_urls = ['https://github.com/odelaneau/GLIMPSE/archive/refs/tags']
+sources = ['v%(version)s.tar.gz']
+checksums = [
+    {'v2.0.1.tar.gz': 'dcdc06fc85ca9bae6a2255caf3f985a5e6ccab5a99a0c3fe4c2fd7f8d27b0b8e'},
+]
+
+builddependencies = [
+    ('Boost', '1.82.0', '-core'),
+    ('HTSlib', '1.22.1'),
+]
+
+local_exes = [
+    'GLIMPSE2_chunk',
+    'GLIMPSE2_concordance',
+    'GLIMPSE2_ligate',
+    'GLIMPSE2_phase',
+    'GLIMPSE2_split_reference',
+]
+
+prebuildopts = 'ls */makefile | xargs sed -i "s/^CXXFLAG=.*/CXXFLAG=${CXXFLAGS}/g" && '
+prebuildopts += 'ls */makefile | xargs sed -i "s/^LDFLAG=.*/LDFLAG=${CXXFLAGS}/g" && '
+
+buildopts = 'CXX="$CXX" HTSSRC=${EBROOTHTSLIB} HTSLIB_LIB="-lhts -lcurl" BOOST_INC=$EBROOTBOOST/include '
+buildopts += 'BOOST_LIB_IO="-lboost_iostreams" BOOST_LIB_PO="-lboost_program_options" '
+buildopts += 'BOOST_LIB_SE="-lboost_serialization" '
+
+
+# Get the directory name from the executable name : remove prefix GLIMPSE
+files_to_copy = [([exe[9:] + '/bin/'+ exe for exe in local_exes], 'bin')]
+
+sanity_check_paths = {
+    'files': ['bin/{}'.format(exe) for exe in local_exes],
+    'dirs': [],
+}
+
+moduleclass = 'bio'
