@@ -1,0 +1,74 @@
+# Author: Pavel Grochal (INUITS)
+# License: GPLv2
+
+easyblock = 'Bundle'
+
+name = 'Percolator'
+version = '3.8'
+
+# homepage doesn't have correctly working https
+# stating GitHub because landing page links the homepage
+# http://percolator.ms/
+homepage = 'https://github.com/percolator/percolator'
+description = "Semi-supervised learning for peptide identification from shotgun proteomics datasets"
+
+toolchain = {'name': 'GCC', 'version': '12.3.0'}
+
+builddependencies = [
+    ('CMake', '3.27.7'),
+    ('cURL', '7.63.0'),
+    ('Boost', '1.82.0'),
+    ('KyotoCabinet', '1.2.80'),
+    ('Eigen', '3.4.0'),
+]
+
+dependencies = [
+    ('zlib', '1.2.11'), # in gentoo, filtered
+    ('SQLite', '3.27.2'), # in gentoo, filtered
+    ('bzip2', '1.0.6'), # in gentoo, filtered
+    ('Xerces-C++', '3.2.2'), # in gentoo, filtered
+    ('XSD', '4.2.0'), # in gentoo, filtered
+]
+
+default_easyblock = 'CMakeMake'
+
+local_sw_preconfigopts = '' #export XSDDIR="${EBROOTGENTOO}/libexec/codesynthesis" &&' # export XSDDIR="${EBROOTXSD}" && export XERCESCROOT="${EBROOTXERCESMINCPLUSPLUS}" && '
+# can't use %(namelower)s below, because names are derived from components
+local_unpacked_dir_name = 'percolator-rel-3-08'
+local_srcdir_root = '%%(builddir)s/%s/' % local_unpacked_dir_name
+local_common_configopts = '-DTARGET_ARCH=%(arch)s  -DXSD_INCLUDE_DIR=$EBROOTGENTOO/include/xsd -DXSD_EXECUTABLE=$EBROOTGENTOO/libexec/codesynthesis/xsd '
+postinstallcmds = ['rm -rf %(installdir)s/include/eigen3 %(installdir)s/share/eigen3'] # for whatever reason, it packages its own version of eigen3, deleting it
+
+github_account = 'percolator'
+default_component_specs = {
+    'source_urls': [GITHUB_LOWER_SOURCE],
+    'sources': ['rel-3-08.tar.gz'],
+    'start_dir': local_unpacked_dir_name,
+    'preconfigopts': local_sw_preconfigopts
+}
+
+components = [
+    (name, version, {
+        'configopts': local_common_configopts + '-DXML_SUPPORT=ON',
+        'srcdir': local_srcdir_root,
+#        'patches': ['Percolator-3.6.5-cmake-deps.patch'],
+    }),
+    ('%s_converters' % name, version, {
+        # Installation docs states using "TokyoCabinet" but from all information obtained
+        # TokyoCabinet and KyotoCabinet should be different implementations of the same protocol.
+        'configopts': local_common_configopts + '-DSERIALIZE="KyotoCabinet" ',
+        'srcdir': '%s/src/converters' % local_srcdir_root,
+    }),
+    #('%s_elude_tool' % name, version, {
+    #    'configopts': local_common_configopts,
+    #    'srcdir': '%s/src/elude_tool' % local_srcdir_root,
+    #}),
+]
+
+sanity_check_paths = {
+    'files': ['bin/percolator'],
+    'dirs': ['share/xml/percolator/'],
+}
+sanity_check_commands = ['percolator --help']
+
+moduleclass = 'bio'
