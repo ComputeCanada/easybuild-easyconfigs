@@ -1,0 +1,75 @@
+easyblock = 'Tarball'
+
+name = 'cuQuantum'
+version = '25.06.0.10'
+
+homepage = 'https://developer.nvidia.com/cuquantum-sdk'
+description = """NVIDIA cuQuantum SDK is a high-performance library for
+quantum information science and beyond"""
+
+toolchain = {'name': 'gcccorecuda', 'version': '2023.2.129'}
+toolchainopts = {'optarch': 'False'}
+
+# By downloading, you accept the cuQuantum Software License Agreement
+# (https://developer.nvidia.com/cuquantum-license-agreement)
+accept_eula = True
+source_urls = ['https://developer.download.nvidia.com/compute/cuquantum/redist/cuquantum/linux-x86_64/']
+sources = ['cuquantum-linux-x86_64-%(version)s_cuda%(cudamajver)s-archive.tar.xz']
+checksums = ['2bb36f9691c65d5327b9eb52ee3bd14e8c5cb6d6f982927b87e9219f1ce65a5d']
+
+builddependencies = {
+    ('cuTENSOR', '2.4.1.4', '', ('CUDAcore', '12.9.1')),
+    ('Cython', '3.1.2'),
+    ('python-build-bundle', '2025a'),
+    ('pytest', '8.2.2'),
+}
+
+multi_deps = {'Python': ['3.11', '3.12', '3.13']}
+multi_deps_extensions_only = True
+
+# Does not support P100s
+cuda_compute_capabilities = ['8.0', '9.0', '10.0']
+
+installopts = ' && '.join([
+    '.',
+    '/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/lib --any_interpreter --add_path $EBROOTCUDACORE/lib',
+    '/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/lib --any_interpreter --add_path $EBROOTCUTENSOR/lib',
+    #cupy is required for cuquantum python extension
+    'pip install cupy==13.6.0 --no-index --prefix=%(installdir)s',
+])
+
+local_extoptions = ' && '.join([
+    'export CUQUANTUM_ROOT=$EBROOTCUQUANTUM',
+    'export CUTENSOR_ROOT=$EBROOTCUTENSOR',
+    'cd python',
+    '',  #for trailing character
+])
+
+exts_defaultclass = "PythonPackage"
+
+exts_list = [
+    ('cuquantum', '25.06.0', {
+        'prebuildopts': "export CUQUANTUM_ROOT=$EBROOTCUQUANTUM && export CUTENSOR_ROOT=$EBROOTCUTENSOR && cd python && ",
+        'preinstallopts': "export CUQUANTUM_ROOT=$EBROOTCUQUANTUM && export CUTENSOR_ROOT=$EBROOTCUTENSOR && cd python && ",
+        'source_urls': ['https://github.com/NVIDIA/cuQuantum/archive/refs/tags/'],
+        'sources': ['v%(version)s.tar.gz'],
+        'use_pip': True,
+        'checksums': ['6a1406915e43bb455e9bfa8f08e5137a3ec4612e01b2080e7815186588c7ea62'],
+    }),
+]
+
+sanity_check_paths = {
+    'files': ['include/custatevec.h', 'lib/libcutensornet.so'],
+    'dirs': ['include', 'lib'],
+}
+
+sanity_check_commands = [
+    'python -c "from cuquantum import custatevec"',
+    'python -c "from cuquantum import cutensornet"',
+    'python -c "from cuquantum import contract"',
+    'python -c "from cuquantum import Network"',
+]
+
+modextrapaths = {'EBPYTHONPREFIXES': ''}
+
+moduleclass = 'numlib'
