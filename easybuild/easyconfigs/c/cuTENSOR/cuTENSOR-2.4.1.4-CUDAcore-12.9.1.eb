@@ -1,0 +1,27 @@
+easyblock = 'Tarball'
+
+name = 'cuTENSOR'
+version = '2.4.1.4'
+
+homepage = 'https://developer.nvidia.com/cutensor'
+description = """cuTENSOR is a high-performance CUDA library for tensor 
+primitives."""
+
+#Use with CUDA version >= 11.1
+toolchain = {'name': 'CUDAcore', 'version': '12.9.1'}
+toolchainopts = {'optarch': 'False'}
+local_cuda_major = toolchain['version'].split('.')[0]
+
+# By downloading, you accept the cuTENSOR Software License Agreement
+# (https://docs.nvidia.com/cuda/cutensor/license.html)
+accept_eula = True
+source_urls = ['https://developer.download.nvidia.com/compute/cutensor/redist/libcutensor/linux-x86_64/']
+sources = [f'libcutensor-linux-x86_64-%(version)s_cuda{local_cuda_major}-archive.tar.xz']
+checksums = ['032904fb8bba341e24aa45a8cc7b5afc63e4c28e22474530ccc97cfa546d0442']
+
+sanity_check_paths = {
+    'files': ['include/cutensor.h', 'lib/libcutensor.so'],
+    'dirs': ['include', 'lib'],
+}
+
+moduleclass = 'numlib'
