@@ -7,7 +7,7 @@ homepage = 'https://icl.cs.utk.edu/magma/'
 description = """The MAGMA project aims to develop a dense linear algebra library similar to
  LAPACK but for heterogeneous/hybrid architectures, starting with current Multicore+GPU systems."""
 
-toolchain = {'name': 'gccflexiblascuda', 'version': '2023.1.129'}
+toolchain = {'name': 'gccflexiblascuda', 'version': '2023.2.129'}
 toolchainopts = {'pic': True, 'openmp': True}
 
 source_urls = ['https://icl.cs.utk.edu/projectsfiles/magma/downloads/']
