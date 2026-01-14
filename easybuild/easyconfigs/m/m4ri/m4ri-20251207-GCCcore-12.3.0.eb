@@ -1,0 +1,24 @@
+easyblock = 'ConfigureMake'
+
+name = 'm4ri'
+version = '20251207'
+
+homepage = 'https://github.com/malb/m4ri'
+description = "M4RI is a library for fast arithmetic with dense matrices over F2."
+
+toolchain = {'name': 'GCCcore', 'version': '12.3.0'}
+
+github_account = 'xiaoyeli'
+source_urls = ['https://github.com/malb/m4ri/releases/download/%(version)s/']
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['7b195a4d88fa827b9ec6d087c3cac739ab6e5100da05faaed3a1d2c20ca3a930']
+
+preconfigopts = "autoreconf --install && "
+configopts = "--enable-openmp "
+
+sanity_check_paths = {
+    'files': ['include/m4ri/m4ri.h', 'lib/libm4ri.a', 'lib/libm4ri.%s' % SHLIB_EXT],
+    'dirs': [],
+}
+
+moduleclass = 'math'
