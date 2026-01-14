@@ -1,0 +1,24 @@
+easyblock = 'ConfigureMake'
+
+name = 'm4rie'
+version = '20250128'
+
+homepage = 'https://github.com/malb/m4rie'
+description = "M4RIE is a library for fast arithmetic with dense matrices."
+
+toolchain = {'name': 'GCC', 'version': '12.3.0'}
+
+source_urls = ['https://github.com/malb/m4rie/releases/download/%(version)s/']
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['96f1adafd50e6a0b51dc3aa1cb56cb6c1361ae7c10d97dc35c3fa70822a55bd7']
+
+dependencies = [('m4ri', '20251207')]
+
+preconfigopts = "autoreconf --install && "
+
+sanity_check_paths = {
+    'files': ['include/m4rie/m4rie.h'] + ['lib/libm4rie.%s' % e for e in ['a', SHLIB_EXT]],
+    'dirs': [],
+}
+
+moduleclass = 'math'
