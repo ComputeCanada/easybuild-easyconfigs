@@ -1,0 +1,20 @@
+name = 'SuperLU'
+version = '7.0.1'
+
+homepage = 'http://crd-legacy.lbl.gov/~xiaoye/SuperLU/'
+description = """SuperLU is a general purpose library for the direct solution of large, sparse, nonsymmetric systems
+ of linear equations on high performance machines."""
+
+toolchain = {'name': 'foss', 'version': '2023a'}
+toolchainopts = {'opt': True, 'pic': True}
+
+github_account = 'xiaoyeli'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ["v%(version)s.tar.gz"]
+checksums = ['86dcca1e086f8b8079990d07f00eb707fc9ef412cf3b2ce808b37956f0de2cb8']
+
+builddependencies = [('CMake', '3.31.0')]
+
+build_shared_libs = True
+
+moduleclass = 'numlib'

@@ -1,7 +1,7 @@
 easyblock = "Toolchain"
 
 name = 'gcccuda'
-version = '2023.1.129'
+version = '2023.2.129'
 
 homepage = '(none)'
 description = """GNU Compiler Collection (GCC) based compiler toolchain, along with CUDA toolkit."""

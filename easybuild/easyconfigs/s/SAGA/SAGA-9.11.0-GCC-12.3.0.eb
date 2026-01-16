@@ -1,0 +1,51 @@
+easyblock = 'CMakeMake'
+
+name = 'SAGA'
+version = '9.11.0'
+
+homepage = 'https://saga-gis.sourceforge.io/'
+description = "System for automated geoscientific analyses"
+
+toolchain = {'name': 'gccflexiblas', 'version': '2023a'}
+toolchainopts = {'pic': True}
+
+source_urls = ['https://sourceforge.net/projects/saga-gis/files/SAGA%20-%20%(version_major)s/SAGA%20-%20%(version)s/']
+sources = ['saga-%(version)s_src.zip']
+
+builddependencies = [
+    ('CMake', '3.31.0'),
+    ('SWIG', '4.2.1'),
+]
+
+dependencies = [
+    ('wxWidgets', '3.2.9'),
+    ('PROJ', '9.2.0'),
+    ('GDAL', '3.9.1'),
+    ('PostgreSQL', '16.0'),
+    ('Qhull', '2020.2'),
+#    ('libharu', '2.3.0'),
+     ('OpenCV', '4.13.0'),
+]
+multi_deps = {'Python': ['3.11', '3.12']}
+#    ('Python', '3.11')
+
+srcdir = 'saga-gis'
+
+configopts = " ".join([
+    "-DWITH_TRIANGLE=OFF",
+    "-DWITH_PYTHON=ON",
+    "-DPYTHON_INSTALL_DIR=%(installdir)s/lib64/python%(pyshortver)s/site-packages", 
+])
+
+postinstallcmds = [
+    "setrpaths.sh --path %(installdir)s/lib64/python%(pyshortver)s/site-packages --add_path %(installdir)s/lib64"
+]
+
+modextrapaths = {'PYTHONPATH': 'lib/python%(pyshortver)s/site-packages'}
+
+sanity_check_paths = {
+    'files': ['bin/saga_cmd', 'bin/saga_gui', 'lib/libsaga_api.so'],
+    'dirs': ['include/saga', 'lib/saga', 'lib/python%(pyshortver)s/site-packages'],
+}
+
+moduleclass = 'geo'

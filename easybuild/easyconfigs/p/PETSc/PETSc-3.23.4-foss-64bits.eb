@@ -35,7 +35,6 @@ preconfigopts = " ".join([
 ])
 
 configopts = " ".join([
-    '--with-fortran-bindings=0', # doesn't work and isn't needed for Firedrake
     '--with-shared-libraries=1',
     '--with-strict-petscerrorcode',
     '--with-hdf5=1',
