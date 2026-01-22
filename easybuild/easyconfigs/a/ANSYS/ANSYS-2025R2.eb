@@ -112,8 +112,8 @@ modextravars = {
 }
 
 modextrapaths = {
-    'AWP_ROOT251': ['v252'],
-    'ANSYS251_DIR': ['v252/ansys'],
+    'AWP_ROOT252': ['v252'],
+    'ANSYS252_DIR': ['v252/ansys'],
     'PATH': ['v252/reaction/forte.linuxx8664/bin','v252/fensapice/bin','v252/rocky','v252/AnsysEM'],
 }
 
