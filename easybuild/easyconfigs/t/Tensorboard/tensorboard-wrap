@@ -1,0 +1,5 @@
+#!/bin/sh
+export LOGDIR=${TENSORBOARD_LOGDIR:-$HOME/tensorboard_logs}
+mkdir -p $LOGDIR
+
+exec %INSTALLDIR/bin/tensorboard --logdir=$LOGDIR ${1+"$@"}
