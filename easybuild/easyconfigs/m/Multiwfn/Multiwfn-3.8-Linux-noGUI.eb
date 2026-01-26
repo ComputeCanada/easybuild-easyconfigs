@@ -1,0 +1,25 @@
+easyblock = 'PackedBinary'
+
+name = 'Multiwfn'
+version = '3.8'
+versionsuffix = '-noGUI'
+
+homepage = 'http://sobereva.com/multiwfn/'
+description = "A multifunctional wavefunction analyzer."
+
+toolchain = SYSTEM
+
+source_urls = ['http://sobereva.com/multiwfn/misc/']
+sources = ['%(name)s_%(version)s_bin_Linux_noGUI.zip']
+checksums = ['4ef9bd14874703cfd48679e980fe02ba9a19c8139410397ed73b3211928b9728']
+
+postinstallcmds = ["cd %(installdir)s && mkdir -p bin && chmod u+x Multiwfn_noGUI && mv Multiwfn_noGUI bin/ && cd bin/ && ln -s Multiwfn_noGUI Multiwfn && chmod -R go+X %(installdir)s"]
+
+sanity_check_paths = {
+    'files': ['bin/Multiwfn_noGUI', 'LICENSE.txt'],
+    'dirs': ['examples'],
+}
+
+modextravars = {'OMP_STACKSIZE': "1000M"}
+
+moduleclass = 'chem'
