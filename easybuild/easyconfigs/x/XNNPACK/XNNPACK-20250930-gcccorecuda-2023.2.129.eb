@@ -1,0 +1,39 @@
+easyblock = 'CMakeMake'
+
+name = 'XNNPACK'
+version = '20250930' # no actual version
+
+homepage = 'https://github.com/google/XNNPACK'
+description = """High-efficiency floating-point neural network inference operators for mobile, server, and Web."""
+
+toolchain = {'name': 'gfbfc', 'version': '2023.2.129'}
+toolchainopts = {'pic': True}
+
+github_account = 'google'
+source_urls = [GITHUB_SOURCE]
+sources = [{
+    'filename': '%(namelower)s.tar.xz',
+    'git_config': {
+        'url': 'https://github.com/google',
+        'repo_name': '%(name)s',
+        'commit': '51a0103656eff6fc9bfd39a4597923c4b542c883',
+    },
+}]
+checksums = ['cfc38fcc30e0b09a979e2040ab0cf045caa30f0d0a2edb0a90ef5f3f8624841f']
+
+builddependencies = [
+    ('CMake', '3.31.0'),
+]
+
+configopts = ' '.join([
+    "-DXNNPACK_BUILD_TESTS=OFF",
+    "-DXNNPACK_BUILD_BENCHMARKS=OFF",
+    "-DXNNPACK_LIBRARY_TYPE=shared",
+])
+
+sanity_check_paths = {
+    'files': ['lib/libXNNPACK.so'],
+    'dirs': ['include', 'lib']
+}
+
+moduleclass = 'lib'
