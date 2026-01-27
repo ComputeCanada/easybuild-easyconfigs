@@ -15,9 +15,11 @@ checksums = ['a12ccd50f57083c530e1c76f10d52865defbd19fc9e2c85b483493065709874a']
 
 builddependencies = [('CMake', '3.31.0')]
 
+defaultopts = '-DSLEEF_BUILD_TESTS=OFF -DSLEEF_ENABLE_TESTER4=OFF '
+
 configopts = [
-    '-DBUILD_SHARED_LIBS=OFF -DSLEEF_ENABLE_LTO=TRUE',
-    '-DBUILD_SHARED_LIBS=ON',
+    f' {defaultopts} -DBUILD_SHARED_LIBS=OFF -DSLEEF_ENABLE_LTO=TRUE',
+    f' {defaultopts} -DBUILD_SHARED_LIBS=ON',
 ]
 
 sanity_check_paths = {
