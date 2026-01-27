@@ -26,11 +26,11 @@ install_cmd += 'echo "LICENSE_SERV_INPUT_1=cst@local" >> installer.properties ; 
 install_cmd += 'echo "LICENSE_SERV_INPUT_BOOLEAN_1=" >> installer.properties ; '
 install_cmd += 'echo "USER_INSTALL_DIR=%(installdir)s" >> installer.properties ; '
 install_cmd += 'export CHECK_DISK_SPACE=OFF && ./install.sh --replay installer.properties --nogui --no-pkg-check --force-system-java ; '
-postinstallcmds = ['/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/LinuxAMD64 ;']
-postinstallcmds = ['/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/ACIS_interop/linux_a64/code/bin ;']
-postinstallcmds = ['/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/FEST3D/lib ;']
-postinstallcmds = ['/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/ASAT/paraview/lib ;']
-postinstallcmds = ['/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/ASAT/paraview/plugins ;']
+postinstallcmds = ['setrpaths --verbose --path %(installdir)s/LinuxAMD64/ %(installdir)s/ACIS_interop/linux_a64/code/bin/ %(installdir)s/FEST3D/lib/ %(installdir)s/ASAT/paraview/lib/ ; ']
+#postinstallcmds = ['setrpaths --path %(installdir)s/ACIS_interop/linux_a64/code/bin/ ;']
+#postinstallcmds = ['setrpaths --path %(installdir)s/FEST3D/lib/ ;']
+#postinstallcmds = ['setrpaths.sh --path %(installdir)s/ASAT/paraview/lib/ ;']
+#postinstallcmds = ['/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/ASAT/paraview/plugins/ ;']
 postinstallcmds += ['cd %(installdir)s ; patch -p0 < %(installdir)s/%(name)s-%(version)s.patch']
 sanity_check_paths = {
       'files': ['LinuxAMD64/cst_design_environment_AMD64.exe','LinuxAMD64/cst_design_environment_gui_AMD64','LinuxAMD64/cst_boardcheck_AMD64'],
