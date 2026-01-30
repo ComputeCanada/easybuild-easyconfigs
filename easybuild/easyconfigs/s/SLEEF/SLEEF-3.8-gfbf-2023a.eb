@@ -1,0 +1,30 @@
+easyblock = 'CMakeMake'
+
+name = 'SLEEF'
+version = '3.8'
+
+homepage = 'https://sleef.org/'
+description = """SIMD Library for Evaluating Elementary Functions, vectorized libm and DFT"""
+
+toolchain = {'name': 'gfbf', 'version': '2023a'}
+
+github_account = 'shibatch'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ["%(version)s.tar.gz"]
+checksums = ['a12ccd50f57083c530e1c76f10d52865defbd19fc9e2c85b483493065709874a']
+
+builddependencies = [('CMake', '3.31.0')]
+
+defaultopts = '-DSLEEF_BUILD_TESTS=OFF -DSLEEF_ENABLE_TESTER4=OFF '
+
+configopts = [
+    f' {defaultopts} -DBUILD_SHARED_LIBS=OFF -DSLEEF_ENABLE_LTO=TRUE',
+    f' {defaultopts} -DBUILD_SHARED_LIBS=ON',
+]
+
+sanity_check_paths = {
+    'files': ['lib/lib%(namelower)s.a', 'lib/lib%(namelower)s.so'],
+    'dirs': ['lib', 'include']
+}
+
+moduleclass = 'math'

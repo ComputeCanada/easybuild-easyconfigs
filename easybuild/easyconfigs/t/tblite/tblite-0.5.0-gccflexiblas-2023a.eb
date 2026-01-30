@@ -1,0 +1,66 @@
+easyblock = 'CMakeNinja'
+
+name = 'tblite'
+version = '0.5.0'
+
+homepage = 'https://github.com/tblite/tblite'
+description = "Light-weight tight-binding framework"
+
+toolchain = {'name': 'gccflexiblas', 'version': '2023a'}
+toolchainopts = {'openmp': True}
+
+github_account = 'tblite'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['65ede0d66ad38f7748cb1c93367db3bd9b67f6439d8e45539bcf55182489c287']
+
+builddependencies = [
+    ('CMake', '3.30.0'),
+    ('python-build-bundle', '2025a'),
+    ('numpy', '2.1.1'),
+]
+
+# Dep hell... just let it pull its own internal deps.
+dependencies = []
+
+local_python_versions = ['3.11', '3.12', '3.13']
+# make sure both static and shared libs are built
+local_configopts = [
+    "-DBUILD_SHARED_LIBS=OFF ",
+    "-DBUILD_SHARED_LIBS=ON ",
+]
+configopts = local_configopts * len(local_python_versions)
+multi_deps = {'Python': sorted(local_python_versions * 2)}
+
+# run suite of tests with ctest
+test_cmd = 'ctest --parallel 1'
+runtest = ''
+
+exts_defaultclass = 'PythonPackage'
+exts_default_options = {'source_urls': [PYPI_SOURCE]}
+exts_list = [
+    (name, version, {
+        'prebuildopts': " export CC=gcc && export PKG_CONFIG_PATH=%(installdir)s/lib/pkgconfig:$PKG_CONFIG_PATH && ",
+        'sanity_pip_check': False,
+        'source_tmpl': '%(name)s-%(version)s.tar.gz',
+        'source_urls': ['https://pypi.python.org/packages/source/%(nameletter)s/%(name)s'],
+        'use_pip': True,
+        'use_pip_for_deps': True,
+        'checksums': [
+            {'tblite-0.5.0.tar.gz': '5dae9e7f559a2602c361acf3817c987501f5b13eaf2072b5f81bb8ae071fc7cb'},
+        ],
+    }),
+]
+
+exts_filter = ("module load scipy-stack && python -c 'import %(ext_name)s' && module load xtb/6.6.1 && python -c 'import tblite.ase'", '')
+
+modextrapaths = {'EBPYTHONPREFIXES': '' }
+
+sanity_check_paths = {
+    'files': ['bin/%(name)s', 'include/%(name)s.h', 'lib/lib%(name)s.so', 'lib/lib%(name)s.a'],
+    'dirs': ['share'],
+}
+
+sanity_check_commands = ['tblite --help']
+
+moduleclass = 'chem'
