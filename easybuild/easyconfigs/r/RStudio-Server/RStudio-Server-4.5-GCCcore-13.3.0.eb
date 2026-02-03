@@ -13,9 +13,12 @@ toolchain = {'name': 'GCCcore', 'version': '13.3.0'}
 
 source_urls = ['https://github.com/rstudio/rstudio/archive/']
 sources = ['v2025.09.2+418.tar.gz']
-checksums = ['7e64e65bd3457855e981698dfb61f84e23de0d8bfcb2b1ffc28a38b5b964a769']
+patches = ['rstudio-1.2.1335.patch']
 
-#patches = ['rstudio-1.2.1335.patch']
+checksums = [
+    {'v2025.09.2+418.tar.gz': '7e64e65bd3457855e981698dfb61f84e23de0d8bfcb2b1ffc28a38b5b964a769'},
+    {'rstudio-1.2.1335.patch': 'ce2cf5d344a5d254aacfff628ce1eeae6968730a81d01319a823ad828a1a3be6'},
+]
 
 builddependencies = [
     ('gcccoreflexiblas', '2024a'),
