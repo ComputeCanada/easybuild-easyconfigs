@@ -20,7 +20,7 @@ checksums = ['84226ecd313b233da27dc2eb3601b4f222b8209c3a7216d8733b031da1dc64e6']
 
 builddependencies = [('binutils', '2.40')]
 
-multi_deps = {'Python': ['3.11', '3.12', '3.13', '3.14']}
+multi_deps = {'Python': ['3.10', '3.11', '3.12', '3.13', '3.14']}
 download_dep_fail = True
 hidden = True
 use_pip = True
