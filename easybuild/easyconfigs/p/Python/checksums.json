@@ -15,7 +15,6 @@
   "Python-3.14.2-custom-ctypes.patch": "4c7659026a88961330c9629b0a1c23e9a8ed38108af765bfc0f537f55b7d610f",
   "Python-3.14.2.tgz": "c609e078adab90e2c6bacb6afafacd5eaf60cd94cf670f1e159565725fcd448d",
   "Python-3.14.2_skip-inf-recursion-tests.patch": "ff9d0951f169fa5c34f883093d7688b1823693e2950b6c4cfb21682ece33646a",
-  "Python-3.14.2_skip-iran-tests.patch": "3882e08c8ce4a9caf62a69c607abb9b87ce81330e7b8e4c7f60a16640291a562",
   "Python-3.9.6.tgz": "d0a35182e19e416fc8eae25a3dcd4d02d4997333e4ad1f2eee6010aadc3fe866",
   "Python-3_9-blist-1.3.6-fix-undefined_symbol_PyObject_GC_IS_TRACKED.patch": "18a643d1d1565b05df7dcc9a612a86dcf7b3b352435032f6425a61b597f911d0",
   "SecretStorage-3.3.1.tar.gz": "fd666c51a6bf200643495a04abb261f83229dcb6fd8472ec393df7ffc8b6f195",
