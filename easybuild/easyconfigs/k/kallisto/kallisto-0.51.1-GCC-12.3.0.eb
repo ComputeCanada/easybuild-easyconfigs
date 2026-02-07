@@ -25,6 +25,10 @@ dependencies = [
 ]
 
 #preconfigopts = "cd ../%(name)s-%(version)s/ext/htslib/ && autoreconf && cd - &&"
+configopts = ' -DUSE_HDF5=ON '
+
+# remove hardcoded march=native
+prebuildopts = "fgrep -le march=native -r %(builddir)s/%(name)s-%(version)s/ext | xargs sed -i 's/-march=native//g' && "
 
 parallel = 1
 
