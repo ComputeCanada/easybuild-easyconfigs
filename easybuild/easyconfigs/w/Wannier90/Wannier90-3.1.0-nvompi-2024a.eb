@@ -11,7 +11,7 @@ toolchainopts = {'openmp': False}
 builddependencies = [('FlexiBLAScore', '3.4.4')]
 source_urls = ['https://github.com/wannier-developers/%(name)s/archive/']
 sources = ['v%(version)s.tar.gz']
-patches = ['%(name)s-%(version)s-openmpi.patch']
+patches = ['%(name)s-%(version)s-nvompi.patch']
 checksums = [
     '40651a9832eb93dec20a8360dd535262c261c34e13c41b6755fa6915c936b254',
     '96b6e6e72509aa2c08639d2019ca3c41bb4ac5041212051518dac54ee0ab598f',  # %(name)s-%(version)s.patch,
