@@ -30,7 +30,7 @@ python-dateutil==2.9.0.post0+computecanada
 pyzmq==27.1.0+computecanada
 six==1.17.0+computecanada
 stack-data==0.6.3+computecanada
-tornado==6.5.2+computecanada
+tornado==6.5.4+computecanada
 traitlets==5.14.3+computecanada
 typing_extensions==4.15.0+computecanada ; python_version < "3.12"
 wcwidth==0.5.2+computecanada
