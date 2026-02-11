@@ -1,0 +1,81 @@
+easyblock = 'Binary'
+
+name = 'ABAQUS'
+version = '2026'
+
+homepage = 'https://www.3ds.com/products/simulia/abaqus'
+description =   """Finite Element Analysis (FEA) software for advanced engineering simulations involving stress analysis,
+                   conductive and convective heat transfer, mass diffusion, acoustics, piezoelectricity, electrochemistry
+                   independently, sequentially coupled, fully coupled using implicit and explicit robust solvers.  This
+                   module contains the initial release Abaqus 2026 Golden with SIMULIA Abaqus, Isight, fe-safe, Tosca."""
+
+toolchain = SYSTEM
+
+sources = [
+    '%(version)s/%(version)s.AM_SIM_Abaqus_Extend.AllOS.1-5.tar',
+    '%(version)s/%(version)s.AM_SIM_Abaqus_Extend.AllOS.2-5.tar',
+    '%(version)s/%(version)s.AM_SIM_Abaqus_Extend.AllOS.3-5.tar',
+    '%(version)s/%(version)s.AM_SIM_Abaqus_Extend.AllOS.4-5.tar',
+    '%(version)s/%(version)s.AM_SIM_Abaqus_Extend.AllOS.5-5.tar',
+]
+
+# sha256sum
+checksums = [
+    '68cea67c854cd8ee362f9d852abdca274e9d12b3e47a45795029a01b7612252b',  # 2026.AM_SIM_Abaqus_Extend.AllOS.1-5.tar
+    'ac3e09609242657e4cac43670ca063591bc2b2c6cd3b4bc002dda5fdf00f0987',  # 2026.AM_SIM_Abaqus_Extend.AllOS.2-5.tar
+    '44ed4e36d3dc7ffdb73d2f1a84a9e778fbfd37f9996922fc70c4fb062ffdb8dc',  # 2026.AM_SIM_Abaqus_Extend.AllOS.3-5.tar
+    'c06f8b721a986e9fb28bbd38597d4de31fa31b78fe657893d2525ae3d4501d1e',  # 2026.AM_SIM_Abaqus_Extend.AllOS.4-5.tar
+    '8a7b4759b9a3065cca19eedf1873c9b99b2cf097686c605b286636c6b7c74db6',  # 2026.AM_SIM_Abaqus_Extend.AllOS.5-5.tar
+    'eec41cb771b6146ef55f7d72be667551cbac7f466689b8dacacd160157721caf',  # EstablishedProductsConfig.ini
+    'ea803c380d35d847e7dc8f1b0da3b184075b9ae9769998274be514cb8081aad2',  # ibm-semeru-open-jre_x64_linux_25.0.2_10_openj9-0.57.0.tar.gz
+    'd03c1f4810877f843e14390df167babc2d0212ae241f3d84cd104c1a3f7564a6',  # UserIntentions_AM_SIM_Abaqus_Extend.media-20260210T064239-0500.xml
+]
+
+extract_sources = True
+
+install_cmd = "\
+cd /cvmfs/restricted.computecanada.ca/easybuild/sources/a/ABAQUS;\
+sed 's+/scratch/roberpj/abaqus/2026/Golden/install+%(installdir)s+g' %(version)s/Custom/Golden/UserIntentions_AM_SIM_Abaqus_Extend.media-20260210T064239-0500.xml > %(builddir)s/AM_SIM_Abaqus_Extend.AllOS/1/UserIntentions_AM_SIM_Abaqus_Extend.media-20260210T064239-0500.xml;\
+cd %(builddir)s; export DSYAuthOS_`lsb_release -si`=1 DSY_Force_OS=linux_a64 DSY_Skip_CheckPrereq=1;\
+AM_SIM_Abaqus_Extend.AllOS/1/StartTUI.sh --silent AM_SIM_Abaqus_Extend.AllOS/1/UserIntentions_AM_SIM_Abaqus_Extend.media-20260210T064239-0500.xml"
+
+postinstallcmds = [
+    "find %(installdir)s -type d -exec chmod -v 755 {} \;",
+    "find %(installdir)s -type f -a \( ! -perm /g=r -o ! -perm /o=r \) -exec chmod -v go+r {} \;",
+    "find %(installdir)s -type f -print0 | while read -d '' -r f; \
+        do if [ $(file -b --mime-type $f) = application/x-executable ]; then chmod -v 755 $f; fi; done",
+    "for d in $(find %(installdir)s -name 'bin' -o -name 'Linux64' -o -name 'Linux_x64' \
+        -o -name 'lnamd64' -o -name 'lib' -o -name 'amd64' -o -name 'machines'); \
+        do echo Calling setrpaths.sh --path $d; /cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path $d; done",
+    "echo Calling setrpaths.sh --path %(installdir)s/EstProducts/linux_a64/code/bin --any_interpreter; \
+        /cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/EstProducts/linux_a64/code/bin --any_interpreter;",
+    "cp -fv /cvmfs/restricted.computecanada.ca/easybuild/sources/a/ABAQUS/%(version)s/Custom/Site/EstablishedProductsConfig.ini \
+        %(installdir)s/EstProducts/linux_a64/SMA/site/EstablishedProductsConfig.ini",
+    "sed -i 's+/scratch/roberpj/abaqus/2026/Golden/install+%(installdir)s+g' %(installdir)s/EstProducts/linux_a64/SMA/site/EstablishedProductsConfig.ini",
+]
+
+sanity_check_paths = {
+    'files': ['Commands/abaqus'],
+    'dirs' : ['Commands','CAE','EstProducts'],
+}
+
+modextrapaths = {
+    'PATH': ['Commands'],
+}
+
+moduleclass = 'cae'
+
+modluafooter = """
+require("SitePackage")
+local found, path = find_and_define_license_file("__ABAQUS_LICENSE_FILE","abaqus")
+if (not found) then
+        local error_message = [[
+        We did not find a suitable license for Abaqus. If you have access to one, you can create the file $HOME/.licenses/abaqus.lic with the license information. If you think you should have access to one as part of your institution, please write to support@tech.alliancecan.ca so that we can configure it. For more information about configuring an ABAQUSlicense, please see https://docs.alliancecan.ca/wiki/Technical_support
+        Nous n'avons pas trouve de licence utilisable pour Abaqus. Si vous avez acces a une licence de Abaqus, vous pouvez creer le fichier $HOME/.licenses/abaqus.lic avec l'information de la licence. Si vous pensez que vous devriez automatiquement avoir acces a une licence via votre institution, veuillez ecrire a support@tech.alliancecan.ca pour que nous puissions la configurer. Pour plus d'information sur la facon de configurer une licence pour ABAQUS, veuillez consulter la page https://docs.alliancecan.ca/wiki/Technical_support/fr
+        ]]
+        LmodError(error_message)
+elseif (path) then
+    -- load the license file which should contain Lua commands to set the license path
+    assert(loadfile(path))()
+end
+"""
