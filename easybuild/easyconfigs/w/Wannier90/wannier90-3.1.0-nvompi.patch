@@ -1,0 +1,23 @@
+--- config/make.inc.ifort.orig	2026-01-27 23:54:18.113468128 +0000
++++ config/make.inc.ifort	2026-01-27 23:54:40.424348082 +0000
+@@ -2,9 +2,9 @@
+ #=====================================================
+ # For Linux with intel version 11/12 on 64bit machines
+ #=====================================================
+-F90 = ifort
++F90 = nvfortran 
+ COMMS=mpi
+-MPIF90=mpiifort
++MPIF90=mpifort
+ FCOPTS=-O2
+ LDOPTS=-O2
+ 
+@@ -13,7 +13,7 @@
+ #========================================================
+ 
+ LIBDIR = /opt/intel/mkl/lib/intel64
+-LIBS   =  -L$(LIBDIR) -lmkl_core -lmkl_intel_lp64 -lmkl_sequential -lpthread
++LIBS   =  -lflexiblas -lpthread
+ 
+ #=======================
+ # ATLAS Blas and LAPACK

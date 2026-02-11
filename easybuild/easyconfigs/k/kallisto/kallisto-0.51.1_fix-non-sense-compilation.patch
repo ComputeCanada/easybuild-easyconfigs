@@ -1,0 +1,129 @@
+diff -Nru kallisto-0.51.1.orig/CMakeLists.txt kallisto-0.51.1/CMakeLists.txt
+--- kallisto-0.51.1.orig/CMakeLists.txt	2024-09-17 01:40:08.000000000 -0400
++++ kallisto-0.51.1/CMakeLists.txt	2026-02-08 11:50:35.546006852 -0500
+@@ -63,7 +63,7 @@
+ 
+ #add_compile_options(-Wall -Wno-unused-function)
+ add_compile_options(-Wno-subobject-linkage) # Suppress bifrost warning
+-set(PROJECT_BIFROST_CMAKE_CXX_FLAGS "-Wno-subobject-linkage -Wno-return-type") # Suppress bifrost warning
++set(PROJECT_BIFROST_CMAKE_CXX_FLAGS "-Wno-subobject-linkage -Wno-return-type $ENV{CXXFLAGS}") # Suppress bifrost warning
+ 
+ if(LINK MATCHES static)
+     message("static build")
+@@ -89,7 +89,10 @@
+     PREFIX ${PROJECT_SOURCE_DIR}/ext/bifrost
+     SOURCE_DIR ${PROJECT_SOURCE_DIR}/ext/bifrost
+     BUILD_IN_SOURCE 1
+-    CONFIGURE_COMMAND mkdir -p build && cd build && cmake .. -DMAX_KMER_SIZE=${MAX_KMER_SIZE} -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_CXX_FLAGS=${PROJECT_BIFROST_CMAKE_CXX_FLAGS} ${DO_ENABLE_AVX2} ${DO_ENABLE_COMPILATION_ARCH}
++    CONFIGURE_COMMAND mkdir -p build && cd build && cmake ..
++    -DMAX_KMER_SIZE=${MAX_KMER_SIZE} -DCMAKE_INSTALL_PREFIX=${PREFIX}
++    -DCMAKE_CXX_FLAGS=${PROJECT_BIFROST_CMAKE_CXX_FLAGS} ${DO_ENABLE_AVX2}
++    ${DO_ENABLE_COMPILATION_ARCH} -DCMAKE_VERBOSE_MAKEFILE=ON
+     BUILD_COMMAND cd build && make
+     INSTALL_COMMAND ""
+ )
+@@ -100,7 +103,7 @@
+     PREFIX ${PROJECT_SOURCE_DIR}/ext/zlib-ng
+     SOURCE_DIR ${PROJECT_SOURCE_DIR}/ext/zlib-ng
+     BUILD_IN_SOURCE 1
+-    CONFIGURE_COMMAND mkdir -p zlib-ng && cd zlib-ng && cmake .. -DZLIB_COMPAT=ON -DZLIB_ENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=${PREFIX}
++    CONFIGURE_COMMAND mkdir -p zlib-ng && cd zlib-ng && cmake .. -DZLIB_COMPAT=ON -DZLIB_ENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_VERBOSE_MAKEFILE=ON
+     BUILD_COMMAND cd zlib-ng && make
+     INSTALL_COMMAND ""
+     )
+diff -Nru kallisto-0.51.1.orig/ext/bifrost/CMakeLists.txt kallisto-0.51.1/ext/bifrost/CMakeLists.txt
+--- kallisto-0.51.1.orig/ext/bifrost/CMakeLists.txt	2024-09-17 01:40:08.000000000 -0400
++++ kallisto-0.51.1/ext/bifrost/CMakeLists.txt	2026-02-08 11:48:57.888507593 -0500
+@@ -29,8 +29,8 @@
+ 	message("Disabling native architecture compilation (including AVX2)")
+ else(COMPILATION_ARCH MATCHES "OFF")
+ 	message("Compilation architecture: ${COMPILATION_ARCH}")
+-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=${COMPILATION_ARCH}")
+-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=${COMPILATION_ARCH}")
++	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
++	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+ endif(COMPILATION_ARCH MATCHES "OFF")
+ 
+ if(ENABLE_AVX2 MATCHES "OFF")
+diff -Nru kallisto-0.51.1.orig/ext/bifrost/doc/snippets/compile_test.sh kallisto-0.51.1/ext/bifrost/doc/snippets/compile_test.sh
+--- kallisto-0.51.1.orig/ext/bifrost/doc/snippets/compile_test.sh	2024-09-17 01:40:08.000000000 -0400
++++ kallisto-0.51.1/ext/bifrost/doc/snippets/compile_test.sh	2026-02-08 11:48:42.538114996 -0500
+@@ -1,2 +1,2 @@
+-clang++ -Weverything -fexceptions -O3 -std=c++11 -march=native -Wno-c++98-compat -c test.cpp -o test.o
++clang++ -Weverything -fexceptions -O3 -std=c++11  -Wno-c++98-compat -c test.cpp -o test.o
+ clang++ -o test test.o -s -O3 -lbifrost -pthread -lz
+diff -Nru kallisto-0.51.1.orig/ext/bifrost/README.md kallisto-0.51.1/ext/bifrost/README.md
+--- kallisto-0.51.1.orig/ext/bifrost/README.md	2024-09-17 01:40:08.000000000 -0400
++++ kallisto-0.51.1/ext/bifrost/README.md	2026-02-08 11:48:42.538114996 -0500
+@@ -88,7 +88,7 @@
+   * a static library (*libbifrost.a*)
+ 
+   **Advanced options**
+-  * Bifrost compiles by default with `-march=native`: the compiler targets architecture instructions specific to the machine Bifrost is compiled on. Hence, the binary and library produced might not work on a different machine. Native compilation can be disabled by adding the option `-DCOMPILATION_ARCH=OFF` to the `cmake` command (disables all AVX2 optimizations too). Alternatively, you can use this option to specify the architecture you want to target: `x86-64`, `knl`, etc. Default is `-DCOMPILATION_ARCH=native`.
++  * Bifrost compiles by default with ``: the compiler targets architecture instructions specific to the machine Bifrost is compiled on. Hence, the binary and library produced might not work on a different machine. Native compilation can be disabled by adding the option `-DCOMPILATION_ARCH=OFF` to the `cmake` command (disables all AVX2 optimizations too). Alternatively, you can use this option to specify the architecture you want to target: `x86-64`, `knl`, etc. Default is `-DCOMPILATION_ARCH=native`.
+   * Bifrost uses AVX2 instructions during graph construction which can be disabled by adding the option `-DENABLE_AVX2=OFF` to the `cmake` command.
+ 
+   If you encounter any problem during the installation, see the [Troubleshooting](#troubleshooting) section.
+@@ -307,7 +307,7 @@
+ ```
+ -O3 -std=c++11
+ ```
+-Furthermore, Bifrost compiles by default with flag `-march=native` so unless native compilation was disabled when installing Bifrost, use flag `-march=native` too.
++Furthermore, Bifrost compiles by default with flag `` so unless native compilation was disabled when installing Bifrost, use flag `` too.
+ 
+ Finally, use the following flags for linking:
+ ```
+diff -Nru kallisto-0.51.1.orig/ext/zlib-ng/CMakeLists.txt kallisto-0.51.1/ext/zlib-ng/CMakeLists.txt
+--- kallisto-0.51.1.orig/ext/zlib-ng/CMakeLists.txt	2024-09-17 01:40:08.000000000 -0400
++++ kallisto-0.51.1/ext/zlib-ng/CMakeLists.txt	2026-02-08 11:48:42.541115072 -0500
+@@ -83,7 +83,7 @@
+ option(WITH_REDUCED_MEM "Reduced memory usage for special cases (reduces performance)" OFF)
+ option(WITH_NEW_STRATEGIES "Use new strategies" ON)
+ option(WITH_NATIVE_INSTRUCTIONS
+-    "Instruct the compiler to use the full instruction set on this host (gcc/clang -march=native)" OFF)
++    "Instruct the compiler to use the full instruction set on this host (gcc/clang )" OFF)
+ option(WITH_MAINTAINER_WARNINGS "Build with project maintainer warnings" OFF)
+ option(WITH_CODE_COVERAGE "Enable code coverage reporting" OFF)
+ option(WITH_INFLATE_STRICT "Build with strict inflate distance checking" OFF)
+@@ -204,7 +204,7 @@
+         if(BASEARCH_PPC_FOUND)
+             set(NATIVEFLAG "-mcpu=native")
+         else()
+-            set(NATIVEFLAG "-march=native")
++            set(NATIVEFLAG "")
+         endif()
+     else()
+         if(BASEARCH_ARM_FOUND)
+@@ -1166,7 +1166,7 @@
+ add_feature_info(WITH_OPTIM WITH_OPTIM "Build with optimisation")
+ add_feature_info(WITH_NEW_STRATEGIES WITH_NEW_STRATEGIES "Use new strategies")
+ add_feature_info(WITH_NATIVE_INSTRUCTIONS WITH_NATIVE_INSTRUCTIONS
+-    "Instruct the compiler to use the full instruction set on this host (gcc/clang -march=native)")
++    "Instruct the compiler to use the full instruction set on this host (gcc/clang )")
+ add_feature_info(WITH_MAINTAINER_WARNINGS WITH_MAINTAINER_WARNINGS "Build with project maintainer warnings")
+ add_feature_info(WITH_CODE_COVERAGE WITH_CODE_COVERAGE "Enable code coverage reporting")
+ add_feature_info(WITH_INFLATE_STRICT WITH_INFLATE_STRICT "Build with strict inflate distance checking")
+diff -Nru kallisto-0.51.1.orig/ext/zlib-ng/configure kallisto-0.51.1/ext/zlib-ng/configure
+--- kallisto-0.51.1.orig/ext/zlib-ng/configure	2024-09-17 01:40:08.000000000 -0400
++++ kallisto-0.51.1/ext/zlib-ng/configure	2026-02-08 11:48:42.540115047 -0500
+@@ -387,7 +387,7 @@
+       powerpc*)
+         NATIVE_FLAG="-mcpu=native" ;;
+       *)
+-        NATIVE_FLAG="-march=native" ;;
++        NATIVE_FLAG="" ;;
+     esac
+     CFLAGS="${CFLAGS} ${NATIVE_FLAG}"
+     SFLAGS="${SFLAGS} ${NATIVE_FLAG}"
+diff -Nru kallisto-0.51.1.orig/ext/zlib-ng/README.md kallisto-0.51.1/ext/zlib-ng/README.md
+--- kallisto-0.51.1.orig/ext/zlib-ng/README.md	2024-09-17 01:40:08.000000000 -0400
++++ kallisto-0.51.1/ext/zlib-ng/README.md	2026-02-08 11:48:42.541115072 -0500
+@@ -118,7 +118,7 @@
+ | WITH_GZFILEOP            | --without-gzfileops      | Compile with support for gzFile related functions                                     | ON      |
+ | WITH_OPTIM               | --without-optimizations  | Build with optimisations                                                              | ON      |
+ | WITH_NEW_STRATEGIES      | --without-new-strategies | Use new strategies                                                                    | ON      |
+-| WITH_NATIVE_INSTRUCTIONS | --native                 | Compiles with full instruction set supported on this host (gcc/clang -march=native)   | OFF     |
++| WITH_NATIVE_INSTRUCTIONS | --native                 | Compiles with full instruction set supported on this host (gcc/clang )   | OFF     |
+ | WITH_SANITIZER           |                          | Build with sanitizer (memory, address, undefined)                                     | OFF     |
+ | WITH_FUZZERS             |                          | Build test/fuzz                                                                       | OFF     |
+ | WITH_BENCHMARKS          |                          | Build test/benchmarks                                                                 | OFF     |

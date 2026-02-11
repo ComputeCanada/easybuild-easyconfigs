@@ -14,17 +14,20 @@ toolchainopts = {'pic': True}
 
 source_urls = [GITHUB_SOURCE]
 sources = ['v%(version)s.tar.gz']
-checksums = ['a8bcc23bca6ac758f15e30bb77e9e169e628beff2da3be2e34a53e1d42253516']
+patches = ['kallisto-0.51.1_fix-non-sense-compilation.patch']
+checksums = [
+    'a8bcc23bca6ac758f15e30bb77e9e169e628beff2da3be2e34a53e1d42253516',
+    'd9251c1bd0ac5c1337ad629dcc28fd683641e622bea62ad9032e2228ecb0ba4f',
+]
 
 builddependencies = [
-    ('Autotools', '20180311'),
-    ('CMake', '3.21.1'),
+    ('CMake', '3.31.0'),
 ]
 dependencies = [
     ('HDF5', '1.14.2'),
 ]
 
-#preconfigopts = "cd ../%(name)s-%(version)s/ext/htslib/ && autoreconf && cd - &&"
+configopts = ' -DUSE_HDF5=ON '
 
 parallel = 1
 

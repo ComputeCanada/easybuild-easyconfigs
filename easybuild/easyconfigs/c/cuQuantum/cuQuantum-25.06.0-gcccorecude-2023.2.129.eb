@@ -71,5 +71,6 @@ sanity_check_commands = [
 ]
 
 modextrapaths = {'EBPYTHONPREFIXES': ''}
+modextravars = {'CUQUANTUM_ROOT': '%(installdir)s'}
 
 moduleclass = 'numlib'

@@ -117,6 +117,8 @@ postinstallcmds = [
      ' \\$PATH:%(installdir)s/bin:$EBROOTGENTOO/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin@"' +
      ' %(installdir)s/etc/apptainer/apptainer.conf',
     'sed -i "s@max loop devices = 256@max loop devices = 2048@" %(installdir)s/etc/apptainer/apptainer.conf',
+    # so that --nv uses the system and not the Gentoo ldconfig -p
+    'ln -s /sbin/ldconfig %(installdir)s/libexec/apptainer/bin/ldconfig',
 ]
 
 sanity_check_paths = {
