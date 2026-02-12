@@ -1,7 +1,7 @@
 easyblock = 'Binary'
 
 name = 'jupyterhub_node'
-version = '7.0.1'
+version = '7.2.1'
 
 homepage = 'https://github.com/ComputeCanada/puppet-jupyterhub/blob/main/templates/node-requirements.txt.epp'
 description = """Bundle to run jupyterhub"""
@@ -16,6 +16,7 @@ preinstallopts = ['python -m venv %(installdir)s && source %(installdir)s/bin/ac
 install_cmd = 'pip install'
 installopts = '--no-index --no-deps -r requirements-%(version)s.txt'
 sources = ['requirements-%(version)s.txt']
+checksums = ['60bb7aa8d48bbbd6daf0bb3b62d65b177c5206b16a59ebc0e5bd5edbc5725ace']
 
 sanity_check_paths = {
     'files': ['bin/jupyter-server'],

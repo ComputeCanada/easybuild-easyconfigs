@@ -1,0 +1,109 @@
+easyblock = 'ConfigureMake'
+
+name = 'ABINIT'
+version = '10.4.7'
+
+homepage = 'https://www.abinit.org/'
+description = """
+ABINIT is a package whose main program allows one to find the total energy, charge density and electronic structure of
+systems made of electrons and nuclei (molecules and periodic solids) within Density Functional Theory (DFT), using
+pseudopotentials and a planewave or wavelet basis.
+"""
+
+toolchain = {'name': 'iofbf', 'version': '2023a'}
+toolchainopts = {'usempi': True, 'openmp': True, 'pic': True}
+
+source_urls = ['https://forge.%(namelower)s.org/']
+sources = [
+    SOURCELOWER_TAR_GZ,
+    "bigdft-%(namelower)s-1.7.1.30.tar.gz",
+]
+checksums = [
+    {'abinit-10.4.7.tar.gz': '161c60ef90686c19e0718363eb5a17bfa29494e5fbdc59be45a7342e20349768'},
+    {'bigdft-abinit-1.7.1.30.tar.gz': 'fd724c5359e1ff525d81a2dfa3728e50108435fc64f6aa46651c0e09a2d2d631'},
+]
+
+builddependencies = [
+    # for tests
+    ('SciPy-Stack', '2024a'),
+]
+
+dependencies = [
+    ('libxc', '6.2.2'),
+    ('netCDF', '4.9.2'),
+    ('netCDF-Fortran', '4.6.1'),
+    ('HDF5', '1.14.2', '-mpi'),
+    ('libPSML', '1.1.12'),
+    ('Wannier90', '3.1.0'),
+    ('xmlf90', '1.6.2'),
+    ('AtomPAW', '4.2.0.3', '', ('ifb', '2023a')),
+    #('ELPA', '2021.11.001'),
+]
+
+preconfigopts = """
+cd ../bigdft-abinit-1.7.1.30
+./configure --prefix=%(builddir)s/bigdft --disable-binaries --disable-bindings --enable-libbigdft --without-archives --with-blacs="" LIBS="$LIBSCALAPACK" --with-scalapack="$LIBSCALAPACK" --disable-internal-libxc --with-libxc-incs="-I$EBROOTLIBXC/include" --with-libxc-libs="-L$EBROOTLIBXC/lib -lxc" CFLAGS="$CFLAGS --std=c89 -Wno-incompatible-pointer-types -Wno-int-conversion"
+make -j8
+make install
+cd $OLDPWD &&
+"""
+
+# Ensure MPI
+configopts = '--with-mpi="yes" --enable-mpi-io '
+
+# Enable OpenMP
+configopts += '--enable-openmp="yes" '
+
+# BLAS/Lapack from FlexiBLAS/ScaLAPACK
+configopts += 'LINALG_LIBS="${LIBSCALAPACK}" '
+
+# FFTW
+configopts += '--with-fft-flavor=fftw3 FFTW3_LIBS="-L${EBROOTFFTW} -lfftw3f -lfftw3" '
+
+# libxc support
+configopts += '--with-libxc=${EBROOTLIBXC} '
+
+# libpsml support
+configopts += '--with-libpsml="${EBROOTLIBPSML}" LIBPSML_FCFLAGS="$(pkg-config --cflags libpsml)" '
+
+# hdf5/netcdf4 support
+configopts += '--with-netcdf="${EBROOTNETCDF}" '
+configopts += '--with-netcdf-fortran="${EBROOTNETCDFMINFORTRAN}" '
+configopts += '--with-hdf5="${EBROOTHDF5}" '
+
+# Wannier90
+configopts += '--with-wannier90="${EBROOTWANNIER90}" WANNIER90_LIBS="-L$EBROOTWANNIER90/lib -lwannier" '
+
+# xmlf90
+configopts += '--with-xmlf90="${EBROOTXMLF90}" XMLF90_FCFLAGS="$(pkg-config --cflags xmlf90)" '
+
+# libxml2
+configopts += '--with-libxml2 '
+
+# BigDFT
+configopts += '--with-bigdft=%(builddir)s/bigdft '
+
+# AtomPAW
+#configopts += '---with-atompaw="${EBROOTATOMPAW}" '
+
+# Enable double precision for GW calculations
+configopts += '--enable-gw-dpc '
+
+# 'make check' is just executing some basic unit tests.
+# Also running 'make tests_v1' to have some basic validation
+runtest = "check && make test_v1"
+
+local_binaries = [
+    '%(namelower)s', 'abitk', 'aim', 'anaddb', 'atdep', 'band2eps', 'conducti', 'cut3d',
+    'fftprof', 'fold2Bloch', 'ioprof', 'lapackprof', 'lruj', 'macroave', 'mrgddb',
+    'mrgdv', 'mrggkk', 'mrgscr', 'multibinit', 'testtransposer', 'vdw_kernelgen',
+    'vdw_kernelgen', 'optic',
+]
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in local_binaries],
+    'dirs': ['lib/pkgconfig'],
+}
+
+moduleclass = 'chem'
+
