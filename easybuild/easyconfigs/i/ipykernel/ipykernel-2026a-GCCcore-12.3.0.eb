@@ -15,7 +15,7 @@ multi_deps = {
 	'Python': ['3.10', '3.11', '3.12', '3.13', '3.14']
 }
 multi_deps_load_default = False
-installopts = '--no-index --no-deps'
+installopts = '--no-index --no-deps --verbose'
 
 sources = ['requirements-%(version)s.txt']
 
