@@ -161,6 +161,8 @@
   "setuptools-75.8.0.tar.gz": "c5afc8f407c626b8313a86e10311dd3f661c6cd9c09d4bf8c15c0e11f9f2b0e6",
   "setuptools-80.10.2.tar.gz": "8b0e9d10c784bf7d262c4e5ec5d4ec94127ce206e8738f29a437945fbc219b70",
   "setuptools-80.9.0.tar.gz": "f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c",
+  "setuptools-82.0.0.tar.gz": "22e0a2d69474c6ae4feb01951cb69d515ed23728cf96d05513d36e42b62b37cb",
+  "setuptools-fix_trove_classifiers_hassle.patch": "3d513495799bec9164a0c00938ed343a231336bfede46f90180bd614bf2cecf5",
   "setuptools-rust-1.1.2.tar.gz": "a0adb9b503c0ffc4e8fe80b7c617898cefa78049983aaaea7f747e153a3e65d1",
   "setuptools-scm-8.0.4.tar.gz": "b5f43ff6800669595193fd09891564ee9d1d7dcb196cab4b2506d53a2e1c95c7",
   "setuptools_scm-6.4.2.tar.gz": "6833ac65c6ed9711a4d5d2266f8024cfa07c533a0e55f4c12f6eff280a5a9e30",
