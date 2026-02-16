@@ -1,0 +1,35 @@
+easyblock = 'PythonPackage'
+
+name = 'numpy'
+version = '2.4.2'
+
+homepage = 'http://python.org/'
+
+description = """numpy for each version of python in our stack"""
+
+toolchain = {'name': 'GCCcore', 'version': '14.3.0'}
+
+# this is a bundle of Python packages
+exts_defaultclass = 'PythonPackage'
+
+multi_deps = {
+    'Python': ['3.11', '3.12', '3.13', '3.14']
+}
+
+multi_deps_load_default = False
+
+# Must be available from the wheelhouse. To test, one can add --find-links=path/to/numpy in installopts
+installopts = '--no-index'
+install_src = "%(name)s==%(version)s"
+
+hidden = True
+
+exts_filter = ('python -c "import numpy"', "")
+
+unpack_sources = False
+use_pip = True
+use_pip_for_deps = True
+fix_python_shebang_for = ['bin/*']
+sanity_pip_check = True
+
+moduleclass = 'lib'
