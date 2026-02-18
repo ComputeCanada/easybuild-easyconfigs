@@ -16,11 +16,12 @@ toolchainopts = {'openmp': True, 'cstd': 'c++11'}
 
 source_urls = ['https://github.com/fbreitwieser/krakenuniq/archive/']
 sources = ['v%(version)s.tar.gz']
+checksums = ['5e2ef21878c1c4ce92be9925e47b9ccae0ecb59a79d71cc4cbb53d057e0de9ec']
 
 dependencies = [
     ('Jellyfish', '2.3.1'),
     ('Perl', '5.36.1', '', ('system', 'system')),
-    ('BioPerl', '1.7.8', '', ('GCCcore', '12.3.0')),
+    ('BioPerl', '1.7.8', '-StdEnv-2023', ('system', 'system')),
 ]
 
 cmds_map = [('.*', " sh install_krakenuniq.sh %(installdir)s/bin")]
