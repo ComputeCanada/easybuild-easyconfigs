@@ -1,0 +1,37 @@
+easyblock = 'Tarball'
+
+name = 'pplacer'
+version = '1.1.alpha22'
+
+homepage = 'http://matsen.fhcrc.org/pplacer/'
+description = """Pplacer places query sequences on a fixed reference phylogenetic tree to maximize phylogenetic
+ likelihood or posterior probability according to a reference alignment. Pplacer is designed to be fast, to give
+ useful information about uncertainty, and to offer advanced visualization and downstream analysis."""
+
+
+toolchain = SYSTEM
+
+sources = [{
+    'source_urls': ['https://github.com/matsen/pplacer/releases/download/v%(version)s/'],
+    'filename': '%(namelower)s-linux-v%(version)s.zip',
+    'download_filename': 'pplacer-linux-x86_64.zip',
+}]
+checksums = ['eebadaf3e8ad908c1fa5a7078fde02dd4c04b3af3619fb00b2d6cca8ae3ba36f']
+
+postinstallcmds = [
+ ' && '.join([
+   'cd %(installdir)s',
+   'ln -s pplacer.exe pplacer',
+   'ln -s guppy.exe guppy',
+   'ln -s rppr.exe rppr',
+ ])
+]
+
+sanity_check_paths = {
+    'files': ['pplacer', 'guppy', 'rppr'],
+    'dirs': ['scripts'],
+}
+
+modextrapaths = {'PATH': '.'}
+
+moduleclass = 'bio'
