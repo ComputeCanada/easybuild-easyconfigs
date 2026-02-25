@@ -1,0 +1,106 @@
+easyblock = 'CMakeMake'
+
+name = 'OpenMM'
+version = '8.4.0'
+
+homepage = 'http://openmm.org'
+description = "OpenMM is a toolkit for molecular simulation."
+
+toolchain = {'name': 'gofbc', 'version': '2023.2.415.126'}
+toolchainopts = {'opt': True}
+
+source_urls = ['https://github.com/openmm/openmm/archive/']
+sources = ['%(version)s.tar.gz']
+checksums = ['2fbc4171a7d15342260a4eef0f09bdd5f8e002994b403dddb9b2a5eeba16724a']
+
+multi_deps = {'Python': ['3.11',]}
+
+builddependencies = [
+    ('CMake', '3.31.0'),
+    ('FFTW', '3.3.10'),
+    ('SWIG', '4.2.1'),
+    ('numpy', '2.1.1'),
+    ('Cython', '3.1.2'), # Needs Cython for install only
+]
+
+separate_build_dir = True
+
+configopts = " ".join([
+    '-DOPENMM_GENERATE_API_DOCS=OFF',
+    '-DPYTHON_EXECUTABLE=$EBROOTPYTHON/bin/python3',
+])
+
+preinstallopts = ' && '.join([
+    'export OPENMM_INCLUDE_PATH=%(installdir)s/include',
+    'export OPENMM_LIB_PATH=%(installdir)s/lib',
+    '',
+])
+
+installopts = ' && '.join([
+    "&& cd python",
+    "python setup.py build",
+    "pip install --prefix=%(installdir)s .",
+])
+
+# Exclude some tests (regexps).  Can't test TestCuda* b/c there's no GPU in build-node.
+runtest = """test -e ARGS="-E \'(Integrator)|(Thermostat)|(Barostat)|(Rpmd)|(Amoeba)|(HippoNonbondedForce)|(TestCuda)|(TestOpenCL)|(TestDrudeNoseHoover)\'" """
+
+exts_defaultclass = 'PythonPackage'
+exts_list = [
+    ('pdbfixer', '1.12', {
+        'installopts': '',
+        'preinstallopts': '',
+        'runtest': False,
+        'source_urls': ['https://github.com/openmm/pdbfixer/archive/refs/tags'],
+        'sources': ['v%(version)s.tar.gz'],
+        'use_pip': True,
+        'checksums': ['a5c0b05dfaf2cdcad3b8ffc9ee1e6a955628aade0dda653da04d4a12ba4fe3ec'],
+    }),
+    ('openmmml', '1.5', {
+        'installopts': '',
+        'preinstallopts': '',
+        'runtest': False,
+        'source_urls': ['https://github.com/openmm/openmm-ml/archive/refs/tags/'],
+        'sources': ['%(version)s.tar.gz'],
+        'use_pip': True,
+        'checksums': ['49605a2334a8e623ef2fc6e45f0466e797fd051efeb8d0ce5703370900f73ffc'],
+    }),
+]
+
+exts_filter = ("module load scipy-stack && python -c 'import %(ext_name)s'", '')
+
+sanity_check_paths = {
+    'files': [
+        'include/OpenMM.h',
+        'lib/python%(pyshortver)s/site-packages/openmm/openmm.py',
+        'lib/libOpenMM.so',
+    ],
+    'dirs': [
+        'bin',
+        'include',
+        'include/openmm',
+        'lib',
+    ]
+}
+
+sanity_check_commands = [
+    "python -c 'import openmm'",
+    "python -c 'import openmmml'",
+    "python -c 'import simtk'",
+    "module load scipy-stack && python%(pyshortver)s -m openmm.testInstallation",
+]
+
+modextrapaths = {
+    'EBPYTHONPREFIXES': '',
+    'OPENMM_INCLUDE_PATH': 'include',
+    'OPENMM_LIB_PATH': 'lib',
+}
+
+# if some python is already loaded, use it, otherwise use default python module
+modluafooter = """
+if convertToCanonical(LmodVersion()) >= convertToCanonical("8.2.9") then
+    depends_on("scipy-stack")
+end
+"""
+
+moduleclass = 'chem'
