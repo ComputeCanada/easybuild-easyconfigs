@@ -13,7 +13,8 @@ source_urls = ['https://github.com/openmm/openmm/archive/']
 sources = ['%(version)s.tar.gz']
 checksums = ['2fbc4171a7d15342260a4eef0f09bdd5f8e002994b403dddb9b2a5eeba16724a']
 
-multi_deps = {'Python': ['3.11','3.12']}
+# PDBfixer depends on legacy-cgi which is not available for Python 3.13 
+multi_deps = {'Python': ['3.11','3.12','3.13']}
 
 builddependencies = [
     ('CMake', '3.31.0'),
@@ -47,15 +48,6 @@ runtest = """test -e ARGS="-E \'(Integrator)|(Thermostat)|(Barostat)|(Rpmd)|(Amo
 
 exts_defaultclass = 'PythonPackage'
 exts_list = [
-    ('pdbfixer', '1.12', {
-        'installopts': '',
-        'preinstallopts': '',
-        'runtest': False,
-        'source_urls': ['https://github.com/openmm/pdbfixer/archive/refs/tags'],
-        'sources': ['v%(version)s.tar.gz'],
-        'use_pip': True,
-        'checksums': ['a5c0b05dfaf2cdcad3b8ffc9ee1e6a955628aade0dda653da04d4a12ba4fe3ec'],
-    }),
     ('openmmml', '1.5', {
         'installopts': '',
         'preinstallopts': '',
