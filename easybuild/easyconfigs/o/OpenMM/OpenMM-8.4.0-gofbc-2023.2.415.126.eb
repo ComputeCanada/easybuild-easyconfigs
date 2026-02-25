@@ -13,7 +13,7 @@ source_urls = ['https://github.com/openmm/openmm/archive/']
 sources = ['%(version)s.tar.gz']
 checksums = ['2fbc4171a7d15342260a4eef0f09bdd5f8e002994b403dddb9b2a5eeba16724a']
 
-multi_deps = {'Python': ['3.11',]}
+multi_deps = {'Python': ['3.11','3.12','3.13']}
 
 builddependencies = [
     ('CMake', '3.31.0'),
