@@ -1,0 +1,78 @@
+easyblock = 'CMakeMake'
+
+name = 'VTK'
+version = '9.4.2'
+
+homepage = 'http://www.vtk.org'
+description = """The Visualization Toolkit (VTK) is an open-source, freely available software system for
+ 3D computer graphics, image processing and visualization. VTK consists of a C++ class library and several
+ interpreted interface layers including Tcl/Tk, Java, and Python. VTK supports a wide variety of visualization
+ algorithms including: scalar, vector, tensor, texture, and volumetric methods; and advanced modeling techniques
+ such as: implicit modeling, polygon reduction, mesh smoothing, cutting, contouring, and Delaunay triangulation."""
+
+toolchain = {'name': 'GCC', 'version': '14.3.0'}
+
+source_urls = ['https://www.%(namelower)s.org/files/release/%(version_major_minor)s']
+sources = [
+    SOURCE_TAR_GZ,
+    '%(name)sData-%(version)s.tar.gz',
+]
+
+builddependencies = [
+    ('CMake', '3.27.7', '', SYSTEM),
+]
+multi_deps = { 'Python': ['3.14', '3.13', '3.12', '3.11'] }
+dependencies = [
+    #('SciPy-Stack', '2026a', '', SYSTEM),
+    ('HDF5', '1.14.6'),
+    ('netCDF', '4.9.3'),
+]
+
+separate_build_dir = True
+
+configopts = ' '.join([
+    # Third party modules
+    "-DVTK_USE_SYSTEM_LZMA=ON",
+    "-DVTK_USE_SYSTEM_HDF5=ON",
+    "-DVTK_USE_SYSTEM_NETCDF=ON",
+    # Python
+    "-DVTK_WRAP_PYTHON=ON",
+    "-DVTK_PYTHON_VERSION=3",
+    "-DPYTHON_INCLUDE_DIR=$EBROOTPYTHON/include/python%(pyshortver)s",
+    "-DPYTHON_LIBRARY=$EBROOTPYTHON/lib/libpython%%(pyshortver)s.%s" % SHLIB_EXT,
+    "-DPython3_EXECUTABLE=$EBROOTPYTHON/bin/python",
+    # Other
+    "-DCMAKE_INSTALL_LIBDIR=lib",
+])
+
+preinstallopts = "export PYTHONPATH=%(installdir)s/lib/python%(pyshortver)s/site-packages:$PYTHONPATH && "
+
+# these libraries depend on a specific version of python, move them to their own directory
+local_python_dependent_libs = ['libvtkCommonPython-9.4.so*', 'libvtkFiltersPython-9.4.so*', 'libvtkPythonContext2D-9.4.so*', 'libvtkPythonInterpreter-9.4.so*', 'libvtkWrappingPythonCore%(pyshortver)s-9.4.so*']
+installopts = ' install && mkdir %(installdir)s/lib-py%(pyshortver)s && cd %(installdir)s/lib && cp -a ' + ' '.join(local_python_dependent_libs) +  ' %(installdir)s/lib-py%(pyshortver)s #'
+
+postinstallcmds = ['/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %%(installdir)s/lib/python%s --add_path %%(installdir)s/lib-py%s:%%(installdir)s/lib' % (v, v) for v in multi_deps['Python']]
+postinstallcmds += ['/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %%(installdir)s/lib-py%s --add_origin' % v for v in multi_deps['Python']]
+postinstallcmds += ["""mkdir -p %%(installdir)s/lib/python%s/site-packages/%%(namelower)s-%%(version)s.dist-info && echo -e 'Metadata-Version: 2.3
+Name: %%(namelower)s
+Version: %%(version)s' > %%(installdir)s/lib/python%s/site-packages/%%(namelower)s-%%(version)s.dist-info/METADATA""" % (v,v) for v in multi_deps['Python']]
+
+multi_deps_load_default = False
+
+sanity_check_paths = {
+    'files': ['bin/vtkWrapJava-%(version_major_minor)s', 'bin/vtkParseJava-%(version_major_minor)s', 'bin/vtkWrapPythonInit-%(version_major_minor)s', 'bin/vtkWrapPython-%(version_major_minor)s', 'bin/vtkWrapHierarchy-%(version_major_minor)s', 'bin/vtkpython'],
+    'dirs': ['lib/python%(pyshortver)s/site-packages/', 'include/%(namelower)s-%(version_major_minor)s', 'lib/python%(pyshortver)s/site-packages'],
+}
+
+sanity_check_commands = [('python', "-c 'import %(namelower)s'")]
+
+moduleclass = 'vis'
+modluafooter = """
+if convertToCanonical(LmodVersion()) >= convertToCanonical("8.2.9") then
+  depends_on("scipy-stack")
+end
+
+if convertToCanonical(LmodVersion()) >= convertToCanonical("8.2.9") then
+    extensions("vtk/%(version)s")
+end
+"""
