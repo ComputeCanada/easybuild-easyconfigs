@@ -51,7 +51,7 @@ configopts = ' '.join([
 preinstallopts = "export PYTHONPATH=%(installdir)s/lib/python%(pyshortver)s/site-packages:$PYTHONPATH && "
 
 # these libraries depend on a specific version of python, move them to their own directory
-local_python_dependent_libs = ['libvtkCommonPython-9.4.so*', 'libvtkFiltersPython-9.4.so*', 'libvtkPythonContext2D-9.4.so*', 'libvtkPythonInterpreter-9.4.so*', 'libvtkWrappingPythonCore%(pyshortver)s-9.4.so*']
+local_python_dependent_libs = ['libvtkCommonPython-%(version_major_minor)s.so*', 'libvtkFiltersPython-%(version_major_minor)s.so*', 'libvtkPythonContext2D-%(version_major_minor)s.so*', 'libvtkPythonInterpreter-%(version_major_minor)s.so*', 'libvtkWrappingPythonCore%(pyshortver)s-%(version_major_minor)s.so*']
 installopts = ' install && mkdir %(installdir)s/lib-py%(pyshortver)s && cd %(installdir)s/lib && cp -a ' + ' '.join(local_python_dependent_libs) +  ' %(installdir)s/lib-py%(pyshortver)s #'
 
 postinstallcmds = ['/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %%(installdir)s/lib/python%s --add_path %%(installdir)s/lib-py%s:%%(installdir)s/lib' % (v, v) for v in multi_deps['Python']]
