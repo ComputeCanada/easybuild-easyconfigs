@@ -16,9 +16,9 @@ builddependencies = [
     ('Autotools', '20220317'),
     ('CMake', '3.31.0'),
     ('Doxygen', '1.9.7'),
-    ('numpy', '2.1.1'),
-    ('Cython', '3.1.2'),
-    ('python-build-bundle', '2025b'),
+    ('numpy', '2.4.2'),
+    ('Cython', '3.2.4'),
+    ('python-build-bundle', '2026a'),
     ('mpi4py', '4.1.0')
 ]
 
@@ -31,7 +31,7 @@ dependencies = [
     ('libxml2', '2.11.4'),
 ]
 
-local_python_versions = ['3.11', '3.12', '3.13']
+local_python_versions = ['3.11', '3.12', '3.13', '3.14']
 # make sure both static and shared libs are built
 local_configopts = [
     "-DBUILD_SHARED_LIBS=OFF",
@@ -49,14 +49,14 @@ exts_default_options = {
 	'preinstallopts': "PYTHONPATH=%(installdir)s/lib/python%(pyshortver)s/site-packages:$PYTHONPATH "
 }
 exts_list = [
-    ('certifi', '2025.11.12'),
+    ('certifi', '2026.2.25'),
     ('cftime', '1.6.5'),
     ('netcdf4', '1.7.4', {
         'fix_python_shebang_for': ['bin/*'],
     }),
 ]
 
-exts_filter = ("module load mpi4py/4.1.0 numpy/.2.1.1; python -c 'import netCDF4'", '')
+exts_filter = ("module load mpi4py/4.1.0 numpy/.2.4.2; python -c 'import netCDF4'", '')
 
 modextrapaths = {'EBPYTHONPREFIXES': ''}
 
