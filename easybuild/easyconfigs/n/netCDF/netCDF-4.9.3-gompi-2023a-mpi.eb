@@ -18,7 +18,7 @@ builddependencies = [
     ('Doxygen', '1.9.7'),
     ('numpy', '2.4.2'),
     ('Cython', '3.2.4'),
-    ('python-build-bundle', '2026a')
+    ('python-build-bundle', '2026a'),
     ('mpi4py', '4.1.0')
 ]
 
