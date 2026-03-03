@@ -1,0 +1,73 @@
+easyblock = 'CMakeMake'
+
+name = 'ITK'
+version = '5.4.5'
+
+homepage = 'https://itk.org'
+description = """Insight Segmentation and Registration Toolkit (ITK) provides
+ an extensive suite of software tools for registering and segmenting
+ multidimensional imaging data."""
+
+toolchain = {'name': 'GCC', 'version': '12.3.0'}
+toolchainopts = {'pic': True, 'cstd': 'c++17'}
+
+github_account = 'InsightSoftwareConsortium'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['bb53785b9803ed2dc4fd6b395f6fe089fcdbdfdeb9242549257b9adcefc9f73e']
+
+builddependencies = [
+    ('CMake', '3.31.0'),
+    ('Eigen', '3.4.0'),
+]
+
+dependencies = [
+    ('HDF5', '1.14.6'),
+    ('VTK', '9.4.2'),
+]
+multi_deps = {'Python': ['3.11', '3.12', '3.13', '3.14'] }
+
+local_sys_deps = ['DOUBLECONVERSION', 'EIGEN', 'EXPAT', 'HDF5', 'JPEG', 'PNG', 'TIFF', 'ZLIB']
+local_sys_cmake = ['-DITK_USE_SYSTEM_%s=ON' % d for d in local_sys_deps]
+
+configopts = ' '.join([
+    '-DBUILD_SHARED_LIBS=ON',
+    '-DBUILD_TESTING=OFF',
+    '-DModule_ITKReview=ON',
+    '-DModule_ITKVtkGlue=ON',
+    '-DModule_SimpleITKFilters=ON',
+    '-DModule_RTK=ON',
+    '-DRTK_BUILD_APPLICATIONS=ON',
+    '-DITK_WRAP_PYTHON:BOOL=ON',
+    '-DITK_LEGACY_REMOVE:BOOL=OFF',  # needed by SimpleITK
+    '-DPY_SITE_PACKAGES_PATH=%(installdir)s/lib/python${EBVERSIONPYTHON:0:4}/site-packages',
+    ' '.join(local_sys_cmake),
+])
+
+build_shared_libs = True
+prebuildopts = "LC_ALL=C CPATH=$CPATH:$EBROOTVTK/include/vtk-9.3 "
+
+local_lib_names = ['ITKCommon', 'ITKIOHDF5', 'ITKIOJPEG', 'ITKIOPNG', 'ITKIOTIFF',
+                   'ITKReview', 'ITKVTK', 'ITKVtkGlue', 'itkSimpleITKFilters', 'itkRTK']
+
+postinstallcmds = [
+    "mkdir -p %(installdir)s/lib/python{py}/site-packages/{dist}-%(version)s.dist-info && echo -e 'Metadata-Version: 2.4\nName: {dist}\nVersion: %(version)s' > %(installdir)s/lib/python{py}/site-packages/{dist}-%(version)s.dist-info/METADATA".format(py=py, dist=name.lower())
+    for py in multi_deps['Python']
+]
+
+modextrapaths = {"EBPYTHONPREFIXES": ""}
+
+sanity_check_paths = {
+    'files': ['bin/itkTestDriver'] +
+             ['lib/lib%s-%%(version_major)s.%%(version_minor)s.%s' % (l, SHLIB_EXT) for l in local_lib_names],
+    'dirs': ['include/ITK-%(version_major)s.%(version_minor)s', 'share'],
+}
+
+sanity_check_commands = ["python -c 'import itk'"]
+
+modluafooter = """
+if convertToCanonical(LmodVersion()) >= convertToCanonical("8.2.9") then
+    extensions("itk/{}")
+end
+""".format(version)
+moduleclass = 'data'
