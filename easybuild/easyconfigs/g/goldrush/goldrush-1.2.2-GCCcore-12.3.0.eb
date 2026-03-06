@@ -1,0 +1,41 @@
+easyblock = 'MesonNinja'
+
+name = 'goldrush'
+version = '1.2.2'
+
+homepage = 'https://github.com/bcgsc/goldrush'
+description = """Linear-time de novo Long Read Assembler."""
+
+toolchain = {'name': 'GCCcore', 'version': '12.3.0'}
+
+github_account = 'dftd4'
+source_urls = ["https://github.com/bcgsc/goldrush/releases/download/%(version)s"]
+sources = ['%(name)s-%(version)s.tar.gz']
+checksums = ['b7998854ff3b596de145a9ce2801126d09fb9253167240a5e40d7049040877ad']
+
+builddependencies = [
+   ('CMake', '3.27.7'),
+   ('Boost', '1.87.0', '-core'),
+   ('sparsehash', '2.0.4'),
+   ('sdsl-lite', '2.1.1'),
+]
+
+dependencies = [
+   ('minimap2', '2.28'),
+   ('btllib', '1.6.2'),
+]
+
+preconfigopts = "fgrep -le 'werror=true' -r %(builddir)s | xargs sed -i -e 's/werror=true/werror=false/' && "
+
+postinstallcmds = [
+   "sed -i -e 's@/usr/bin/make@/bin/env -S make@' %(installdir)s/bin/%(name)s"
+]
+
+sanity_check_paths = {
+  'files': ['bin/%(name)s'],
+  'dirs': [],
+}
+
+sanity_check_commands = ["goldrush"]
+
+moduleclass = 'bio'
