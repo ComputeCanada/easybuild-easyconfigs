@@ -1,0 +1,13 @@
+diff -ru libre-qda-libreqda-v1.1.0.orig/scripts/make_theme.py libre-qda-libreqda-v1.1.0/scripts/make_theme.py
+--- libre-qda-libreqda-v1.1.0.orig/scripts/make_theme.py	2026-03-20 19:31:47.868073848 +0000
++++ libre-qda-libreqda-v1.1.0/scripts/make_theme.py	2026-03-20 19:33:08.882285839 +0000
+@@ -49,6 +49,9 @@
+     except sass.CompileError as e:
+         print(f"SCSS compilation error: {e}")
+         sys.exit(1)
++    
++    except PermissionError as e:
++        print(f"SCSS can't write {e}")
+ 
+ 
+ def copy_default_theme(destination_theme_name):
