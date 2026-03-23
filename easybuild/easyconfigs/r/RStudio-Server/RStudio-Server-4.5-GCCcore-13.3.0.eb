@@ -49,6 +49,8 @@ preconfigopts = " && ".join([
     "./install-pandoc",
     "./install-panmirror",
     "./install-packages",
+    "./install-sccache",
+    "./install-quarto",
     "./install-copilot-language-server",
     "./install-gwt",
     "cd %(builddir)s/rstudio-*/",
@@ -65,7 +67,7 @@ configopts = " ".join([
     "-DRSTUDIO_BOOST_REQUESTED_VERSION=$EBVERSIONBOOST",
     "-DRSTUDIO_USE_SYSTEM_BOOST=ON",
     "-DRSTUDIO_USE_SYSTEM_SOCI=ON",
-    "-DQUARTO_ENABLED=OFF",
+    "-DQUARTO_ENABLED=ON",
     "-DRSTUDIO_USE_SYSTEM_YAML_CPP=ON",
     "-DRSTUDIO_USE_PAM=OFF",
 ])
