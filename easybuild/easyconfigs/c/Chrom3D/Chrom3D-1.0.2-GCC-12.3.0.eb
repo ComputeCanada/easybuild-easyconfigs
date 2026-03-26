@@ -30,4 +30,4 @@ sanity_check_paths = {
 
 sanity_check_commands = ['Chrom3D --version']
 
-moduleclass = 'phys'
+moduleclass = 'bio'
