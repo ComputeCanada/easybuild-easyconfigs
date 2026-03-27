@@ -1,0 +1,65 @@
+easyblock = 'Binary'
+
+name = 'QuantumATK'
+version = '2025.06'
+
+homepage = 'https://www.synopsys.com/silicon/quantumatk.html'
+description = """QuantumATK is a complete atomistic simulation toolkit. QuantumATK addresses key applications in the semiconductor industry and is a core component of the Synopsys Design-Technology Co-Optimization (DTCO) solution. Atomic-scale modeling tools in QuantumATK range from classical force fields for handling large and to some extent more realistic materials systems to ab initio tools that provide highly accurate results for smaller systems. """
+
+toolchain = SYSTEM
+sources = ['%(name)s_vW-%(version)s.tar.gz']
+checksums = ['']
+extract_sources = True
+
+config = f"""\
+cat << EOF > config
+SourceDir: $(pwd)
+SiteID: 000
+PRODUCTS: quantumatk
+RELEASES: W-%(version)s
+quantumatk, W-%(version)s {{
+   DESCRIPTION: Synopsys QuantumATK
+   POSTARGVALUE: softwareRendering (no)
+   POSTARGVALUE: addToPath(yes)
+   POSTARGVALUE: openLicenseDoc(no)
+   POSTARGVALUE: runProgramAfterInstall(no)
+}}
+EOF
+"""
+
+install_cmd = " && ".join([
+    "./SynopsysInstaller_v5.8.run -dir .",
+    config,
+    "export SI_ACCEPT_LICENSE=1; ./installer -target %(installdir)s -batch_installer -config config",
+])
+
+postinstallcmds = [" && ".join([
+    "sed -i 's/TENTATIVE_PATHS=/#TENTATIVE_PATHS=/g' %(installdir)s/%(namelower)s/W-%(version)s/atkpython/bin/activate_env",
+    "sed -i 's/0/1/g'  %(installdir)s/%(namelower)s/W-%(version)s/software-rendering",
+])]
+
+sanity_check_paths = {
+      'files': ['%(namelower)s/W-%(version)s/bin/%(namelower)s','%(namelower)s/W-%(version)s/bin/atkpython'],
+      'dirs': []
+}
+
+modextrapaths = {"PATH" : ['%(namelower)s/W-%(version)s/mpi/bin', '%(namelower)s/W-%(version)s/bin']}
+
+modluafooter = """
+require("SitePackage")
+local found, path = find_and_define_license_file("SNPSLMD_LICENSE_FILE","quantumatk")
+if (not found) then
+        local error_message = [[
+        We did not find a suitable license for QuantumATK. If you have access to one, you can create the file $HOME/.licenses/quantumatk.lic with the license information. If you think you should have access to one as part of your institution, please contact us (https://docs.alliancecan.ca/wiki/Technical_support) so that we can configure it.
+
+        Nous n'avons pas trouvé de licence utilisable pour QuantumATK. Si vous avez acces a une licence, vous pouvez créer le fichier $HOME/.licenses/quantumatk.lic avec l'information de celle-ci. Si vous pensez que vous devriez automatiquement avoir accès à une licence via votre institution, veuillez nous contacter (https://docs.alliancecan.ca/wiki/Technical_support) afin que nous puissions la configurer.
+        ]]
+        LmodError(error_message)
+end
+if (mode() == "load") then
+
+   local warning_message = [[ WARNING: please run this software with 'mpiexec' instead of 'srun' ]]
+   LmodWarning(warning_message)
+end
+"""
+moduleclass = 'phys'
