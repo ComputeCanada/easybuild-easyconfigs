@@ -8,7 +8,6 @@ description = """Pplacer places query sequences on a fixed reference phylogeneti
  likelihood or posterior probability according to a reference alignment. Pplacer is designed to be fast, to give
  useful information about uncertainty, and to offer advanced visualization and downstream analysis."""
 
-
 toolchain = SYSTEM
 
 sources = [{
@@ -18,19 +17,33 @@ sources = [{
 }]
 checksums = ['eebadaf3e8ad908c1fa5a7078fde02dd4c04b3af3619fb00b2d6cca8ae3ba36f']
 
+# Sneakily point to, and add GSL lib
 postinstallcmds = [
- ' && '.join([
-   'cd %(installdir)s',
-   'ln -s pplacer.exe pplacer',
-   'ln -s guppy.exe guppy',
-   'ln -s rppr.exe rppr',
- ])
+    ' && '.join([
+        'cd %(installdir)s',
+        'mv -v pplacer.exe pplacer',
+        'mv -v guppy.exe guppy',
+        'mv -v rppr.exe rppr',
+        'rm -v tests.exe',
+        'chmod u+wx pplacer guppy rppr',
+        'setrpaths --path pplacer guppy rppr --add_path /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcc12/gsl/2.7/lib --any_interpreter',
+        'patchelf --replace-needed libgsl.so.27 libgsl.so pplacer guppy rppr',
+        'patchelf --add-needed libgslcblas.so pplacer guppy rppr',
+    ])
 ]
+
+fix_python_shebang_for = ['scripts/*.py']
 
 sanity_check_paths = {
     'files': ['pplacer', 'guppy', 'rppr'],
     'dirs': ['scripts'],
 }
+
+sanity_check_commands = [
+    'pplacer --help',
+    'guppy --version',
+    'rppr --version'
+]
 
 modextrapaths = {'PATH': '.'}
 
