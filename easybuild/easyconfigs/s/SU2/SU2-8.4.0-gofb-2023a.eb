@@ -38,18 +38,21 @@ configopts = " ".join([
 buildopts = "-C build"
 installopts = "-C build"
 
+dependencies = [
+    ('mpi4py', '4.1.0'),
+]
+
 # no need for multi_deps, it does not link against python
 builddependencies = [
     ('Python', '3.11'),
     ('SWIG', '4.1.1'),
-    ('mpi4py', '4.1.0'),
 ]
 
 sanity_check_paths = {
     'files': ['bin/SU2_CFD', 'bin/pysu2.py'],
     'dirs': [],
 }
-sanity_check_commands = ['module load python mpi4py; python -c "import pysu2"']
+sanity_check_commands = ['module load python; python -c "import pysu2"']
 
 modextravars = {
     'SU2_HOME': '%(installdir)s/',
