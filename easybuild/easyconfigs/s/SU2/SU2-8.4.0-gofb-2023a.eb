@@ -1,0 +1,60 @@
+easyblock = 'MesonNinja'
+
+name = 'SU2'
+version = "8.4.0"
+
+homepage = 'http://su2.stanford.edu'
+description = """An open-source collection of software tools written in C++ for performing 
+Partial Differential Equation (PDE) analysis and solving PDE-constrained optimization problems. 
+The toolset is designed with computational fluid dynamics and aerodynamic shape optimization in mind."""
+
+toolchain = {'name': 'gofb', 'version': '2023a'}
+toolchainopts = {'pic': True, 'openmp': True}
+
+sources = [{
+     'filename': '%(namelower)s-%(version)s.tar.xz',
+     'git_config': {
+         'url': 'https://github.com/su2code',
+         'repo_name': '%(name)s',
+         'tag': 'v%(version)s',
+         'keep_git_dir': True,
+    },
+}]
+patches = ['SU2-7.5.1-flexiblas.patch']
+checksums = [
+    {'su2-8.4.0.tar.xz': '56e7ca41cb0e759ae1858df76ae77ad7abb77259cd5973c779baaf1204f25587'},
+    {'SU2-7.5.1-flexiblas.patch': '09dfab166ac723c4d4e55847e63a5664a2e3e2f747c8ae27e7989fd953e0ddaa'},
+]
+
+separate_build_dir = False
+configure_cmd = "./meson.py "
+build_dir = "build"
+configopts = " ".join([
+    "-Denable-pywrapper=true",
+    "-Dwith-mpi=enabled",
+    "-Dblas-name=flexiblas",
+])
+
+buildopts = "-C build"
+installopts = "-C build"
+
+# no need for multi_deps, it does not link against python
+builddependencies = [
+    ('Python', '3.11'),
+    ('SWIG', '4.1.1'),
+    ('mpi4py', '4.1.0'),
+]
+
+sanity_check_paths = {
+    'files': ['bin/SU2_CFD', 'bin/pysu2.py'],
+    'dirs': [],
+}
+sanity_check_commands = ['module load python mpi4py; python -c "import pysu2"']
+
+modextravars = {
+    'SU2_HOME': '%(installdir)s/',
+    'SU2_RUN': '%(installdir)s/bin'
+}
+modextrapaths = {'PYTHONPATH': ['bin']}
+
+moduleclass = 'cae'
