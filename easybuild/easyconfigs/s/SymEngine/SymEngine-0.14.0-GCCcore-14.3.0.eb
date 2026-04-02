@@ -6,16 +6,16 @@ version = '0.14.0'
 homepage = 'https://github.com/symengine/symengine'
 description = "SymEngine is a standalone fast C++ symbolic manipulation library."
 
-toolchain = {'name': 'GCCcore', 'version': '12.3.0'}
+toolchain = {'name': 'GCCcore', 'version': '14.3.0'}
 toolchainopts = {'pic': True}
 
 source_urls = ['https://github.com/symengine/symengine/releases/download/v%(version)s/']
 sources = [SOURCELOWER_TAR_GZ]
 
 builddependencies = [
-    ('CMake', '3.27.7'),
-    ('numpy', '2.1.1'),
-    ('Cython', '3.0.11'),
+    ('CMake', '3.31.0'),
+    ('numpy', '2.4.2'),
+    ('Cython', '3.2.4'),
     ('FLINT', '3.0.0'),
     ('LLVM', '16.0.6'),
 ]
@@ -35,12 +35,12 @@ configopts = " ".join([
     "-DWITH_TCMALLOC=OFF",
 ])
 
-multi_deps = {'Python': ['3.11', '3.12', '3.13']}
+multi_deps = {'Python': ['3.11', '3.12', '3.13', '3.14']}
 multi_deps_extensions_only = True
 
 exts_defaultclass = 'PythonPackage'
 exts_list = [
-    ('symengine', version, {
+    ('symengine', '0.14.1', {
         'sources': [{'source_urls': ['https://github.com/symengine/symengine.py/releases/download/v%(version)s/'], 'filename': 'symengine.py-%(version)s.tar.gz'}],
         'use_pip': True,
     }),
