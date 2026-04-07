@@ -1,0 +1,79 @@
+easyblock = 'CMakeMake'
+
+name = 'OpenMC'
+version = '0.15.3'
+
+homepage = 'https://docs.openmc.org/en/stable/'
+description = """ OpenMC is a
+community-developed Monte Carlo neutron and photon transport simulation code.
+It is capable of performing fixed source, k-eigenvalue, and subcritical
+multiplication calculations on models built using either a constructive solid
+geometry or CAD representation. OpenMC supports both continuous-energy and
+multigroup transport. The continuous-energy particle interaction data is based
+on a native HDF5 format that can be generated from ACE files produced by NJOY.
+Parallelism is enabled via a hybrid MPI and OpenMP programming model.
+"""
+
+toolchain = {'name': 'gompi', 'version': '2023a'}
+
+source_urls = ['https://github.com/openmc-dev/openmc/archive']
+sources = ['v%(version)s.tar.gz']
+patches = ['OpenMC-0.13.2_remove-gitsubmodules.patch']
+checksums = [
+    {'v0.15.3.tar.gz': '7019d3325cf59b1d1d3176ac85a247e75a1b9efa6ed40bdf0e7178ed4d03b83a'},
+    {'OpenMC-0.13.2_remove-gitsubmodules.patch': '38c72817076fc0d18a329d5d405e6fa0306810e9efeb0390ea29110c37781fff'},
+]
+
+multi_deps = {"Python": ["3.11", "3.12", "3.13", "3.14"]}
+
+builddependencies = [
+    ('CMake', '3.31.0'),
+    ('xtensor', '0.25.0'),
+    ('GSL-lite', '0.41.0'),
+    ('Cython', '3.2.4'),
+    ('SciPy-Stack', '2026a'),
+]
+
+# The python bindings depends on h5py and mpi4py
+dependencies = [
+    ('HDF5', '1.14.6', '-mpi'),
+    ('mpi4py', '4.1.0'),
+]
+
+configopts = " ".join([
+    "-DHDF5_PREFER_PARALLEL=ON",
+    "-DOPENMC_USE_MPI=ON",
+    "-DOPENMC_BUILD_TESTS=OFF",
+])
+
+separate_build_dir = False
+installopts = " && pip install --no-index --no-build-isolation --no-cache --prefix=%(installdir)s . "
+
+sanity_check_paths = {
+    'files': [
+        'bin/openmc',
+        'lib/libopenmc.so'
+    ],
+    'dirs': [
+        'lib/python%(pyshortver)s/site-packages',
+        'include/openmc',
+        'bin',
+    ],
+}
+
+sanity_check_commands = [
+    "openmc --version",
+    "python -c 'import openmc'",
+    "python -c 'import openmc.lib'",
+]
+
+modextrapaths = {"EBPYTHONPREFIXES": ""}
+
+# Depends on any numpy, scipy, matplotlib, pandas, at runtime.
+modluafooter = """
+if convertToCanonical(LmodVersion()) >= convertToCanonical("8.2.9") then
+  depends_on("scipy-stack")
+end
+"""
+
+moduleclass = 'lib'
