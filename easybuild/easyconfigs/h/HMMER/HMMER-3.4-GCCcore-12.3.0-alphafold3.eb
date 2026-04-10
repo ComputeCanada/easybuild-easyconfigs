@@ -1,0 +1,60 @@
+easyblock = 'ConfigureMake'
+
+name = 'HMMER'
+version = "3.4"
+modaltsoftname = "HMMER-alphafold3"
+
+homepage = 'http://hmmer.org/'
+description = """HMMER is used for searching sequence databases for homologs
+ of protein sequences, and for making protein sequence alignments. It
+ implements methods using probabilistic models called profile hidden Markov
+ models (profile HMMs).  Compared to BLAST, FASTA, and other sequence
+ alignment and database search tools based on older scoring methodology,
+ HMMER aims to be significantly more accurate and more able to detect remote
+ homologs because of the strength of its underlying mathematical models. In the
+ past, this strength came at significant computational expense, but in the new
+ HMMER3 project, HMMER is now essentially as fast as BLAST."""
+
+toolchain = {'name': 'GCCcore', 'version': '12.3.0'}
+
+source_urls = [
+    'http://eddylab.org/software/hmmer/',
+    'http://eddylab.org/software/hmmer%(version_major)s/%(version)s/',
+]
+sources = ['hmmer-%(version)s.tar.gz']
+checksums = [
+    {'hmmer-%(version)s.tar.gz': 'ca70d94fd0cf271bd7063423aabb116d42de533117343a9b27a65c17ff06fbf3'},
+    {'HMMER-%(version)s-add_jackhmmer_seq_limit.patch': 'df9e3ae35ad1659921d96ebfca67a9616a7a467ddde2be18a56f9bd3edb38c41'},
+]
+
+# This patch is significatively beneficial for Alphafold3. It is an additionnal option, so
+# it is only additive and breaks no current behavior.
+# Taken from https://raw.githubusercontent.com/google-deepmind/alphafold3/refs/heads/main/docker/jackhmmer_seq_limit.patch
+patches = ['HMMER-3.4-add_jackhmmer_seq_limit.patch']
+
+# 3 tests fail in 3.3.2 due to commands being renamed or not built. All
+# other tests should pass.
+#   exercise  297 [           hmmpgmd_ga] ...     FAILED [command failed]
+#   exercise  299 [     hmmpgmd_shard_ga] ...     FAILED [command failed]
+#   exercise  307 [               iss159] ...     FAILED [command failed]
+# runtest = 'check'
+
+installopts = ' && cd easel && make install'
+
+local_bin_files = ['alimask', 'esl-alirev', 'esl-reformat', 'esl-translate',
+                   'hmmlogo', 'jackhmmer', 'esl-afetch', 'esl-alistat',
+                   'esl-selectn', 'esl-weight', 'hmmpgmd', 'makehmmerdb',
+                   'esl-alimanip', 'esl-compalign', 'esl-seqrange', 'hmmalign',
+                   'hmmpress', 'nhmmer', 'esl-alimap', 'esl-compstruct',
+                   'esl-seqstat', 'hmmbuild', 'hmmscan', 'nhmmscan', 'esl-alimask',
+                   'esl-construct', 'esl-sfetch', 'hmmconvert', 'hmmsearch',
+                   'phmmer', 'esl-alimerge', 'esl-histplot', 'esl-shuffle',
+                   'hmmemit', 'hmmsim', 'esl-alipid', 'esl-mask', 'esl-ssdraw',
+                   'hmmfetch', 'hmmstat']
+
+sanity_check_paths = {
+    'files': ["bin/%s" % x for x in local_bin_files],
+    'dirs': ['bin', 'share'],
+}
+
+moduleclass = 'bio'
