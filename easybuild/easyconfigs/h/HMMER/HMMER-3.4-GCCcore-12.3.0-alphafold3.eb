@@ -2,6 +2,7 @@ easyblock = 'ConfigureMake'
 
 name = 'HMMER'
 version = "3.4"
+versionsuffix = "-alphafold3"
 modaltsoftname = "HMMER-alphafold3"
 
 homepage = 'http://hmmer.org/'
