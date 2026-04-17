@@ -1,0 +1,20 @@
+easyblock = 'Bundle'
+
+name = 'ijulia-kernel'
+version = '1.12'
+
+homepage = 'https://julialang.org/'
+
+description = """IJulia kernelspec for Julia %(version)s"""
+
+toolchain = SYSTEM
+dependencies = [('Julia', '%(version)s.5', '-linux-x86_64'), ('IJulia', '1.34.4', '-Julia-%(version)s.5')]
+
+postinstallcmds = [
+"""
+    mkdir -p %(installdir)s/share/jupyter &&
+    XDG_DATA_HOME=%(installdir)s/share julia -e 'using IJulia; installkernel("Julia", specname="julia");'
+"""
+]
+
+modextrapaths = {'JUPYTER_PATH': ['share/jupyter']}
