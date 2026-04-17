@@ -80,10 +80,6 @@ exts_list = [
     }),
 ]
 
-modextrapaths = {
-    'JUPYTER_PATH': 'jupyter',
-}
-
 moduleclass = 'lib'
 
 hidden = True
