@@ -50,7 +50,7 @@ configopts = " ".join([
     '--with-mpi4py=no',
     '--with-cuda=yes',
     '--with-cuda-arch=70,80,90',
-    'LDFLAGS=${LDFLAGS}',
+    '--with-cuda-dir=$EBROOTCUDACORE',
 ])
 
 
@@ -63,9 +63,20 @@ download_deps = [
     'pnetcdf',
 ]
 
+# TODO: find out why `self.libraries.addRpathSkipDir(toolkitStubLibDir)` does results in the stub directory being filtered
+# Temporary fix, as PETSc should be skipping it...
+# PETSc includes the stubs path, but we want to filter it from rpath
+local_hotfix_stubs = """
+for so in %(installdir)s/lib/*.so; do
+    NEWRPATH=$(patchelf --print-rpath "$so" | tr ':' '\n' | grep -v 'stubs/lib64$' | paste -sd:)
+    patchelf --set-rpath "$NEWRPATH" "$so"
+done
+"""
+
 postinstallcmds = [
     'ln -sf %(installdir)s/lib/%(namelower)s/bin %(installdir)s/bin',
     'ln -sf %(installdir)s/lib/%(namelower)s/conf %(installdir)s/conf',
+    local_hotfix_stubs,
 ]
 
 keepsymlinks = True
