@@ -38,7 +38,9 @@ postinstallcmds = [
   "find %(installdir)s \( -type f -o -type l \) -name 'libgfortran.so*' -exec mv {} {}.bak \;",
   "find %(installdir)s \( -type f -o -type l \) -name 'libgfortran.so.3*bak' -print0 | while IFS= \
    read -r -d $'\\0' file; do echo \"Removing bak from $file\"; mv \"$file\" \"${file%.bak}\"; done;",
-  "find %(installdir)s/v252/rocky/bin/gcc-libs \( -type f -o -type l \) -name 'libstdc++.so*' -exec mv {}.bak {} \;",
+  "find %(installdir)s/v252/rocky \( -type f -o -type l \) -name '*.so*bak' -print0 | while IFS= \
+   read -r -d $'\\0' file; do echo \"Removing bak from $file\"; mv \"$file\" \"${file%.bak}\"; done;",
+  "find %(installdir)s/v252/rocky \( -type f -o -type l \) -name '*.desktop' -exec mv {} {}.bak \;",
   # Look for latest libstdc++.so.X.Y.Z under $EBROOTGENTOO instead of root filesystem
   "grep -riIlZ 'find /usr/lib64 /usr/lib' %(installdir)s --exclude-dir={lib,python,CPython} | \
    while IFS= read -r -d $'\\0' file; do echo \"$file\"; sed -i \"s|find \/usr\/lib64 \/usr\/lib|\
