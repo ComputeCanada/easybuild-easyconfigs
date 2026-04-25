@@ -1,0 +1,15 @@
+Only in libre-qda-libreqda-v1.0.1.orig: poetry.lock
+diff -ru libre-qda-libreqda-v1.0.1.orig/pyproject.toml libre-qda-libreqda-v1.0.1/pyproject.toml
+--- libre-qda-libreqda-v1.0.1.orig/pyproject.toml	2026-03-18 18:03:05.414419624 +0000
++++ libre-qda-libreqda-v1.0.1/pyproject.toml	2026-03-18 18:03:27.477385943 +0000
+@@ -109,6 +109,10 @@
+ [tool.poetry.scripts]
+ taguette = "taguette.main:main"
+ 
++[[tool.poetry.source]]
++name = "pypi-public"
++url = "https://pypi.org/simple/"
++
+ [build-system]
+ requires = ["poetry-core>=1.0.0"]
+ build-backend = "poetry.core.masonry.api"

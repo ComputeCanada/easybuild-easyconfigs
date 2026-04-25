@@ -28,6 +28,10 @@ sanity_check_paths = {
 }
 
 modluafooter = '''
+if ( mode() == "load" ) then
+    if ( os.getenv("JULIA_DEPOT_PATH") == nil ) then setenv("JULIA_DEPOT_PATH", ":") end
+    if ( os.getenv("JULIA_LOAD_PATH") == nil ) then setenv("JULIA_LOAD_PATH", ":") end
+end
 append_path("JULIA_DEPOT_PATH", "%(installdir)s")
 append_path("JULIA_LOAD_PATH", "%(installdir)s/environments/%(name)s")
 '''

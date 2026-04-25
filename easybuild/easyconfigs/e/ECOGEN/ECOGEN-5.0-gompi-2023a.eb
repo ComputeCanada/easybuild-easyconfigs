@@ -1,0 +1,27 @@
+easyblock = 'CMakeMakeCp'
+
+name = 'ECOGEN'
+version = "5.0"
+
+homepage = 'https://code-mphi.github.io/ECOGEN/'
+description = """A CFD open source code dedicated to multiphase compressible flows"""
+
+toolchain = {'name': 'gompi', 'version': '2023a'}
+
+github_account = 'code-mphi'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['fd8706f53d95893d277d45b318d3504f0c6725f6f5f7bb344c294890e6a67efe']
+
+builddependencies = [
+    ('CMake', '3.31.0'),
+]
+
+files_to_copy = [(['%(name)s'], 'bin')]
+
+sanity_check_paths = {
+ 'files': ['bin/%(name)s'],
+ 'dirs': [],
+}
+
+moduleclass = 'phys'

@@ -14,7 +14,7 @@ description = """Using the CUDA Forward Compatibility package,
 
 toolchain = SYSTEM
 
-dependencies = [('CUDAcompat', '13.0', '-580.95.05')]
+dependencies = [('CUDAcompat', '13.2', '-595.58.03')]
 
 moduleclass = 'system'
 

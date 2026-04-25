@@ -1,0 +1,48 @@
+easyblock = 'CMakeMake'
+
+name = 'AFNI'
+version = "26.0.09"
+
+homepage = 'http://afni.nimh.nih.gov/'
+description = """AFNI is a set of C programs for processing, analyzing, and displaying functional MRI (FMRI) data -
+ a technique for mapping human brain activity."""
+
+toolchain = {'name': 'gccflexiblas', 'version': '2023a'}
+toolchainopts = {'openmp': True, 'pic': True}
+
+source_urls = ['https://github.com/%(namelower)s/%(namelower)s/archive/']
+sources = ['AFNI_%(version)s.tar.gz']
+checksums = ['970b52bd4924e9ab6f62867d6a198414df923929a55f553ccdebe841cd546ccd']
+
+builddependencies = [
+    ('M4', '1.4.18'),
+    ('CMake', '3.27.7'),
+]
+
+dependencies = [
+    ('R', '4.5.0'),
+    ('Qt5', '5.12.8'),
+    ('GSL', '2.7'),
+    ('R-bundle-Bioconductor', '3.21'),
+    #('expat', '2.2.9'),  # provided from gentoo
+    ('Python', '3.11'),
+    ('SciPy-Stack', '2023b'),
+]
+
+configopts  = ' -DSTANDARD_PYTHON_INSTALL=ON -DCOMP_PYTHON=ON -DPYTHON_EXECUTABLE=$EBROOTPYTHON/bin/python'
+configopts += ' -DGENERATE_PACKAGING_COMPONENTS=ON -DCOMP_SUMA=ON -DCOMP_GUI=ON '
+configopts += ' -DCOMP_RSTATS=ON -DCOMP_TCSH=ON  -DCOMP_COREBINARIES=ON '
+
+postinstallcmds = [
+    "cd %(builddir)s/afni-AFNI_%(version)s/src/python_scripts && cp -r scripts/* afnipy %(installdir)s/bin",
+    "ln -s ../lib/librio.so %(installdir)s/bin/R_io.so",
+]
+
+sanity_check_paths = {
+    'files': ['bin/%(namelower)s'],
+    'dirs': [],
+}
+
+sanity_check_commands = ["python -c 'import afnipy'"]
+
+moduleclass = 'bio'

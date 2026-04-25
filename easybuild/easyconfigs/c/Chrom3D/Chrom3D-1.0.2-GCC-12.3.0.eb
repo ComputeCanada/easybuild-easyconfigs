@@ -1,0 +1,33 @@
+easyblock = 'MakeCp'
+
+name = 'Chrom3D'
+version = "1.0.2"
+
+homepage = 'https://github.com/Chrom3D/Chrom3D'
+description = """Chrom3D is a computational framework for efficient reconstruction of 3D genome structures using chromosome contact data (Hi-C, TCC and 5C data) and optionally lamin ChIP-seq data."""
+
+toolchain = {'name': 'GCC', 'version': '12.3.0'}
+
+github_account = 'Chrom3D'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+patches = ['Chrom3D-1.0.2-fix_cast.patch']
+checksums = [
+    {'v1.0.2.tar.gz': 'f19e046216f17c43369ccddf45cdc114b364cf3ad7173501a56ab87a7d310be9'},
+    {'Chrom3D-1.0.2-fix_cast.patch': '75483667ff8533c892723216cb8b4eabacecd6f051492001476c360aec5a717b'},
+]
+
+builddependencies = [
+    ('Boost', '1.82.0'),
+]
+
+files_to_copy = [(['%(name)s'], 'bin')]
+
+sanity_check_paths = {
+ 'files': ['bin/%(name)s'],
+ 'dirs': [],
+}
+
+sanity_check_commands = ['Chrom3D --version']
+
+moduleclass = 'bio'

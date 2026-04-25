@@ -23,7 +23,6 @@ dependencies = [
     ('Abseil', '20230125.3'),
     ('BamTools', '2.5.2'),
     ('jemalloc', '5.3.0'),
-    ('libffi', '3.4.4'),
     ('protobuf', '24.4'),
     ('zlib', '1.2.13'),
     ('sdsl-lite', '2.0.3'),

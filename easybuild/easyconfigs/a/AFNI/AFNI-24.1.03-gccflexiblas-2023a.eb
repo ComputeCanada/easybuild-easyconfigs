@@ -33,7 +33,10 @@ configopts  = ' -DSTANDARD_PYTHON_INSTALL=ON -DCOMP_PYTHON=ON -DPYTHON_EXECUTABL
 configopts += ' -DGENERATE_PACKAGING_COMPONENTS=ON -DCOMP_SUMA=ON -DCOMP_GUI=ON '
 configopts += ' -DCOMP_RSTATS=ON -DCOMP_TCSH=ON  -DCOMP_COREBINARIES=ON '
 
-postinstallcmds = [ "cd %(builddir)s/afni-AFNI_%(version)s/src/python_scripts && cp -r scripts/* afnipy %(installdir)s/bin"]
+postinstallcmds = [
+    "cd %(builddir)s/afni-AFNI_%(version)s/src/python_scripts && cp -r scripts/* afnipy %(installdir)s/bin",
+    "ln -s ../lib/librio.so %(installdir)s/bin/R_io.so",
+]
 
 sanity_check_paths = {
     'files': ['bin/%(namelower)s'],

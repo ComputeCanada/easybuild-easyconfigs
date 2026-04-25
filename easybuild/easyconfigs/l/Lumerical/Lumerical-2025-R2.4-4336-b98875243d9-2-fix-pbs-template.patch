@@ -1,0 +1,26 @@
+diff -Naur opt.orig/lumerical/v252/templates/fdtd-pbs-template.sh opt/lumerical/v252/templates/fdtd-pbs-template.sh
+--- opt.orig/lumerical/v252/templates/fdtd-pbs-template.sh	2026-03-03 17:24:34.148639216 +0000
++++ opt/lumerical/v252/templates/fdtd-pbs-template.sh	2026-03-03 17:31:16.766775368 +0000
+@@ -10,7 +10,7 @@
+ NUM_PROCS=`/bin/awk 'END {print NR}' $PBS_NODEFILE`
+ echo "Starting run at: `date`"
+ echo "Running on $NUM_PROCS processors."
+-MY_PROG="/opt/lumerical/v252/bin/fdtd-engine-ompi-lcl"
++MY_PROG="$EBROOTLUMERICAL/bin/fdtd-engine"
+ INPUT="<filename>"
+ mpiexec -n $NUM_PROCS $MY_PROG -t 1 ./${INPUT}
+ echo "Job finished at: `date`"
+diff -Naur opt.orig/lumerical/v252/templates/varfdtd-pbs-template.sh opt/lumerical/v252/templates/varfdtd-pbs-template.sh
+--- opt.orig/lumerical/v252/templates/varfdtd-pbs-template.sh	2026-03-03 17:24:34.149639206 +0000
++++ opt/lumerical/v252/templates/varfdtd-pbs-template.sh	2026-03-03 17:32:52.187859629 +0000
+@@ -10,8 +10,8 @@
+ NUM_PROCS=`/bin/awk 'END {print NR}' $PBS_NODEFILE`
+ echo "Starting run at: `date`"
+ echo "Running on $NUM_PROCS processors."
+-MY_PROG="/opt/lumerical/v252/bin/varfdtd-engine-mpichp4"
++MY_PROG="$EBROOTLUMERICAL/bin/varfdtd-engine"
+ INPUT="<filename>"
+-/opt/lumerical/v252/mpich/ch_p4/bin/mpirun -n $NUM_PROCS $MY_PROG -t 1 ./${INPUT}
++${MY_PROG} -n $NUM_PROCS $MY_PROG -t 1 ./${INPUT}
+ echo "Job finished at: `date`"
+ exit

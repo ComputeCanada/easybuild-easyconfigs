@@ -21,7 +21,7 @@ sources = [{
 checksums = ['7cac6c4a8e67a7bf7931f9d8539a433f0660bfb4b9f1a3ca99adaa648cd65c15']
 
 dependencies = [
-    ('BLAST+', '2.14.1'),  #'2.16.0'),
+    ('BLAST+', '2.17.0'),
     ('HMMER',  '3.4'),
     ('cURL',   '8.7.1'),
 ]

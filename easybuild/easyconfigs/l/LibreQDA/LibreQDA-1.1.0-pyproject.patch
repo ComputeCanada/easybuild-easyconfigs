@@ -1,0 +1,14 @@
+diff -ru libre-qda-libreqda-v1.1.0.orig/pyproject.toml libre-qda-libreqda-v1.1.0/pyproject.toml
+--- libre-qda-libreqda-v1.1.0.orig/pyproject.toml	2026-03-20 17:10:43.954653474 +0000
++++ libre-qda-libreqda-v1.1.0/pyproject.toml	2026-03-20 17:11:33.465185111 +0000
+@@ -2,6 +2,10 @@
+ name = "taguette"
+ version = "1.0.1"
+ description = "Free and open source qualitative research tool"
++packages = [
++  { include = "taguette" },
++  { include = "scripts" },
++]
+ 
+ license = "BSD-3-Clause"
+ 

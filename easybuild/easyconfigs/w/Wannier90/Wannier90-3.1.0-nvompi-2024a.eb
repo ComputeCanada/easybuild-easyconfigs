@@ -8,7 +8,7 @@ description = "The Maximally-Localised Generalised Wannier Functions  calculates
 
 toolchain = {'name': 'nvompi', 'version': '2024a'}
 toolchainopts = {'openmp': False}
-builddependencies = [('FlexiBLAScore', '3.4.4')]
+builddependencies = [('FlexiBLAS', '3.4.4', '', ('NVHPC', '25.1'))]
 source_urls = ['https://github.com/wannier-developers/%(name)s/archive/']
 sources = ['v%(version)s.tar.gz']
 patches = ['%(name)s-%(version)s-nvompi.patch']

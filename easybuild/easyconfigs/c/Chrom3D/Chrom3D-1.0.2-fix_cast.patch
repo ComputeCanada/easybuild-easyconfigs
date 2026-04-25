@@ -1,0 +1,13 @@
+diff -Nru Chrom3D-1.0.2/src/Chrom3D.cpp Chrom3D-1.0.2.patched/src/Chrom3D.cpp
+--- Chrom3D-1.0.2/src/Chrom3D.cpp	2020-06-05 04:33:49.000000000 -0400
++++ Chrom3D-1.0.2.patched/src/Chrom3D.cpp	2026-03-26 10:17:29.181864185 -0400
+@@ -18,8 +18,7 @@
+ 
+ #include "../src/tclap-1.2.1/include/tclap/CmdLine.h"
+ 
+-#define SSTR( x ) dynamic_cast< std::ostringstream & >( \
+-        ( std::ostringstream() << std::dec << x ) ).str()
++#define SSTR(x) static_cast<std::ostringstream&&>(std::ostringstream{} << x).str()
+ 
+ using namespace std;
+ 

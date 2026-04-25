@@ -1,0 +1,48 @@
+easyblock = 'ConfigureMake'
+
+name = 'LibreQDA'
+version = '1.1.0'
+
+homepage = 'https://gitlab.com/bin-cirst/libreqda/libre-qda'
+description = """LibreQDA is an open-source web-based document tagging tool for qualitative data analysis.
+
+Using this tool, you can upload a collection of documents, create a hierarchy of codes, and annotate portions of documents with codes and notes that you can recall and organize later."""
+
+toolchain = SYSTEM
+source_urls = ['https://gitlab.com/bin-cirst/libreqda/libre-qda/-/archive/%(name_lower)s-v%(version)s']
+sources = ['libre-qda-libreqda-v%(version)s.tar.gz']
+patches = [
+  '%(name)s-%(version)s-pyproject.patch',
+  '%(name)s-1.0.1-poetry.patch',
+  '%(name)s-%(version)s-make_theme.patch',
+  '%(name)s-%(version)s-static_paths.patch',
+]
+checksums = [
+    {'libre-qda-libreqda-v1.1.0.tar.gz': '27b04b127385dc98c7ee26a6a263a76eb773080da8154e6225144a61cd8a1749'},
+    {'LibreQDA-1.1.0-pyproject.patch': '7d8d473c59919a76d420f4790d8e85749d5bb60bf831ce4b98fff479b2705151'},
+    {'LibreQDA-1.0.1-poetry.patch': 'caa6dd0603d05f42c3787505aa45b056301f6a1ec5f1363792e96faa36d6b841'},
+    {'LibreQDA-1.1.0-make_theme.patch': 'db923cd7d4fd6da4f010c149617d14bdaeec0dbc44d4bb78e9c1f18b0a9f339c'},
+    {'LibreQDA-1.1.0-static_paths.patch': '0e33b729811e387bcff4a22e2815042ee1742fff2d7b7e36c736ed591c05394b'},
+]
+
+#patches = ['libreqda-%(version)s-alliancecan.patch']
+
+dependencies = [('calibre', '8.6.0')]
+builddependencies = [('Python', '3.13'), ('python-build-bundle','2026a'), ('babel', '2.17.0')]
+
+skipsteps = ['configure', 'build']
+preinstallopts = 'scripts/update_translations.sh && rm %(builddir)s/libre-qda-libreqda-v%(version)s/poetry.lock && '
+preinstallopts += 'poetry --verbose -vvv lock && '
+install_cmd = 'poetry --verbose -vvv bundle venv'
+installopts = '%(installdir)s/bundle'
+postinstallcmds = ['mkdir %(installdir)s/bin; ln -s %(installdir)s/bundle/bin/taguette %(installdir)s/bin/taguette']
+
+local_language_map = {'fr': 'fr_FR', 'fr_CA': 'fr_FR', 'en': 'en_US', 'en_CA': 'en_US', 'en_UK': 'en_US'}
+postinstallcmds += ['ln -s %s %%(installdir)s/bundle/lib/python%%(pyshortver)s/site-packages/taguette/l10n/%s' % (src, dst) for dst, src in local_language_map.items()]
+
+sanity_check_paths = {
+    'files': ['bundle/bin/taguette', 'bin/taguette'],
+    'dirs': ['bundle/lib']
+}
+
+moduleclass = 'data'

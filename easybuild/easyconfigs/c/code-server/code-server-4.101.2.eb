@@ -16,6 +16,7 @@ postinstallcmds = [
     'mkdir %(installdir)s/extensions/foxundermoon.shell-format-7.0.1/bin; pushd %(installdir)s/extensions/foxundermoon.shell-format-7.0.1/bin; wget https://github.com/mvdan/sh/releases/download/v3.0.1/shfmt_v3.0.1_linux_amd64; chmod +x shfmt_v3.0.1_linux_amd64; popd',
     'chmod go+rX -R %(installdir)s/extensions',
     '/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s --add_origin ',
+    'sed -i -e "s;#!/bin/sh;#!/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/bash;g" %(installdir)s/bin/code-server'
 ]
 exts_defaultclass = 'VSCodeExtension'
 exts_default_options = {

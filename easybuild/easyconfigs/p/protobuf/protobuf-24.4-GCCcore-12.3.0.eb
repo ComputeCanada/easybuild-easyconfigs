@@ -14,6 +14,9 @@ checksums = ['616bb3536ac1fff3fb1a141450fa28b875e985712170ea7f1bfe5e5fc41e2cd8']
 
 builddependencies = [
     ('CMake', '3.27.7'),
+]
+
+dependencies = [
     ('Abseil', '20230125.3'),
 ]
 

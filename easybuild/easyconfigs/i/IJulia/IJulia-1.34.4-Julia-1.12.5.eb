@@ -1,0 +1,85 @@
+easyblock = 'JuliaBundle'
+name = 'IJulia'
+version = '1.34.4'
+_julia_ver = '1.12.5'
+versionsuffix = "-Julia-%s" % _julia_ver
+
+homepage = 'https://github.com/JuliaLang/IJulia.jl'
+description = "Julia kernel for Jupyter"
+
+toolchain = SYSTEM
+
+dependencies = [
+    ('Julia', _julia_ver, '-linux-%s' % ARCH, SYSTEM),
+]
+
+exts_list = [
+    ('Preferences', '1.5.2', {
+        'source_urls': ['https://github.com/JuliaPackaging/Preferences.jl/archive/'],
+        'checksums': ['5aa3d646f3c5eea62f441109ba466e2636fe0fc7b4481d6747ed02a36da6e6f8'],
+    }),
+    ('PrecompileTools', '1.3.3', {
+        'source_urls': ['https://github.com/JuliaLang/PrecompileTools.jl/archive/'],
+        'checksums': ['78c3437ef1481cfd7ab2dfba3df45ad6a9c1e38e1667a900f8af06eb765ddf54'],
+    }),
+    ('Parsers', '2.8.1', {
+        'source_urls': ['https://github.com/JuliaData/Parsers.jl/archive/'],
+        'checksums': ['6ea035be48ef5daaecdff62ac8f29c6110aaf20f3349058a4f96e2503f55b693'],
+    }),
+    ('StructUtils', '2.7.2', {
+        'source_urls': ['https://github.com/JuliaServices/StructUtils.jl/archive/'],
+        'checksums': ['f7525017d7b302c0aef527fb301d99ea77e29776b27efd460bd271772180178b'],
+    }),
+    ('JSON', '1.5.0', {
+        'source_urls': ['https://github.com/JuliaIO/JSON.jl/archive/'],
+        'checksums': ['eb940b94d4f557e07aa24112032a086fa24f255f1364ffe07535daa5f19db560'],
+    }),
+    ('JLLWrappers', '1.7.1', {
+        'source_urls': ['https://github.com/JuliaPackaging/JLLWrappers.jl/archive/'],
+        'checksums': ['d8e5be0af75d4fe28b449299c5684a8a4e577bd621332051f2f7574edcdee28d'],
+    }),
+    ('MbedTLS_jll', '2.28.1010+0', {
+        'source_urls': ['https://github.com/JuliaBinaryWrappers/MbedTLS_jll.jl/archive/'],
+        'sources': [{'filename': 'MbedTLS-v%(version)s.tar.gz'}],
+        'checksums': ['39972b87afe0d7f191a9746bbf8102bbd45d2e904edd0d914d553c532e0c9049'],
+    }),
+    ('MbedTLS', '1.1.9', {
+        'source_urls': ['https://github.com/JuliaLang/MbedTLS.jl/archive/'],
+        'checksums': ['d421bb36f9eb7f8840bd7108c2c33a9a5532454ac9465861e2f7797f89c1f56b'],
+    }),
+    ('VersionParsing', '1.3.0', {
+        'source_urls': ['https://github.com/JuliaInterop/VersionParsing.jl/archive/'],
+        'checksums': ['f90fe419e1a40ef0eccfaaed1d1b7792d9115a059a82d0c23e3c04c944d0f8ca'],
+    }),
+    ('Conda', '1.10.3', {
+        'source_urls': ['https://github.com/JuliaPy/Conda.jl/archive/'],
+        'checksums': ['8f61889c13b68ae733efd2ff2853c2a608c1f413becf56385ddacb86a1110bce'],
+    }),
+    ('SoftGlobalScope', '1.1.0', {
+        'source_urls': ['https://github.com/stevengj/SoftGlobalScope.jl/archive/'],
+        'checksums': ['8d4264386c859403938498cd9ddd5e94e10181deba4a3e71d391b16750e3848b'],
+    }),
+    ('libsodium_jll', '1.0.22+0', {
+        'source_urls': ['https://github.com/JuliaBinaryWrappers/libsodium_jll.jl/archive/'],
+        'sources': [{'filename': 'libsodium-v%(version)s.tar.gz'}],
+        'checksums': ['f410226975bca365e75bd8faf2ce3f9c6441d4f33f07167d06fa4b9300e3dcb5'],
+    }),
+    ('ZeroMQ_jll', '4.3.6+0', {
+        'source_urls': ['https://github.com/JuliaBinaryWrappers/ZeroMQ_jll.jl/archive/'],
+        'sources': [{'filename': 'ZeroMQ-v%(version)s.tar.gz'}],
+        'checksums': ['a73d9aec597d4c142b772c2fb5e13d211a61551cc6620b6caf5185b6d342f72a'],
+    }),
+    ('ZMQ', '1.5.1', {
+        'source_urls': ['https://github.com/JuliaInterop/ZMQ.jl/archive/'],
+        'checksums': ['3fda575a341b367981127670ee8e4a2a03bdb75e0e6bcc461b17a67b2f47350c'],
+    }),
+    (name, version, {
+        'preinstallopts': "mkdir -p %(installdir)s/jupyter && export JUPYTER_DATA_DIR=%(installdir)s/jupyter && ",
+        'source_urls': ['https://github.com/JuliaLang/IJulia.jl/archive/'],
+        'checksums': ['63d7ba2236de92708ca048ccc99da2005dbd870d926bd4beb121f21efc6664f3'],
+    }),
+]
+
+moduleclass = 'lib'
+
+hidden = True

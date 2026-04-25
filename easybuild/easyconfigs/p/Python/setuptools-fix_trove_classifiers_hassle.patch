@@ -1,0 +1,29 @@
+diff --git a/setuptools/config/_validate_pyproject/formats.py b/setuptools/config/_validate_pyproject/formats.py
+index 153b1f0b2..50b8520e9 100644
+--- a/setuptools/config/_validate_pyproject/formats.py
++++ b/setuptools/config/_validate_pyproject/formats.py
+@@ -205,15 +205,19 @@ class _TroveClassifier:
+         return value in self.downloaded or value.lower().startswith("private ::")
+ 
+ 
+-try:
+-    from trove_classifiers import classifiers as _trove_classifiers
+-
++if os.getenv("VALIDATE_PYPROJECT_NO_TROVE_CLASSIFIERS"):
+     def trove_classifier(value: str) -> bool:
+-        """See https://pypi.org/classifiers/"""
+-        return value in _trove_classifiers or value.lower().startswith("private ::")
++        return True
++else:
++    try:
++        from trove_classifiers import classifiers as _trove_classifiers
+ 
+-except ImportError:  # pragma: no cover
+-    trove_classifier = _TroveClassifier()
++        def trove_classifier(value: str) -> bool:
++            """See https://pypi.org/classifiers/"""
++            return value in _trove_classifiers or value.lower().startswith("private ::")
++
++    except ImportError:  # pragma: no cover
++        trove_classifier = _TroveClassifier()
+ 

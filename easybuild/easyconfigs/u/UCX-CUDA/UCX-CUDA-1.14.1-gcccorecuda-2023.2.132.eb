@@ -1,0 +1,44 @@
+easyblock = 'EB_UCX_Plugins'
+
+name = 'UCX-CUDA'
+version = '1.14.1'
+
+homepage = 'http://www.openucx.org/'
+description = """Unified Communication X
+An open-source production grade communication framework for data centric
+and high-performance applications
+
+This module adds the UCX CUDA support.
+"""
+
+toolchain = {'name': 'gcccorecuda', 'version': '2023.2.132'}
+toolchainopts = {'pic': True}
+
+source_urls = ['https://github.com/openucx/ucx/releases/download/v%(version)s']
+sources = [{'filename': 'ucx-%(version)s.tar.gz', 'alt_location': 'UCX'}]
+patches = [
+    '%(name)s-1.11.0_link_against_existing_UCX_libs.patch',
+    '%(name)s-1.14.1_remove-non-versioned-typedef.patch',
+]
+checksums = [
+    {'ucx-1.14.1.tar.gz': 'baa0634cafb269a3112f626eb226bcd2ca8c9fcf0fec3b8e2a3553baad5f77aa'},
+    {'UCX-CUDA-1.11.0_link_against_existing_UCX_libs.patch':
+     '457187fa020e526609ba91e7750c9941d57bd57d60d6eed317b40ad8824aca93'},
+    {'UCX-CUDA-1.14.1_remove-non-versioned-typedef.patch':
+     '21e52c3bdb6b4dbe8b62ebb6b2f7521eee99836874abcb0283b53d0bc3584c72'},
+]
+
+builddependencies = [
+    ('binutils', '2.40'),
+    ('Autotools', '20220317'),
+    ('pkgconf', '1.9.5'),
+]
+
+dependencies = [
+    ('zlib', '1.2.13'),
+    ('UCX', version),
+    ('GDRCopy', '2.3.1'),
+]
+
+
+moduleclass = 'lib'

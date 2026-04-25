@@ -1,0 +1,19 @@
+easyblock = "Toolchain"
+
+name = 'nvhpccuda'
+version = '2024a'
+
+homepage = '(none)'
+description = """NVHPC Compiler and CUDA toolkit"""
+
+toolchain = SYSTEM
+
+local_nvhpc_version = '25.1'
+
+# compiler toolchain dependencies
+dependencies = [
+    ('NVHPC', local_nvhpc_version),
+    ('CUDA', '12.6', '', ('NVHPC', local_nvhpc_version)),
+]
+
+moduleclass = 'toolchain'

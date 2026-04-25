@@ -1,0 +1,60 @@
+easyblock = 'Binary'
+name = 'quantumatk'
+version = '2026.03'
+homepage = 'https://www.synopsys.com/silicon/quantumatk.html'
+description = """QuantumATK is a complete atomistic simulation toolkit. QuantumATK addresses key applications in the semiconductor industry and is a core component of the Synopsys Design-Technology Co-Optimization (DTCO) solution. Atomic-scale modeling tools in QuantumATK range from classical force fields for handling large and to some extent more realistic materials systems to ab initio tools that provide highly accurate results for smaller systems. """
+
+toolchain = SYSTEM
+sources = ['QuantumATK_vY-%(version)s.tar.gz']
+checksums = ['4d638040dc9697c981c202d0d834f9ede2966d62d654defd2a2a5f3842430485']
+
+extract_sources = True
+
+local_config = """
+SourceDir: %(start_dir)s
+SiteID: 000
+PRODUCTS: quantumatk
+RELEASES: Y-%(version)s
+quantumatk, Y-%(version)s {
+   DESCRIPTION: Synopsys QuantumATK
+   POSTARGVALUE: softwareRendering (no)
+   POSTARGVALUE: addToPath(yes)
+   POSTARGVALUE: openLicenseDoc(no)
+   POSTARGVALUE: runProgramAfterInstall(no)
+}
+"""
+
+install_cmd = "./SynopsysInstaller_v5.10.run -dir . && "
+install_cmd += f"cat << EOF > config {local_config}EOF\n"
+install_cmd += "SI_ACCEPT_LICENSE=1 ./installer -target %(installdir)s -batch_installer -config config"
+
+postinstallcmds = [
+    "sed -i 's/TENTATIVE_PATHS=/#TENTATIVE_PATHS=/g' %(installdir)s/quantumatk/Y-%(version)s/atkpython/bin/activate_env",
+    "sed -i 's/0/1/g'  %(installdir)s/quantumatk/Y-%(version)s/software-rendering",
+    "setrpaths.sh --path %(installdir)s",
+]
+sanity_check_paths = {
+    'files': ['quantumatk/Y-%(version)s/bin/quantumatk','quantumatk/Y-%(version)s/bin/atkpython'],
+    'dirs': []
+}
+modextrapaths = {"PATH" : ['quantumatk/Y-%(version)s/mpi/bin', 'quantumatk/Y-%(version)s/bin']}
+moduleclass = 'phys'
+
+modluafooter = """
+require("SitePackage")
+local found, path = find_and_define_license_file("SNPSLMD_LICENSE_FILE","quantumatk")
+if (not found) then
+        local error_message = [[
+        We did not find a suitable license for QuantumATK. If you have access to one, you can create the file $HOME/.licenses/quantumatk.lic with the license information. If you think you should have access to one as part of your institution, please contact us (https://docs.alliancecan.ca/wiki/Technical_support) so that we can configure it.
+
+        Nous n'avons pas trouvé de licence utilisable pour QuantumATK. Si vous avez accès à une licence, vous pouvez créer le fichier $HOME/.licenses/quantumatk.lic avec l'information de celle-ci. Si vous pensez que vous devriez automatiquement avoir accès à une licence via votre institution, veuillez nous contacter (https://docs.alliancecan.ca/wiki/Technical_support) afin que nous puissions la configurer.
+        ]]
+        LmodError(error_message)
+end
+if (mode() == "load") then
+
+   local warning_message = [[ WARNING: please run this software with 'mpiexec' instead of 'srun' ]]
+   LmodWarning(warning_message)
+end
+
+"""

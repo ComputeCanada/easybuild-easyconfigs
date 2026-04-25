@@ -35,11 +35,11 @@ builddependencies = [
     ("CMake", "3.27.7"),
     ('HDF5', '1.14.2'),
     # ("Julia", "1.9.3"),
-    ('numpy', '2.1.1'),
+    ('numpy', '2.4.2'),
     ('cuDNN', '9.13.1.26')
 ]
 
-multi_deps = {"Python": ["3.11", "3.12", "3.13"]}
+multi_deps = {"Python": ["3.11", "3.12", "3.13", "3.14"]}
 multi_deps_load_default = False
 
 configopts = " ".join(
