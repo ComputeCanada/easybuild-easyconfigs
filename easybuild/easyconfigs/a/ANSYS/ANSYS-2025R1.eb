@@ -103,7 +103,10 @@ postinstallcmds = [
    sed -i 's|grep \"$1\"|grep \${1}|g' \"%(installdir)s/v251/ansys/bin/anssh.ini\";",
   # Replace '^\/' with '^/' to Avoid newer grep: warning: stray \ before "y
   "find %(installdir)s -type f \( -name 'mpi*fl' -o -name 'mpi*en' \) -exec cp -a {}{,-orig} \;;\
-   find %(installdir)s -type f \( -name 'mpi*fl' -o -name 'mpi*en' \) -exec sed -i \"s|'^\\\\\/'|'^/'|g\" \"{}\" \;"
+   find %(installdir)s -type f \( -name 'mpi*fl' -o -name 'mpi*en' \) -exec sed -i \"s|'^\\\\\/'|'^/'|g\" \"{}\" \;",
+  # Avoid Rocky startup warning "Installed Qt WebEngine locales directory not found at location"
+  "cd %(installdir)s/v251/rocky/bin/lib/PyQt5/translations;\
+   ln -s %(installdir)s/v251/tp/qt/5.15.17/linx64/bin/datadir/translations/qtwebengine_locales qtwebengine_locales;"
 ]
 
 modextravars = {
