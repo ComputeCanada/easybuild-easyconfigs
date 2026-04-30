@@ -22,7 +22,7 @@ builddependencies = [
 ]
 
 dependencies = [
-    ('Python', '3.13.1'),  # Needed for 'rocm_agent_enumerator' which is a Python script
+    #('Python', '3.13.1'),  # Needed for 'rocm_agent_enumerator' which is a Python script
     ('glog', '0.7.1'),
 ]
 
