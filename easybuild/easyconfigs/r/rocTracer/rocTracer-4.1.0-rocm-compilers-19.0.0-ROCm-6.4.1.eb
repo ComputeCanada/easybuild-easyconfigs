@@ -22,7 +22,7 @@ builddependencies = [
     ('CMake', '3.31.3'),
     ('CppHeaderParser', '2.7.4'),
     ('Doxygen', '1.14.0'),
-    ('Python', '3.13.1'),
+    #('Python', '3.13.1'),
 ]
 dependencies = [
     ('HIP', _rocm_version)
