@@ -24,11 +24,12 @@ builddependencies = [
     ('CMake', '3.31.3'),
     ('Python', '3.13.1'),
     ('hipRAND', '2.13.0'),
+    ('rocprofiler-register', '0.4.0', '-ROCm-6.4.1'),
 ]
 
 dependencies = [
     ('HIP', _rocm_version),
-    ('SQLite', '3.47.2'),
+    #('SQLite', '3.47.2'),
 ]
 
 configopts = '-DSQLITE_USE_SYSTEM_PACKAGE=ON '
