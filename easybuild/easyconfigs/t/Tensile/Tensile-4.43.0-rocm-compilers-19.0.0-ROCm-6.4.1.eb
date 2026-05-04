@@ -45,6 +45,14 @@ exts_list = [
         'sources': ['v%(version)s.tar.gz'],
         'checksums': ['49f941903f385f1cd178f1b4c6c57e12e4f5539037b523be083178578ad6df49'],
     }),
+    ('Pygments', '2.19.2', {
+        'sources': ['pygments-%(version)s.tar.gz'],
+        'checksums': ['636cb2477cec7f8952536970bc533bc43743542f70392ae026374600add5b887'],
+    }),
+    ('markdown-it-py', '3.0.0', {
+        'modulename': 'markdown_it',
+        'checksums': ['e3f60a94fa066dc52ec76661e37c851cb232d92f9886b15cb560aaada2df8feb'],
+    }),
     ('rich', '14.0.0', {
         'checksums': ['82f1bc23a6a21ebca4ae0c45af9bdbc492ed20231dcb63f297d6d1021a9d5725'],
     }),
