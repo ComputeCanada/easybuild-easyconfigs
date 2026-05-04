@@ -25,7 +25,8 @@ checksums = ['3fa0a690bf96104afb093d19a4f565012a59ab6df378df8aef5420914e82d91b']
 builddependencies = [
     ('CMake', '3.31.3'),
     ('Python', '3.13.1'),
-    ('PyYAML', '6.0.2'),
+    #('PyYAML', '6.0.2'),
+    ('Tensile', '4.43.0'), # for PyYaml
 ]
 dependencies = [
     ('HIP', _rocm_version),
