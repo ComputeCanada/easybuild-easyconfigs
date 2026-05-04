@@ -49,6 +49,9 @@ exts_list = [
         'sources': ['pygments-%(version)s.tar.gz'],
         'checksums': ['636cb2477cec7f8952536970bc533bc43743542f70392ae026374600add5b887'],
     }),
+    ('mdurl', '0.1.2', {
+        'checksums': ['bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba'],
+    }),
     ('markdown-it-py', '3.0.0', {
         'modulename': 'markdown_it',
         'checksums': ['e3f60a94fa066dc52ec76661e37c851cb232d92f9886b15cb560aaada2df8feb'],
