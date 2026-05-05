@@ -1,0 +1,36 @@
+
+# J. Sassmannshausen (Imperial College London/UK)
+
+easyblock = 'CMakeMake'
+
+name = 'json-fortran'
+version = '9.3.1'
+
+homepage = 'https://github.com/jacobwilliams/json-fortran'
+description = "JSON-Fortran: A Modern Fortran JSON API"
+
+toolchain = {'name': 'intel-compilers', 'version': '2025.2.0'}
+source_urls = ['https://github.com/jacobwilliams/json-fortran/archive/']
+sources = ['%(version)s.tar.gz']
+checksums = ['301a8d205bc7510b21c731130c30babd552c33e3f20568ce732b5e165b1f7a86']
+parallel = 1
+builddependencies = [
+    ('binutils', '2.39'),
+    ('CMake', '3.31.0'),
+]
+
+configopts = " -DUSE_GNU_INSTALL_CONVENTION=TRUE -DCMAKE_Fortran_COMPILER=ifx"
+
+runtest = 'check'
+
+#For new intel compiler (ifx) the current version of cmake does add -module option to the compiler thus, does not create .mod file in "include" path. We do it manually.
+postinstallcmds = ['cp *.mod %(installdir)s/include']
+
+sanity_check_paths = {
+    'files': ['lib/libjsonfortran-static.a', 'lib/libjsonfortran.%s' % SHLIB_EXT,
+              'include/json_module.mod', 'include/json_parameters.mod'],
+    'dirs': ['include'],
+}
+
+moduleclass = 'lib'
+
