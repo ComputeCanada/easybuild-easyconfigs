@@ -3,7 +3,7 @@
   "OpenCV-4.11.0.zip": "11dbd2c8d248fa97ac7d20f33c4bab8559ef32835d1c9274009150bb2cf5218a",
   "OpenCV-4.12.0.zip": "fa3faf7581f1fa943c9e670cf57dd6ba1c5b4178f363a188a2c8bff1eb28b7e4",
   "OpenCV-4.13.0.zip": "431cb489d275da26526581c6735d7d7c0b00f190fe940b3217d386b77aef52c7",
-  "OpenCV-4.13.0-fix-cuda13-namespace.patch": "ad954897adffe4a78f7aeb281fbdbba6b4b1e1c94a12109d1ec08d5e71e4623",
+  "OpenCV-4.13.0-fix-cuda13-namespace.patch": "3ad954897adffe4a78f7aeb281fbdbba6b4b1e1c94a12109d1ec08d5e71e4623",
   "OpenCV-4.2.0-hal-internal.patch": "aad798f0017694ba82abf4fc29ecc23db891075d0f50467cfd4cc7cd4443d4c4",
   "OpenCV-4.5.5.zip": "fb16b734db3a28e5119d513bd7c61ef417edf3756165dc6259519bb9d23d04e2",
   "OpenCV-4.6.0.zip": "158db5813a891c7eda8644259fc1dbd76b21bd1ffb9854a8b4b8115a4ceec359",
