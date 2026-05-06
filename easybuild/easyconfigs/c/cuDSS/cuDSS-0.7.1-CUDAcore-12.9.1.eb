@@ -8,10 +8,9 @@ description = """The NVIDIA cuDSS: A high-performance CUDA Library for Direct Sp
 
 toolchain = {'name': 'CUDAcore', 'version': '12.9.1'}
 toolchainopts = {'optarch': 'False'}
-local_cuda_major = '12'
+local_cuda_major = toolchain['version'].split('.')[0] # major
 
 sources = [f'lib%(namelower)s-linux-x86_64-%(version)s_cuda{local_cuda_major}-archive.tar.xz']
-checksums = ['946571d9ea164f948e402dd97a14541cb90fbec800336cfa7ae644af5937632f']
 
 sanity_check_paths = {
     'files': [
