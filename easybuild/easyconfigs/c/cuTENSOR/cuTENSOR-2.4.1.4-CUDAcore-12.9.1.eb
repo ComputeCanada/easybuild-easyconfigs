@@ -17,7 +17,6 @@ local_cuda_major = toolchain['version'].split('.')[0]
 accept_eula = True
 source_urls = ['https://developer.download.nvidia.com/compute/cutensor/redist/libcutensor/linux-x86_64/']
 sources = [f'libcutensor-linux-x86_64-%(version)s_cuda{local_cuda_major}-archive.tar.xz']
-checksums = ['032904fb8bba341e24aa45a8cc7b5afc63e4c28e22474530ccc97cfa546d0442']
 
 sanity_check_paths = {
     'files': ['include/cutensor.h', 'lib/libcutensor.so'],

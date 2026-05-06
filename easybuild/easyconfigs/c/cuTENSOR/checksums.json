@@ -1,4 +1,6 @@
 {
+    "libcutensor-linux-x86_64-2.6.0.4_cuda13-archive.tar.xz": "f70003a4817da3db2f1f7726328c31332ada89a496446fe30b90f414eccda487",
+    "libcutensor-linux-x86_64-2.4.1.4_cuda12-archive.tar.xz": "032904fb8bba341e24aa45a8cc7b5afc63e4c28e22474530ccc97cfa546d0442",
     "libcutensor-linux-x86_64-2.3.1.0_cuda12-archive.tar.xz": "b1d7ad37b24cd66a446ae76ac33bd5125aa58007a604cb64fc9c014a8d685940",
     "libcutensor-linux-x86_64-2.0.1.2-archive.tar.xz": "ededa12ca622baad706ea0a500a358ea51146535466afabd96e558265dc586a2",
     "libcutensor-linux-x86_64-2.0.0.7-archive.tar.xz": "df6338aed18e5b6ae0c49521053d1606d2a41e187d7f5eccf9180af6bbc4ef68",
