@@ -15,7 +15,7 @@ toolchain = SYSTEM
 sources = ['ANSYS-%s.tar' %local_bs,   # /tmp/ANSYS/2025R2/system-system/alldisks
            'ANSYS_%s.%s_LINX64.tgz' % (local_bs, local_sp)] # /tmp/ANSYS/2025R2/system-system
 checksums = ['f9dd9923621a858b6017bdbc250b189668503eef98673ba99e37b28272a90536',
-             '7e158f03c7fe96c3a29728c39f3a5639cfe07a1fd4ec93602b9e8ad6eb40603c']
+             '62286224a4e1155e36bcb96180e7dec27f48e3d5a30f58199ed4fbab0b3ad7a7']
 extract_sources = True
 
 # Default INSTALL in workdir /tmp/ANSYS/2025R2/system-system/alldisks with arguments:
