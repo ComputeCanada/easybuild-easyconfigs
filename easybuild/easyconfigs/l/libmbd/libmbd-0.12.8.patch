@@ -1,0 +1,22 @@
+--- src/mbd_c_api.F90.orig	2026-05-06 22:00:44.717137500 +0000
++++ src/mbd_c_api.F90	2026-05-06 22:00:15.021182746 +0000
+@@ -130,8 +130,8 @@
+ 
+     call c_f_pointer(geom_c, geom)
+     code = geom%exc%code
+-    call f_c_string(geom%exc%origin, origin)
+-    call f_c_string(geom%exc%msg, msg)
++    call fc_string(geom%exc%origin, origin)
++    call fc_string(geom%exc%msg, msg)
+     geom%exc%code = 0
+     geom%exc%origin = ''
+     geom%exc%msg = ''
+@@ -449,7 +449,7 @@
+     str_f = transfer(str_c(1:i), str_f)
+ end function
+ 
+-subroutine f_c_string(str_f, str_c)
++subroutine fc_string(str_f, str_c)
+     character(len=*), intent(in) :: str_f
+     character(kind=c_char), intent(out) :: str_c(:)
+ 

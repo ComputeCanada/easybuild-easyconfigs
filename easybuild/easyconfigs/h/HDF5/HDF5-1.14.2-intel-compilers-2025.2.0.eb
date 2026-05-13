@@ -1,0 +1,86 @@
+name = 'HDF5'
+version = '1.14.2'
+
+homepage = 'https://portal.hdfgroup.org/display/support'
+description = """HDF5 is a data model, library, and file format for storing and managing data.
+ It supports an unlimited variety of datatypes, and is designed for flexible
+ and efficient I/O and for high volume and complex data."""
+
+toolchain = {'name': 'intel-compilers', 'version': '2025.2.0'}
+toolchainopts = {'pic': True, 'extra_cflags': '-march=x86-64-v3 -axCore-AVX512 ', 'extra_cxxflags': '-march=x86-64-v3 -axCore-AVX512 ', 'extra_fflags': '-march=core-avx2 -axCore-AVX512 ', 'extra_fcflags': '-march=core-avx2 -axCore-AVX512 ', 'extra_f90flags': '-march=core-avx2 -axCore-AVX512 ', 'optarch': ''}
+
+source_urls = ['https://support.hdfgroup.org/ftp/%(name)s/releases/%(namelower)s-%(version_major_minor)s/%(namelower)s-%(version)s/src']
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['1c342e634008284a8c2794c8e7608e2eaf26d01d445fb3dfd7f33cb2fb51ac53']
+
+# For the extensions
+builddependencies = [
+    ('Cython', '0.29.36', '', SYSTEM),
+    ('python-build-bundle', '2023b', '', SYSTEM),
+]
+dependencies = [
+    ('zlib', '1.2.13'),
+    ('Szip', '2.1.1'),
+    ('SciPy-Stack', '2024a','', SYSTEM),
+]
+multi_deps = {'Python': ['3.10', '3.11']}
+
+# otherwise blosc2 libs end up in lib64 but HDF5 in lib
+preinstallopts = "ln -s lib %(installdir)s/lib64 && "
+
+enhance_sanity_check = True
+multi_deps_load_default = False
+multi_deps_extensions_only = True
+exts_defaultclass = 'PythonPackage'
+exts_filter = (
+    "module load python-build-bundle/2023b  scipy-stack/2024a ; python -c 'import %(ext_name)s'",
+    '',
+)
+
+exts_default_options = {
+    'download_dep_fail': True,
+    'preinstallopts': 'PYTHONPATH=%(installdir)s/lib/python%(pyshortver)s/site-packages:$PYTHONPATH',
+    'source_urls': ['https://pypi.python.org/packages/source/%(nameletter)s/%(name)s'],
+    'use_pip': True,
+}
+
+exts_list = [
+    ('cached-property', '1.5.2', {
+        'checksums': ['9fa5755838eecbb2d234c3aa390bd80fbd3ac6b6869109bfc1b499f7bd89a130'],
+    }),
+    ('ndindex', '1.7', {
+        'checksums': ['bf9bd0b76eeada1c8275e04091f8291869ed2b373b7af48e56faf7579fd2efd2'],
+    }),
+    ('py-cpuinfo', '9.0.0', {
+        'modulename': 'cpuinfo',
+        'checksums': ['3cdbbf3fac90dc6f118bfd64384f309edeadd902d7c8fb17f02ffa1fc3f49690'],
+    }),
+    ('h5py', '3.12.1', {
+        'preinstallopts': 'sed -i -e "/cmdclass = CMDCLASS,/a zip_safe = False," setup.py ; H5PY_SETUP_REQUIRES=0 ',
+        'checksums': ['326d70b53d31baa61f00b8aa5f95c2fcb9621a3ee8365d770c551a13dbbcbfdf'],
+    }),
+    ('numexpr', '2.9.0', {
+        'checksums': ['f21d12f6c432ce349089eb95342babf6629aebb3fddf187a4492d3aadaadaaf0'],
+    }),
+    ('blosc2', '2.7.1', {
+        'checksums': ['34db4d41543b16e894d507d6c7d10a9a67c9dd420ff40b072f7c39185cbb8fe8'],
+    }),
+    ('tables', '3.9.1', {
+        'preinstallopts': 'unset LIBS && rm -r c-blosc/{blosc,internal-complibs} && sed -i "s@/usr/local@$EBROOTGENTOO@" setup.py && BLOSC2_DIR=$EBROOTBLOSC2 ',
+        'checksums': ['48331503cd509c9f1f95cf2f5c64a57c48c0aa5141423f0eca352965c4f9bf81'],
+    }),
+    ('msgpack', '1.0.5', {
+        'checksums': ['c075544284eadc5cddc70f4757331d99dcbc16b2bbd4849d15f8aae4cf36d31c'],
+    }),
+
+
+]
+
+sanity_check_paths = {
+    'files': ['lib/libhdf5.so'],
+    'dirs': ['lib/python%(pyshortver)s/site-packages'],
+}
+
+modextrapaths = {'EBPYTHONPREFIXES': ''}
+
+moduleclass = 'data'

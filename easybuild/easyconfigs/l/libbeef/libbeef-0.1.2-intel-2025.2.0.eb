@@ -1,0 +1,37 @@
+easyblock = 'ConfigureMake'
+
+name = 'libbeef'
+version = '0.1.2'
+
+homepage = 'https://github.com/vossjo/libbeef'
+description = """BEEF is a library-based implementation of the Bayesian
+Error Estimation Functional, suitable for linking against by Fortran-
+or C-based DFT codes. A description of BEEF can be found at
+http://dx.doi.org/10.1103/PhysRevB.85.235149."""
+
+toolchain = {'name': 'intel-compilers', 'version': '2025.2.0'}
+
+preconfigopts = 'dos2unix -f * ; autoreconf ; automake --add-missing ; '
+toolchainopts = {'openmp': False}
+builddependencies = [
+('FlexiBLAS', '3.4.5'),
+]
+sources = [{
+           'filename': 'v%(version)s.tar.gz',
+	   'git_config': {
+	        'url': 'https://github.com/vossjo',
+	        'repo_name': 'libbeef',
+       	        'commit': '535ea67',
+	        'recursive': False,
+	   },
+}]
+checksums = ['384f7c7fd2dd8a9a9e245be3a8ed0fbf0195e8c436c8904f2bff00a975296b1f']
+
+configopts = 'CC="$CC"'
+
+sanity_check_paths = {
+    'files': ['bin/bee', 'lib/libbeef.a'],
+    'dirs': [],
+}
+
+moduleclass = 'chem'

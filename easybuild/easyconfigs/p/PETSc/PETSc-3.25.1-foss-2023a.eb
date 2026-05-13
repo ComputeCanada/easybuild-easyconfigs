@@ -1,0 +1,126 @@
+name = 'PETSc'
+version = "3.25.1"
+
+homepage = 'http://www.mcs.anl.gov/petsc'
+description = """PETSc, pronounced PET-see (the S is silent), is a suite of data structures and routines for the
+ scalable (parallel) solution of scientific applications modeled by partial differential equations."""
+
+toolchain = {'name': 'foss', 'version': '2023a'}
+toolchainopts = {'usempi': True, 'pic': True}
+
+source_urls = ['https://web.cels.anl.gov/projects/%(namelower)s/download/release-snapshots/']
+sources = [SOURCELOWER_TAR_GZ]
+
+dependencies = [
+    ('HDF5', '1.14.6', '-mpi'),
+    ('FFTW.MPI', '3.3.10'),
+]
+
+# For the extension
+builddependencies = [
+    ('numpy', '2.4.2'),
+    ('mpi4py', '4.1.0'),
+    ('CMake', '3.31.0'),
+    ('Cython', '3.2.4'),
+]
+
+multi_deps = {'Python': ['3.11', '3.12', '3.13', '3.14']}
+multi_deps_extensions_only = True
+
+configopts = " ".join([
+    '--with-strict-petscerrorcode',
+    '--with-hdf5=1',
+    '--with-hdf5-dir=$EBROOTHDF5',
+    '--with-cxx-dialect=C++14',
+    '--with-memalign=64',
+    '--with-python=no',
+    '--with-mpi4py=no',
+])
+
+
+download_deps = [
+    'triangle',
+    'hpddm',
+    'strumpack',
+]
+
+postinstallcmds = [
+    'ln -sf %(installdir)s/lib/%(namelower)s/bin %(installdir)s/bin',
+    'ln -sf %(installdir)s/lib/%(namelower)s/conf %(installdir)s/conf',
+]
+
+keepsymlinks = True
+
+shared_libs = 1
+
+download_deps_static = [
+    'mumps',
+    'ptscotch',
+    'superlu',
+    'superlu_dist',
+    'parmetis',
+    'metis',
+    'ml',
+    'SuiteSparse',
+    'hypre',
+    'prometheus',
+    'spooles',
+    'chaco',
+    'slepc',
+    'spai',
+    'party',
+]
+
+exts_defaultclass = 'PythonPackage'
+exts_default_options = {
+    'use_pip': True,
+    'sanity_pip_check': False,
+    'runtest': False,
+    'check_ldshared': False,
+    'preconfigopts': '#',
+    'buildopts': '#',
+}
+exts_list = [
+    ('petsc4py', version, {
+        'modulename': 'petsc4py',
+        'source_urls': ['https://pypi.python.org/packages/source/%(nameletter)s/%(name)s'],
+    }),
+    # slepc4py version should matched version of slepc pulled by petsc. SLEPC 3.21.1 is pulled
+    ('slepc4py', '3.25.0', {
+        'modulename': 'slepc4py',
+        'source_urls': ['https://pypi.python.org/packages/source/%(nameletter)s/%(name)s'],
+        'preinstallopts': 'SLEPC_DIR=$PETSC_DIR PETSC_ARCH="installed-arch-linux2-c-opt" ',
+    }),
+]
+
+exts_filter = ("python -c 'import %(ext_name)s'", '')
+
+# Some tests fails due to not finding petsc.so. Temporary disable tests.
+runtest = False
+
+sanity_check_commands = [
+    "module load scipy-stack && python -c 'import petsc4py;'",
+    "module load scipy-stack && python %(installdir)s/lib/petsc/bin/PetscBinaryIO.py --help",
+    "module load scipy-stack && python -c 'import slepc4py;'",
+]
+
+sanity_check_paths = {
+    'files': [
+        'lib/libpetsc.so',
+    ],
+    'dirs': [
+        'bin',
+        'conf',
+        'include',
+        'lib',
+        'share',
+        'lib/python%(pyshortver)s/site-packages'
+    ]
+}
+
+modextrapaths = {'EBPYTHONPREFIXES': ['']}
+
+moduleclass = 'numlib'
+modluafooter = """
+family("%(namelower)s")
+"""

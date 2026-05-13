@@ -65,7 +65,9 @@ exts_list = [
         'preinstallopts': ('sed -i -e "/cmdclass = CMDCLASS,/a zip_safe = False," setup.py && '
 	                   'H5PY_SETUP_REQUIRES=0 LD_LIBRARY_PATH=%(installdir)s/lib '),
     }),
-    ('numexpr', '2.14.1'),
+    ('numexpr', '2.14.1', {
+        'patches': ['numexpr-2.14.1_cmath.patch'],
+    }),
     ('blosc2', '3.12.2'),
     ('tables', '3.11.0', {
         'preinstallopts': ('ln -s lib64 %(installdir)s/lib/python%(pyshortver)s/site-packages/tables.libs && '

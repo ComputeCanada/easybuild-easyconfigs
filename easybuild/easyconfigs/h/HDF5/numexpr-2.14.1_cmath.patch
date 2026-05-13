@@ -1,0 +1,67 @@
+Compilation fixes for numexpr with Intel compilers
+diff -ur numexpr-2.14.1/numexpr/functions.hpp numexpr-2.14.1.new/numexpr/functions.hpp
+--- numexpr-2.14.1/numexpr/functions.hpp	2025-10-13 15:50:29.000000000 +0000
++++ numexpr-2.14.1.new/numexpr/functions.hpp	2026-05-12 15:41:37.199889500 +0000
+@@ -106,9 +106,15 @@
+ #define ELIDE_FUNC_BD
+ #define FUNC_BD(...)
+ #endif
++#ifdef __INTEL_LLVM_COMPILER
++FUNC_BD(FUNC_ISNAN_BD,   "isnan_bd",    isnand_, vdIsnan)
++FUNC_BD(FUNC_ISFINITE_BD, "isfinite_bd", isfinited_, vdIsfinite)
++FUNC_BD(FUNC_ISINF_BD, "isinf_bd", isinfd_, vdIsinf)
++#else
+ FUNC_BD(FUNC_ISNAN_BD,   "isnan_bd",    isnand, vdIsnan)
+ FUNC_BD(FUNC_ISFINITE_BD, "isfinite_bd", isfinited, vdIsfinite)
+ FUNC_BD(FUNC_ISINF_BD, "isinf_bd", isinfd, vdIsinf)
++#endif
+ FUNC_BD(FUNC_SIGNBIT_BD, "signbit_bd",  signbit, vdSignBit)
+ FUNC_BD(FUNC_BD_LAST,    NULL,          NULL,  NULL)
+ #ifdef ELIDE_FUNC_BD
+@@ -124,7 +130,11 @@
+ FUNC_BF(FUNC_ISNAN_BF,   "isnan_bf",    isnanf_,  isnanf2, vsIsnan)
+ FUNC_BF(FUNC_ISFINITE_BF, "isfinite_bf", isfinitef_, isfinitef2, vsIsfinite)
+ FUNC_BF(FUNC_ISINF_BF, "isinf_bf", isinff_, isinff2, vsIsinf)
++#ifdef __INTEL_LLVM_COMPILER
++FUNC_BF(FUNC_SIGNBIT_BF, "signbit_bf", signbitf_, signbitf2, vsSignBit)
++#else
+ FUNC_BF(FUNC_SIGNBIT_BF, "signbit_bf", signbitf, signbitf2, vsSignBit)
++#endif
+ FUNC_BF(FUNC_BF_LAST,    NULL,            NULL,        NULL,    NULL)
+ #ifdef ELIDE_FUNC_BF
+ #undef ELIDE_FUNC_BF
+diff -ur numexpr-2.14.1/numexpr/numexpr_config.hpp numexpr-2.14.1.new/numexpr/numexpr_config.hpp
+--- numexpr-2.14.1/numexpr/numexpr_config.hpp	2025-10-13 15:50:29.000000000 +0000
++++ numexpr-2.14.1.new/numexpr/numexpr_config.hpp	2026-05-12 15:42:11.816791497 +0000
+@@ -42,7 +42,11 @@
+ #endif
+ #include <cmath>
+ //no single precision version of signbit in C++ standard
++#ifdef __INTEL_LLVM_COMPILER
++inline bool signbitf_(float x) { return signbit((double)x); }
++#else
+ inline bool signbitf(float x) { return signbit((double)x); }
++#endif
+ 
+ #ifdef _WIN32
+   #ifndef __MINGW32__
+@@ -56,10 +60,19 @@
+    non-overloaded wrappers for these functions) */
+ inline bool isfinitef_(float x) { return !!std::isfinite(x); }
+ inline bool isnanf_(float x)    { return !!std::isnan(x); }
++#ifdef __INTEL_LLVM_COMPILER
++inline bool isfinited_(double x) { return !!std::isfinite(x); }
++inline bool isnand_(double x)    { return !!std::isnan(x); }
++#else
+ inline bool isfinited(double x) { return !!std::isfinite(x); }
+ inline bool isnand(double x)    { return !!std::isnan(x); }
++#endif
+ inline bool isinff_(float x) { return !!std::isinf(x); }
++#ifdef __INTEL_LLVM_COMPILER
++inline bool isinfd_(double x)    { return !!std::isinf(x); }
++#else
+ inline bool isinfd(double x)    { return !!std::isinf(x); }
++#endif
+ 
+ // To handle overloading of fmax/fmin in cmath and match NumPy behaviour for NaNs
+ inline double fmaxd(double x, double y)    { return (isnand(x) | isnand(y))? NAN : fmax(x, y); }

@@ -1,0 +1,35 @@
+easyblock = 'CMakeMake'
+
+name = 'dftd4'
+version = '3.7.0'
+
+homepage = 'https://github.com/dftd4/dftd4/'
+description = "DFTD4 van-der-Waals functional is generally Applicable Atomic-Charge Dependent London Dispersion Correction."
+
+toolchain = {'name': 'intel-compilers', 'version': '2025.2.0'}
+
+
+toolchainopts = {'extra_cflags': '-march=x86-64-v3 -axCore-AVX512 ', 'extra_cxxflags': '-march=x86-64-v3 -axCore-AVX512 ', 'extra_fflags': '-march=core-avx2 -axCore-AVX512 ', 'extra_fcflags': '-march=core-avx2 -axCore-AVX512 ', 'extra_f90flags': '-march=core-avx2 -axCore-AVX512 ', 'optarch': ''}
+
+
+
+source_urls = ['https://github.com/%(name)s/%(name)s/archive/refs/tags/']
+sources = ['v%(version)s.tar.gz']
+checksums = ['f00b244759eff2c4f54b80a40673440ce951b6ddfa5eee1f46124297e056f69c']  # v3.7.0.tar.gz,
+
+builddependencies = [
+    ('CMake', '3.27.7', '', SYSTEM),
+    ('FlexiBLAS', '3.4.5'),
+]
+
+configopts = [
+    '-DWITH_API_V2="on" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DBLAS_LIBRARIES="-lflexiblas_intel" -DLAPACK_LIBRARIES="-lflexiblas_intel"',
+]
+
+
+sanity_check_paths = {
+    'files': ['lib64/libdftd4.so', 'lib64/libmctc-lib.so', 'lib64/libmstore.so', 'lib64/libmulticharge.so.0', 'bin/%(name)s', 'bin/mctc-convert', 'bin/mstore-fortranize', 'bin/mstore-info', 'bin/multicharge'],
+    'dirs': [],
+}
+
+moduleclass = 'chem'

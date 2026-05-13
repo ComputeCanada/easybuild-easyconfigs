@@ -37,4 +37,6 @@ sanity_check_paths = {
 
 accept_eula = True
 
+modextravars = {'CUDNN_HOME': "%(installdir)s"}
+
 moduleclass = 'numlib'
