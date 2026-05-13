@@ -12,7 +12,7 @@ toolchainopts = {'openmp': False, 'pic': True}
 sources = [{
     'filename': 'NAMD_%(version)s_Source.tar.gz',
     'extract_cmd': ('tar xzf %s && '
-    		    'sed "s/--offload-arch=.* /--offload-arch=%(amdgcn_capabilities)s /"'
+                    'sed -i "s/--offload-arch=.* /--offload-arch=%(amdgcn_capabilities)s /"'
                     ' NAMD_%(version)s_Source/arch/Linux-x86_64.hip')
 }]
 
