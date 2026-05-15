@@ -1,0 +1,25 @@
+easyblock = 'PythonPackage'
+
+name = 'metagenome-atlas'
+version = '19.0.1'
+homepage = 'https://github.com/metagenome-atlas/atlas'
+description = '''Metagenome-atlas is a easy-to-use metagenomic pipeline based on snakemake. It handles all steps from QC, Assembly, Binning, to Annotation.'''
+
+toolchain = {'name': 'intel-compilers', 'version': '2023.2.1'}
+source_urls = ['https://github.com/metagenome-atlas/atlas/archive/refs/tags']
+sources = ['v%(version)s.tar.gz']
+checksums = ['8e85d2ca77ade948af5f4b31e13837efcd730af5b18660fd42b0a9845d61c09b']
+
+dependencies = [ 
+       ('BBMap', '39.06'),
+]
+multi_deps = {'Python': ['3.11', '3.12', '3.13']}
+
+
+preinstallopts = 'python -m venv %(installdir)s ; source %(installdir)s/venv/bin/activate ; pip install --upgrade --no-index pip ; pip install --no-index  snakemake==9.17.1 pandas==3.0.0 click==8.3.3 ruamel.yaml==0.18.16 biopython==1.86 cookiecutter==1.7.3 ./ ; '
+sanity_check_commands = ['python -c "import atlas"']
+sanity_pip_check = False
+modextrapaths = {'EBPYTHONPREFIXES': ''}
+moduleclass = 'bio'
+options = {'modulename': 'atlas'}
+
