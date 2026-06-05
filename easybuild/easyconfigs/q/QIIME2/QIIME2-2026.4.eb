@@ -16,7 +16,6 @@ dependencies = [('Apptainer', '1')]
 
 installopts = 'docker://quay.io/qiime2/qiime2:%(version)s'
 
-container_path = '/cvmfs/containers.computecanada.ca/content/containers/%(namelower)s-%(version)s'
 aliases = ["qiime"]
 apptainer_params = '-c'
 
