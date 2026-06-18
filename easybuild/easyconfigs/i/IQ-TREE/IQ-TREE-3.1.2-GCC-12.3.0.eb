@@ -1,0 +1,45 @@
+easyblock = 'CMakeMake'
+
+name = 'IQ-TREE'
+version = '3.1.2'
+
+# HTTPS is not working
+homepage = 'http://www.iqtree.org/'
+description = """Efficient phylogenomic software by maximum likelihood"""
+
+toolchain = {'name': 'GCC', 'version': '12.3.0'}
+
+sources = [{
+    'filename': 'v%(version)s.tar.xz',
+    'git_config': {
+        'url': 'https://github.com/iqtree',
+        'repo_name': 'iqtree3',
+        'tag': 'v%(version)s',
+        'recursive': True,
+    }
+}]
+checksums = ['3e77cc49d2cc834ab5816935f7b6891b6ca6fe8827521cfb25436f3e79ed10ed']
+
+builddependencies = [
+    ('CMake', '4.0.3'),
+    ('Eigen', '3.4.0'),
+    ('Boost', '1.85.0'),
+]
+dependencies = [
+    ('LSD2', '2.4.1'),
+]
+
+configopts = ' -DIQTREE_FLAGS=omp -DUSE_LSD2=ON '
+
+sanity_check_paths = {
+    'files': ['bin/iqtree3'],
+    'dirs': [],
+}
+
+sanity_check_commands = [
+    "iqtree3 --help",
+    "mkdir -p $TMPDIR/test-omp",
+    "cd $TMPDIR/test-omp && cp -a %(install2dir)s/example.phy . && iqtree3 -s example.phy -redo",
+]
+
+moduleclass = 'bio'
