@@ -39,7 +39,7 @@ sanity_check_paths = {
 sanity_check_commands = [
     "iqtree3 --help",
     "mkdir -p $TMPDIR/test-omp",
-    "cd $TMPDIR/test-omp && cp -a %(install2dir)s/example.phy . && iqtree3 -s example.phy -redo",
+    "cd $TMPDIR/test-omp && cp -a %(installdir)s/example.phy . && iqtree3 -s example.phy -redo",
 ]
 
 moduleclass = 'bio'
