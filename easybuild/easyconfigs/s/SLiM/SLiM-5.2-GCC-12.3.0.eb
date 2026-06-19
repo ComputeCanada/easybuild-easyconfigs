@@ -1,0 +1,41 @@
+easyblock = 'CMakeMake'
+
+name = 'SLiM'
+version = '5.2'
+
+homepage = 'https://messerlab.org/slim'
+description = """SLiM is an evolutionary simulation framework that combines a powerful engine for population
+ genetic simulations with the capability of modeling arbitrarily complex evolutionary scenarios."""
+
+toolchain = {'name': 'GCC', 'version': '12.3.0'}
+
+source_urls = ['https://github.com/MesserLab/%(name)s/archive/refs/tags/']
+sources = ['v%(version)s.tar.gz']
+checksums = ['ec13f5bcc1784786a556594fa362605cc569b66d3e31838513ab71138df65341']
+
+#patches = ['%(name)s-%(version)s_use_external_zlib_gsl.patch']
+
+builddependencies = [
+    ('CMake', '3.31.0'),
+    ('Qt6', '6.5.3'),
+]
+
+dependencies = [
+    ('GSL', '2.7'),
+]
+
+configopts = "-DBUILD_SLIMGUI=ON "
+
+sanity_check_paths = {
+    'files': ['bin/eidos', 'bin/%(namelower)s'],
+    'dirs': [],
+}
+
+sanity_check_commands = [
+    "eidos -usage",
+    "eidos -testEidos",
+    "%(namelower)s -usage",
+    "%(namelower)s -testSLiM",
+]
+
+moduleclass = 'tools'
