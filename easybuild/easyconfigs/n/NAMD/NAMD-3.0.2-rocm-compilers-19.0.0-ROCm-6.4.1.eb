@@ -12,7 +12,7 @@ toolchainopts = {'openmp': False, 'pic': True}
 sources = [{
     'filename': 'NAMD_%(version)s_Source.tar.gz',
     'extract_cmd': ('tar xzf %s && '
-    		    'sed "s/--offload-arch=.* /--offload-arch=%(amdgcn_capabilities)s /"'
+                    'sed -i "s/--offload-arch=.* /--offload-arch=%(amdgcn_capabilities)s /"'
                     ' NAMD_%(version)s_Source/arch/Linux-x86_64.hip')
 }]
 
@@ -45,9 +45,9 @@ charm_extra_cxxflags = '-fpermissive'
 namd_cfg_opts = "--with-single-node-hip --rocm-prefix $EBROOTHIP --hipcub-prefix $EBROOTHIPCUB --rocprim-prefix $EBROOTROCPRIM"
 
 # needed for MI300+ (e.g. gfx942)
-if 'gfx942' in '%(amdgcn_capabilities)s':
-    prebuildopts = 'echo "CXXOPTS+=-DUSE_TABLE_ARRAYS" >> Make.config && '
-    prebuildopts += 'echo "CUDAFLAGS+=-DUSE_TABLE_ARRAYS" >> Make.config && '
+prebuildopts = 'if [[ "%(amdgcn_capabilities)s" == *gfx942* ]]; then'
+prebuildopts += ' echo "CXXOPTS+=-DUSE_TABLE_ARRAYS" >> Make.config;'
+prebuildopts += ' echo "CUDAFLAGS+=-DUSE_TABLE_ARRAYS" >> Make.config; fi &&'
 
 runtest=False
 

@@ -1,0 +1,40 @@
+easyblock = 'CMakeMakeCp'
+
+name = 'GeneRax'
+version = '2.1.3'
+
+homepage = 'https://github.com/BenoitMorel/GeneRax'
+description = """GeneRax is a parallel tool for species tree-aware maximum likelihood based gene family tree inference under gene duplication, transfer, and loss."""
+
+toolchain = {'name': 'gompi', 'version': '2023a'}
+
+sources =[{
+     'filename': '%(namelower)s-%(version)s.tar.xz',
+     'git_config': {
+         'url': 'https://github.com/BenoitMorel',
+         'repo_name': 'GeneRax',
+         'tag': '%(version)s',
+         'recursive': True,
+    },
+}]
+
+#source_urls = ['https://github.com/BenoitMorel/GeneRax/archive/refs/tags']
+#sources = ["%(version)s.tar.gz"]
+checksums = ['4eaa2980fa6e11b3f5ee005165593d3f1038d2f98717fb1d18b561d4fdbbe68c']
+
+builddependencies = [('CMake', '3.31.0')]
+
+configopts = '-DBUILD_TESTING=OFF'
+
+files_to_copy = [(['bin/*'], 'bin'),]
+
+sanity_check_paths = {
+    'files': ['bin/generax'],
+   'dirs': ['bin'],
+}
+
+sanity_check_commands = [
+    'generax -h'
+]
+
+moduleclass = 'bio'

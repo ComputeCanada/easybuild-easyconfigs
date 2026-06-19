@@ -1,0 +1,32 @@
+easyblock = 'Tarball'
+
+name = 'libmathdx'
+version = '0.3.2'
+
+homepage = 'https://developer.nvidia.com/cublasdx-downloads'
+description = """libmathdx is a library used to integrate cuBLASDx and cuFFTDx into Warp"""
+
+toolchain = {'name': 'CUDAcore', 'version': '13.2.0'}
+toolchainopts = {'optarch': 'False'}
+local_cuda_major = toolchain['version'].split('.')[0] # major
+
+sources = [f'%(namelower)s-Linux-x86_64-%(version)s-cuda{local_cuda_major}.0.tar.gz']
+checksums = ['e075273e19e822e9ac268a8af19cea679c19e54682446206a6a1f596fd028515']
+
+sanity_check_paths = {
+    'files': [
+        "lib/libmathdx.so",
+        "lib/libmathdx_static.a",
+        "include/libcommondx.h",
+        "include/libcublasdx.h",
+        "include/libcufftdx.h",
+        "include/libcuranddx.h",
+        "include/libcusolverdx.h",
+        "include/libmathdx.h",
+    ],
+    'dirs': ['include', 'lib'],
+}
+
+accept_eula = True
+
+moduleclass = 'numlib'

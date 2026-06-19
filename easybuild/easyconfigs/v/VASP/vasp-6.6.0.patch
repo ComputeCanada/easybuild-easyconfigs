@@ -1,0 +1,114 @@
+--- arch/makefile.include.intel.orig	2026-03-12 14:40:59.000000000 -0700
++++ arch/makefile.include.intel	2026-05-12 09:10:59.000000000 -0700
+@@ -10,8 +10,8 @@
+ 
+ CPP         = fpp -f_com=no -free -w0  $*$(FUFFIX) $*$(SUFFIX) $(CPP_OPTIONS)
+ 
+-FC          = mpiifort
+-FCL         = mpiifort
++FC          = mpiifx
++FCL         = mpiifx
+ 
+ FREE        = -free -names lowercase
+ 
+@@ -24,7 +24,7 @@
+ # For what used to be vasp.5.lib
+ CPP_LIB     = $(CPP)
+ FC_LIB      = $(FC)
+-CC_LIB      = icc
++CC_LIB      = icx
+ CFLAGS_LIB  = -O
+ FFLAGS_LIB  = -O1
+ FREE_LIB    = $(FREE)
+@@ -32,7 +32,7 @@
+ OBJECTS_LIB = linpack_double.o
+ 
+ # For the parser library
+-CXX_PARS    = icpc
++CXX_PARS    = icpx
+ LLIBS       = -lstdc++
+ 
+ ##
+@@ -48,27 +48,62 @@
+ 
+ # Intel MKL (FFTW, BLAS, LAPACK, and scaLAPACK)
+ # (Note: for Intel Parallel Studio's MKL use -mkl instead of -qmkl)
+-FCL        += -qmkl=sequential
+-MKLROOT    ?= /path/to/your/mkl/installation
+-LLIBS      += -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64
+-INCS        =-I$(MKLROOT)/include/fftw
++#FCL        += -qmkl=sequential
++#MKLROOT    ?= /path/to/your/mkl/installation
++#LLIBS      += -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64
++#INCS        =-I$(MKLROOT)/include/fftw
++LLIBS      += -lflexiblas_intel -lscalapack -lfftw3
++INCS        =-I$(EBROOTFFTW)/include
++
+ 
+ # HDF5-support (optional but strongly recommended, and mandatory for some features)
+-#CPP_OPTIONS+= -DVASP_HDF5
+-#HDF5_ROOT  ?= /path/to/your/hdf5/installation
+-#LLIBS      += -L$(HDF5_ROOT)/lib -lhdf5_fortran
+-#INCS       += -I$(HDF5_ROOT)/include
++CPP_OPTIONS+= -DVASP_HDF5
++HDF5_ROOT  ?= $(EBROOTHDF5)
++LLIBS      += -lhdf5_fortran
++INCS       += -I$(HDF5_ROOT)/include
+ 
+ # For the VASP-2-Wannier90 interface (optional)
+-#CPP_OPTIONS    += -DVASP2WANNIER90
+-#WANNIER90_ROOT ?= /path/to/your/wannier90/installation
+-#LLIBS          += -L$(WANNIER90_ROOT)/lib -lwannier
+-
+-# For machine learning library VASPml (experimental)
+-#CPP_OPTIONS += -Dlibvaspml
+-#CXX_ML       = mpiicpc
+-#CXXFLAGS_ML  = -O3 -std=c++17 -Wall
+-#INCLUDE_ML   =
+-## This may be required for the C++17 filesystem library if the underlying
+-## system compiler is older than GNU 9.1. For newer versions this can be removed.
+-#LLIBS       += -lstdc++fs
++CPP_OPTIONS    += -DVASP2WANNIER90
++LLIBS          += -lwannier
++
++#Libxc-support
++CPP_OPTIONS += -DUSELIBXC
++LLIBS       += -lxcf03 -lxc
++INCS        += -I$(EBROOTLIBXC)/include
++#Libbeef support
++CPP_OPTIONS += -Dlibbeef
++LLIBS       += -lbeef
++
++#DFTD4 support
++CPP_OPTIONS += -DDFTD4_API_V3
++DFTD4_ROOT  ?= $(EBROOTDFTD4)
++LLIBS       += $(shell pkg-config --with-path=$(DFTD4_ROOT)/lib64/pkgconfig --libs dftd4 mctc-lib)
++INCS        += $(shell pkg-config --with-path=$(DFTD4_ROOT)/lib64/pkgconfig --cflags dftd4)
++# simple-DFT-D3
++CPP_OPTIONS += -DSDFTD3
++SDFTD3_ROOT ?= $(EBROOTSIMPLEMINDFTD3)
++LLIBS       +=  -ls-dftd3 -liomp5
++INCS        += -I$(SDFTD3_ROOT)/include/s-dftd3/IntelLLVM-$(EBVERSIONINTELMINCOMPILERS)
++INCS        += -I$(EBROOTMCTCMINLIB)/include/mctc-lib/IntelLLVM-$(EBVERSIONINTELMINCOMPILERS)
++#ELPA support 
++CPP_OPTIONS += -DELPA
++ELPA_ROOT   = $(EBROOTELPA)
++LLIBS       += -lelpa
++INCS        += -I$(ELPA_ROOT)/include/elpa-$(EBVERSIONELPA)/modules
++INCS        += -I$(ELPA_ROOT)/include/elpa-$(EBVERSIONELPA)/elpa
++
++# For machine learning library vaspml (experimental)
++CPP_OPTIONS += -Dlibvaspml
++CPP_OPTIONS += -DVASPML_USE_CBLAS
++CPP_OPTIONS += -DVASPML_NO_MKL
++CPP_OPTIONS += -DVASPML_DEBUG_LEVEL=3
++CXX_ML      = mpiicpc -cxx=icpx
++CXXFLAGS_ML = -O3 -std=c++17 -Wall
++INCLUDE_ML  =
++
++#support LIBMBD
++CPP_OPTIONS += -DLIBMBD
++LIBMBD_ROOT ?= $(EBROOTLIBMBD)
++LLIBS       +=  -lmbd
++INCS        += -I$(LIBMBD_ROOT)/include/mbd
++
