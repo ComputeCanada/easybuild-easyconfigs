@@ -1,3 +1,5 @@
+easyblock = 'Binary'
+
 name = 'STARCCM'
 version = '21.02.008'
 versionsuffix = "-mixed"
@@ -13,8 +15,10 @@ This version uses mixed precision."""
 toolchain = SYSTEM
 
 # sha256sum 
-sources = ['Simcenter_STAR-CCM+_2602.0001-Linux-x64-mixed.tar.gz']
-checksums = ['b5867db2351c3f7b2a97ec2527db1c4d9248ee1896f8a240a809094f25427af9']
+#sources = ['Simcenter_STAR-CCM+_2602.0001-Linux-x64-mixed.tar.gz']
+#checksums = ['b5867db2351c3f7b2a97ec2527db1c4d9248ee1896f8a240a809094f25427af9']
+sources = ['preinstalled/21.02.008.tar.gz']
+checksums = ['f49ba5dfbb8098f69e6b6006416306ea186545b8b5894304614e1977acf72bd6']
 extract_sources = True
 
 postinstallcmds = [
@@ -27,7 +31,12 @@ postinstallcmds = [
 ]
 
 modextrapaths = {
-    'PATH': ['STAR-CCM+%(version)s/star/bin'],
+    'PATH': ["STAR-CCM+%(version)s/star/bin"],
+}
+
+sanity_check_paths = {
+    'files': ['STAR-CCM+%(version)s/star/bin/starccm+'],
+    'dirs': [],
 }
 
 moduleclass = 'tools'
