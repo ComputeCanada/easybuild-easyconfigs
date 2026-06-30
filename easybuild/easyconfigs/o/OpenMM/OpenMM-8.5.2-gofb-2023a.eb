@@ -48,7 +48,7 @@ runtest = """test -e ARGS="-E \'(Integrator)|(Thermostat)|(Barostat)|(Rpmd)|(Amo
 exts_defaultclass = 'PythonPackage'
 exts_list = [
     ('pdbfixer', '1.12', {
-        'installopts': ' --no-deps ',
+        'installopts': '',
         'preinstallopts': '',
         'runtest': False,
         'source_urls': ['https://github.com/openmm/pdbfixer/archive/refs/tags'],
@@ -56,6 +56,7 @@ exts_list = [
         'use_pip': True,
         'checksums': ['a5c0b05dfaf2cdcad3b8ffc9ee1e6a955628aade0dda653da04d4a12ba4fe3ec'],
         'pip_ignore_installed': False,
+        'use_pip_for_deps': True,
     }),
 ]
 
