@@ -1,0 +1,36 @@
+easyblock = 'MakeCp'
+
+name = 'ngsRelate'
+version = '2.0'
+homepage = 'https://github.com/ANGSD/NgsRelate'
+description = """ngsRelate infers relatedness and inbreeding coefficients for pairs of individuals
+from low-coverage NGS data using genotype likelihoods."""
+
+toolchain = {'name': 'GCCcore', 'version': '12.3.0'}
+
+source_urls = ['https://github.com/ANGSD/NgsRelate/archive/refs/tags/']
+sources = ['v%(version)s.tar.gz']
+checksums = ['f2c20228720298d6ef2fd34324449ba7ebdd4b987477c78bd20ed99f176218c6']
+
+dependencies = [
+    ('HTSlib', '1.18'),
+]
+
+# Tell Makefile where HTSlib is
+#buildopts = 'HTSSRC=$EBROOTHTSLIB'
+
+# Files to copy after build
+
+files_to_copy = [
+    (['ngsRelate'], 'bin')
+]
+postinstallcmds = [
+    'chmod 755 %(installdir)s/bin/ngsRelate'
+]
+
+sanity_check_paths = {
+    'files': ['bin/ngsRelate'],
+    'dirs': []
+}
+
+moduleclass = 'bio'
