@@ -14,7 +14,7 @@ toolchain = SYSTEM
 source_urls = ['https://github.com/usadellab/Trimmomatic/releases/download/v%(version)s/']
 sources = [SOURCE_ZIP]
 
-dependencies = [('Java', '17')]
+dependencies = [('Java', '25')]
 
 modloadmsg = """To execute Trimmomatic run: java -jar $EBROOTTRIMMOMATIC/trimmomatic-%(version)s.jar\n"""
 
@@ -22,5 +22,7 @@ sanity_check_paths = {
     'files': ["trimmomatic-%(version)s.jar"],
     'dirs': [""],
 }
+
+sanity_check_commands = ['java -jar $EBROOTTRIMMOMATIC/trimmomatic-%(version)s.jar -version']
 
 moduleclass = 'bio'
