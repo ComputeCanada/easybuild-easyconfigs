@@ -25,7 +25,6 @@ sources = [
         'filename': '%(name)s-contrib-%(version)s.tar.gz',
     }
 ]
-patches = ["%(name)s-4.2.0-hal-internal.patch"]
 
 builddependencies = [
     ("ant", "1.10.14"),
