@@ -1,0 +1,114 @@
+diff --git a/src/Allele.cpp b/src/Allele.cpp
+index 895c9e7..7dead77 100644
+--- a/src/Allele.cpp
++++ b/src/Allele.cpp
+@@ -1,5 +1,5 @@
+ #include "Allele.h"
+-#include <vcflib/multichoose.h>
++#include <multichoose/multichoose.h>
+ #include "TryCatch.h"
+ 
+ 
+diff --git a/src/AlleleParser.cpp b/src/AlleleParser.cpp
+index 9b1e340..3c6e428 100644
+--- a/src/AlleleParser.cpp
++++ b/src/AlleleParser.cpp
+@@ -1,5 +1,5 @@
+ #include "AlleleParser.h"
+-#include <vcflib/multichoose.h> // includes generic functions, so it must be included here
++#include <multichoose/multichoose.h> // includes generic functions, so it must be included here
+                                 // otherwise we will get a linker error
+                                 // see: http://stackoverflow.com/questions/36039/templates-spread-across-multiple-files
+                                 // http://www.cplusplus.com/doc/tutorial/templates/ "Templates and Multi-file projects"
+diff --git a/src/AlleleParser.h b/src/AlleleParser.h
+index 687c5d0..cae0882 100644
+--- a/src/AlleleParser.h
++++ b/src/AlleleParser.h
+@@ -15,7 +15,7 @@
+ #include <cmath>
+ #include <fastahack/split.h>
+ #include <list> // XXX workaround for a missing include in vcflib's join.h
+-#include <vcflib/join.h>
++#include <join.h>
+ 
+ #include "BedReader.h"
+ #include "Parameters.h"
+@@ -29,7 +29,7 @@
+ #include "CNV.h"
+ #include "Result.h"
+ #include "LeftAlign.h"
+-#include <vcflib/Variant.h> // note this can end in vcflib/Variant.h
++#include <Variant.h> // note this can end in vcflib/Variant.h
+ #include "version_git.h"
+ 
+ // the size of the window of the reference which is always cached in memory
+diff --git a/src/DataLikelihood.cpp b/src/DataLikelihood.cpp
+index f5d2872..61d7304 100644
+--- a/src/DataLikelihood.cpp
++++ b/src/DataLikelihood.cpp
+@@ -1,5 +1,5 @@
+ #include "DataLikelihood.h"
+-#include <vcflib/multichoose.h>
++#include <multichoose/multichoose.h>
+ #include "Logging.h"
+ 
+ long double
+diff --git a/src/Genotype.cpp b/src/Genotype.cpp
+index 8180b28..7e2cc3f 100644
+--- a/src/Genotype.cpp
++++ b/src/Genotype.cpp
+@@ -1,5 +1,5 @@
+ #include "Genotype.h"
+-#include <vcflib/multichoose.h>
++#include <multichoose/multichoose.h>
+ #include "multipermute.h"
+ 
+ 
+diff --git a/src/Genotype.h b/src/Genotype.h
+index 0cb0cdc..271ebee 100644
+--- a/src/Genotype.h
++++ b/src/Genotype.h
+@@ -19,7 +19,7 @@
+ #include "CNV.h"
+ #include "Ewens.h"
+ #include "Bias.h"
+-#include <vcflib/join.h>
++#include <join.h>
+ #include <smithwaterman/convert.h>
+ 
+ using namespace std;
+diff --git a/src/ResultData.h b/src/ResultData.h
+index 1bac45a..0c152ed 100644
+--- a/src/ResultData.h
++++ b/src/ResultData.h
+@@ -8,7 +8,7 @@
+ #include "Allele.h"
+ #include "Utility.h"
+ #include "AlleleParser.h"
+-#include <vcflib/Variant.h>
++#include <Variant.h>
+ #include "version_git.h"
+ #include "Result.h"
+ #include "NonCall.h"
+diff --git a/src/freebayes.cpp b/src/freebayes.cpp
+index 5fd4e1c..00708c9 100644
+--- a/src/freebayes.cpp
++++ b/src/freebayes.cpp
+@@ -30,7 +30,7 @@
+ #include "Utility.h"
+ #include "SegfaultHandler.h"
+ 
+-#include <vcflib/multichoose.h>
++#include <multichoose/multichoose.h>
+ 
+ #include "Genotype.h"
+ #include "DataLikelihood.h"
+@@ -41,7 +41,7 @@
+ #include "Contamination.h"
+ #include "NonCall.h"
+ #include "Logging.h"
+-#include "vcflib/Variant.h"
++#include "Variant.h"
+ 
+ using namespace std;
+ 
