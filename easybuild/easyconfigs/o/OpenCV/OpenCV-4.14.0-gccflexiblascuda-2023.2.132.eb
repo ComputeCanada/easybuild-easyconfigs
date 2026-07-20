@@ -25,9 +25,6 @@ sources = [
         'filename': '%(name)s-contrib-%(version)s.tar.gz',
     }
 ]
-#patches = [
-#    ("OpenCV-4.13.0-fix-cuda13-namespace.patch", "%(builddir)s/opencv_contrib-%(version)s")
-#]
 
 builddependencies = [
     ("ant", "1.10.14"),
