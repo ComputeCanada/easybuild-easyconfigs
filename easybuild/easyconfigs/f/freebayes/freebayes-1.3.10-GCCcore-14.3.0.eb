@@ -36,7 +36,7 @@ builddependencies = [
 ]
 
 dependencies = [
-    ('Python', '3.14.2'),
+    ('Python', '3.11'),
     ('SAMtools', '1.18'),
     ('intervaltree', '0.1'),
     ('libffi', '3.3'),
