@@ -1,0 +1,22 @@
+diff --git a/meson.build b/meson.build
+index 6a2aac9..c31d836 100644
+--- a/meson.build
++++ b/meson.build
+@@ -36,7 +36,7 @@ wfa2lib_dep = cc.find_library('wfa2') # need to link for vcflib code
+ zlib_dep = dependency('zlib', static: static_build)
+ htslib_dep = dependency('htslib', static: static_build, required: false)
+ vcflib_dep = cc.find_library('vcflib', required: false, static: static_build)
+-seqlib_dep = dependency('libseqlib', static: static_build, required: false)
++seqlib_dep = cc.find_library('libseqlib', static: static_build, required: false)
+ tabixpp_dep = cc.find_library('tabixpp', required: false, static: static_build)
+ 
+ # later versions of vcflib have Variant.hpp in a system subdirectory
+@@ -51,7 +51,7 @@ endif
+ if get_option('prefer_system_deps')
+   fastahack_dep = cc.find_library('libfastahack', required: true) # also link in for vcflib
+   fastahack_src = files()
+-  smithwaterman_dep = cc.find_library('libsmithwaterman')
++  smithwaterman_dep = cc.find_library('sw')
+   if fs.is_dir('/usr/include/fastahack')
+     message('Using /usr/include/fastahack dir')
+     fastahack_inc = include_directories('/usr/include/fastahack')

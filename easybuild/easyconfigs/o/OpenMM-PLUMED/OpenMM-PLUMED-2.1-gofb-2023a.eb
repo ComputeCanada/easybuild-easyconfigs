@@ -1,0 +1,70 @@
+easyblock = 'CMakeMake'
+
+name = 'OpenMM-PLUMED'
+version = '2.1'
+
+homepage = 'https://github.com/openmm/openmm-plumed/'
+description = """This project provides a connection between OpenMM and
+PLUMED. It allows you to bias or analyze an OpenMM simulation based on
+collective variables."""
+
+toolchain = {'name': 'gofb', 'version': '2023a'}
+
+# https://github.com/openmm/openmm-plumed/archive/refs/tags/v1.0.tar.gz
+github_account = 'openmm'
+source_urls = [GITHUB_SOURCE]
+sources = [V_VERSION_TAR_GZ]
+checksums = ['357450fd3b06ed059db2457139a9df995010a820700d51ef7088a0874d244c37']
+
+multi_deps = {'Python': ['3.11', '3.12', '3.13']}
+
+builddependencies = [
+    ('CMake', '3.31.0'),
+    ('SWIG', '4.2.1'),
+]
+
+dependencies = [
+    ('OpenMM', '8.5.2'),
+    ('PLUMED', '2.9.4'),
+]
+
+separate_build_dir = True
+
+configopts = ' '.join([
+    '-DPLUMED_INCLUDE_DIR="$EBROOTPLUMED/include/plumed"',
+    '-DPLUMED_LIBRARY_DIR="$EBROOTPLUMED/lib"',
+    '-DOPENMM_DIR="$EBROOTOPENMM"',
+])
+
+installopts = ''.join([
+  ' && make -f python/CMakeFiles/PythonInstall.dir/build.make python/PlumedPluginWrapper.cpp',
+  ' && cd python',
+  ' && python setup.py build',
+  ' && pip install --prefix=%(installdir)s .',
+])
+
+postinstallcmds = [
+    '/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths --path %(installdir)s/lib --add_path "%(installdir)s/lib" --any_interpreter',
+]
+
+sanity_check_paths = {
+    'files': ['include/PlumedForce.h', 'include/PlumedKernels.h',
+              'lib/libOpenMMPlumed.%s' % SHLIB_EXT,
+              'lib/python%(pyshortver)s/site-packages/openmmplumed.py'],
+    'dirs': [],
+}
+
+sanity_check_commands = ['python%(pyshortver)s -c "from openmmplumed import PlumedForce"']
+
+modextrapaths = {
+    'EBPYTHONPREFIXES': ''
+}
+
+# if some python is already loaded, use it, otherwise use default python module
+modluafooter = """
+if convertToCanonical(LmodVersion()) >= convertToCanonical("8.2.9") then
+        depends_on(between('python','3.11<','<3.15'))
+end
+"""
+
+moduleclass = 'chem'

@@ -1,0 +1,360 @@
+--- LinuxAMD64/mw/bin-amd64_linux/getgr.sh.orig	2025-11-28 14:58:51.000000000 -0500
++++ LinuxAMD64/mw/bin-amd64_linux/getgr.sh	2025-11-28 14:59:07.000000000 -0500
+@@ -7,7 +7,7 @@
+ USRNAME=$1
+ export USRNAME
+ 
+-IDCOMMAND=/usr/bin/id
++IDCOMMAND=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/id
+ export IDCOMMAND
+ 
+ ${IDCOMMAND} ${USRNAME} | sed 's/[^0-9 ]/ /g' | sed -e 's/[0-9][0-9]*//' -e 's/  */ /g'
+--- ./LinuxAMD64/mw/bin/mwchadm.orig	2026-01-14 13:05:48.000000000 -0500
++++ ./LinuxAMD64/mw/bin/mwchadm	2026-01-14 13:07:44.000000000 -0500
+@@ -11,7 +11,7 @@
+     id=/usr/xpg4/bin/id
+ else
+ # Good for other OS
+-    id=/usr/bin/id
++    id=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/id
+ fi
+ 
+ if [ "`$id -ru`" != "0" ]; then
+--- ./LinuxAMD64/mw/bin/mwset_rtmode.orig	2026-01-14 13:08:37.000000000 -0500
++++ ./LinuxAMD64/mw/bin/mwset_rtmode	2026-01-14 13:08:50.000000000 -0500
+@@ -79,7 +79,7 @@
+ if [ $created_file -eq 1 ]; then
+     if [ `/bin/uname` = "SunOS" ];
+ 	then id=/usr/xpg4/bin/id
+-	else id=/usr/bin/id
++	else id=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/id
+     fi
+     if [ `$id -u` -eq 0 ]; then
+ 	/bin/chgrp 0 "$rt_mode_file"
+--- ./LinuxAMD64/mw/bin/install.mwcore.orig	2026-01-14 13:10:51.000000000 -0500
++++ ./LinuxAMD64/mw/bin/install.mwcore	2026-01-14 13:11:00.000000000 -0500
+@@ -1,6 +1,6 @@
+ #!/bin/sh 
+ 
+-PATH=$PATH:/bin:/usr/bin
++#PATH=$PATH:/bin:/usr/bin
+ export PATH
+  
+ curdir=`dirname "$0"`
+@@ -24,7 +24,7 @@
+ export MWOS MWARCH MWCONFIG_NAME
+ type="cdrom";
+ if [ $MWOS = "linux" ];then
+-   MWENV="/usr/bin/env"
++   MWENV="/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/env"
+ else
+    MWENV="/bin/env"
+ fi
+--- ./LinuxAMD64/mw/bin/mwadm.orig	2026-01-14 13:12:08.000000000 -0500
++++ ./LinuxAMD64/mw/bin/mwadm	2026-01-14 13:13:06.000000000 -0500
+@@ -24,7 +24,6 @@
+ #chadm:mwchadm:changes MSC Administrator
+ #End Commands
+ #################################################
+-PATH="$PATH:/bin:/usr/bin"
+ #PATH=/bin:/usr/bin:$PATH
+ export PATH
+ curdir=`dirname "$0"`
+@@ -54,7 +53,7 @@
+ export MWOS MWARCH MWCONFIG_NAME
+ 
+ if [ $MWOS = "linux" ];then
+-   MWENV="/usr/bin/env"
++   MWENV="/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/env/"
+ else
+    MWENV="/bin/env"
+ fi
+53,54c53,54
+< 	elif [ -x /usr/bin/wc ]; then
+< 		wc=/usr/bin/wc
+---
+> 	elif [ -x /cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/wc]; then
+> 		wc=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/wc
+--- ./LinuxAMD64/mw/bin/tools/core_services.orig	2026-01-14 13:20:54.000000000 -0500
++++ ./LinuxAMD64/mw/bin/tools/core_services	2026-01-14 13:21:10.000000000 -0500
+@@ -7,14 +7,14 @@
+ datadir="$4"
+ force=$5
+ 
+-PATH=/usr/bin:${PATH}
++#PATH=/usr/bin:${PATH}
+ export PATH
+ 
+ MyOS=`uname`
+ if [ "$MyOS" = "SunOS" ]; then
+     id=/usr/xpg4/bin/id
+ else
+-    id=/usr/bin/id
++    id=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/id
+ fi
+ 
+ umask 0077
+--- ./LinuxAMD64/mw/bin/tools/core_hook3.sh.orig	2026-01-14 13:22:08.000000000 -0500
++++ ./LinuxAMD64/mw/bin/tools/core_hook3.sh	2026-01-14 13:22:17.000000000 -0500
+@@ -20,7 +20,7 @@
+         id=/usr/xpg4/bin/id
+ else
+ 	if [ "$MyOS" = "Linux" ]; then
+-		id=/usr/bin/id
++		id=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/id
+ 	else
+ #good for AIX and HP
+ 	        id=/bin/id
+--- ./LinuxAMD64/mw/bin/tools/start_core_at_boot.orig	2026-01-14 13:24:39.000000000 -0500
++++ ./LinuxAMD64/mw/bin/tools/start_core_at_boot	2026-01-14 13:25:33.000000000 -0500
+@@ -7,7 +7,7 @@
+ if [ `/bin/uname` = "SunOS" ]; then
+   id=/usr/xpg4/bin/id
+ else
+-  id=/usr/bin/id
++  id=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/id
+ fi
+ userid=`$id -u`
+ 
+--- ./LinuxAMD64/mw/bin/tools/core_hook2.sh.orig	2026-01-14 13:31:26.000000000 -0500
++++ ./LinuxAMD64/mw/bin/tools/core_hook2.sh	2026-01-14 13:31:37.000000000 -0500
+@@ -5,7 +5,7 @@
+     id=/usr/xpg4/bin/id
+ else
+ # Good for other OS
+-    id=/usr/bin/id
++    id=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/id
+ fi
+ 
+ user=$1
+--- ./LinuxAMD64/mw/bin/mwcheck_platform.orig	2026-01-14 13:34:54.000000000 -0500
++++ ./LinuxAMD64/mw/bin/mwcheck_platform	2026-01-14 13:35:00.000000000 -0500
+@@ -48,7 +48,7 @@
+ dir=`dirname "$self"`
+ selfname=`basename "$self"`
+ if [ $uname = "Linux" ];then
+-	wc=/usr/bin/wc
++	wc=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/wc
+ else
+ 	wc=/bin/wc
+ fi
+@@ -131,7 +131,6 @@
+ tempdir=${MW_TMPDIR:-${TMPDIR:-/tmp}}
+ 
+ if [ "$host" ] ;then
+-  PATH=/bin:/usr/bin; export PATH
+   if [ $uname = "HP-UX" ];then ## (it is 'remsh' on HPUX)
+     rsh=remsh
+   else 
+--- ./LinuxAMD64/mw/bin/mwsetport.sh.orig	2026-01-14 13:38:58.000000000 -0500
++++ ./LinuxAMD64/mw/bin/mwsetport.sh	2026-01-14 13:39:15.000000000 -0500
+@@ -26,7 +26,7 @@
+     id=/usr/xpg4/bin/id
+ else
+     if [ "$MyOS" = "Linux" ]; then
+-        id=/usr/bin/id
++        id=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/id
+     else
+ #good for AIX and HP
+         id=/bin/id
+--- ./LinuxAMD64/mw/bin/mwcore.orig	2026-01-14 13:42:01.000000000 -0500
++++ ./LinuxAMD64/mw/bin/mwcore	2026-01-14 13:52:11.000000000 -0500
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ 
+-PATH=$PATH:/bin:/usr/bin
++#PATH=$PATH:/bin:/usr/bin
+ #PATH=/bin:/usr/bin:$PATH
+ export PATH
+ 
+@@ -22,7 +22,7 @@
+ export MWOS MWARCH MWCONFIG_NAME
+ 
+ if [ $MWOS = "linux" ];then
+-   MWENV="/usr/bin/env"
++   MWENV="/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/env"
+ else
+    MWENV="/bin/env"
+ fi
+--- ./LinuxAMD64/mw/lib/stdperl/Cwd.pm.orig	2026-01-14 13:53:24.000000000 -0500
++++ ./LinuxAMD64/mw/lib/stdperl/Cwd.pm	2026-01-14 13:53:32.000000000 -0500
+@@ -292,9 +292,7 @@
+ # are safe.  This prevents _backtick_pwd() consulting $ENV{PATH}
+ # so everything works under taint mode.
+ my $pwd_cmd;
+-foreach my $try ('/bin/pwd',
+-		 '/usr/bin/pwd',
+-		 '/QOpenSys/bin/pwd', # OS/400 PASE.
++foreach my $try ('/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/pwd', # OS/400 PASE.
+ 		) {
+ 
+     if( -x $try ) {
+@@ -662,7 +660,7 @@
+ 	local $ENV{PATH} = '';
+ 	local $ENV{CDPATH} = '';
+ 	local $ENV{ENV} = '';
+-    $ENV{'PWD'} = `/usr/bin/fullpath -t`;
++    $ENV{'PWD'} = `/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/fullpath -t`;
+     chomp $ENV{'PWD'};
+     return $ENV{'PWD'};
+ }
+@@ -674,8 +672,8 @@
+     my $path = @_ ? shift : '.';
+     local *REALPATH;
+ 
+-    defined( open(REALPATH, '-|') || exec '/usr/bin/fullpath', '-t', $path ) or
+-      die "Can't open /usr/bin/fullpath: $!";
++    defined( open(REALPATH, '-|') || exec '/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/fullpath', '-t', $path ) or
++      die "Can't open /cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/fullpath: $!";
+     my $realpath = <REALPATH>;
+     close REALPATH;
+     chomp $realpath;
+--- ./LinuxAMD64/sms/copy_sms.orig	2026-01-14 14:24:32.000000000 -0500
++++ ./LinuxAMD64/sms/copy_sms	2026-01-14 14:24:38.000000000 -0500
+@@ -8,7 +8,7 @@
+   exit
+ fi
+ 
+-export PATH=/bin:/usr/bin
++#export PATH=/bin:/usr/bin
+ 
+ MWHOME=${MWHOME:-/vobs/build/mw}
+ if [ ! -d "$MWHOME" ] ;then
+--- ./LinuxAMD64/sms/system.pm.orig	2026-01-14 14:27:54.000000000 -0500
++++ ./LinuxAMD64/sms/system.pm	2026-01-14 14:28:00.000000000 -0500
+@@ -1344,8 +1344,8 @@
+   }
+   elsif($self->{uname} eq "SunOS"){
+     if ($self->{level} eq "5.11") {
+-      if (! -x "/usr/bin/find"){
+-        $self->ErrorPermission("/usr/bin/find");
++      if (! -x "/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/find"){
++        $self->ErrorPermission("/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/find");
+         $status+=1;
+       }
+     } else {
+@@ -1370,8 +1370,8 @@
+     }
+   }
+   elsif ($self->{uname} eq "Linux"){
+-    if (! -x "/usr/bin/find"){
+-      $self->ErrorPermission("/usr/bin/find");
++    if (! -x "/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/find"){
++      $self->ErrorPermission("/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/find");
+       $status+=1;
+     }
+   }
+--- ./LinuxAMD64/sms/exec_sms.orig	2026-01-14 14:29:23.000000000 -0500
++++ ./LinuxAMD64/sms/exec_sms	2026-01-14 14:29:36.000000000 -0500
+@@ -46,7 +46,7 @@
+   if [ ! -f ${perl} ];then 
+     perl="${execdir}/mwperl"
+     if [ ! -f ${perl} ];then 
+-      perl=`/usr/bin/perl`
++      perl=`/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/perl`
+       if [ "${perl:-notset}" = "notset" ]; then 
+         perl=/usr/local/bin/perl
+         if [ ! -f ${perl} ];then 
+--- ./LinuxAMD64/mw/bin/tools/core_services.common.orig	2026-01-14 13:14:18.000000000 -0500
++++ ./LinuxAMD64/mw/bin/tools/core_services.common	2026-01-14 13:14:32.000000000 -0500
+@@ -50,8 +50,8 @@
+ 	wc=wc
+ 	if [ -x /bin/wc ]; then
+ 		wc=/bin/wc
+-	elif [ -x /usr/bin/wc ]; then
+-		wc=/usr/bin/wc
++	elif [ -x /cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/wc]; then
++		wc=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/wc
+ 	fi
+ 
+ 	count=`regps | $wc -l`
+--- LinuxAMD64/modeler_AMD64.orig	2026-01-16 15:15:40.000000000 -0500
++++ LinuxAMD64/modeler_AMD64	2026-01-16 14:55:55.000000000 -0500
+@@ -1,6 +1,6 @@
+ #!/bin/bash
+ 
+-set -e
++set +e
+ 
+ # these three should be inherited from the FrontendWrapper.
+ CST_INSTALLDIR=${CST_BASEDIR}
+--- LinuxAMD64/schematic_AMD64.orig	2026-01-16 15:25:34.000000000 -0500
++++ LinuxAMD64/schematic_AMD64	2026-01-16 15:26:58.000000000 -0500
+@@ -56,7 +56,6 @@
+ if [ -e "${CST_LAST_INSTALL_PATH_FILE}" ] ; then
+   set +e
+   read -r -s CST_FIRSTLINE < "${CST_LAST_INSTALL_PATH_FILE}"
+-  set -e
+   CST_LAST_INSTALL_PATH=$(echo "${CST_FIRSTLINE}" | tr -d "\r\n")
+   CST_LAST_INS64=${CST_LAST_INSTALL_PATH}
+   if [ "${CST_INS64}" != "${CST_LAST_INS64}" ] ; then
+--- LinuxAMD64/mw/lib/mwuseconfig.sh.orig	2026-08-05 11:12:48.000000000 -0700
++++ LinuxAMD64/mw/lib/mwuseconfig.sh	2026-08-05 11:43:37.000000000 -0700
+@@ -141,12 +141,12 @@
+ fi
+ 
+ 
+-if [ "${MWARCH_OS:-}" = "i86_linux" ]; then
+-    if [ `echo ${LD_LIBRARY_PATH} | grep /usr/lib64`xxx != xxx ]; then
+-        LD_LIBRARY_PATH=`echo ${LD_LIBRARY_PATH} | sed 's@'"/usr/lib64"@""'@'`
+-    fi
+-fi 
+-
++#if [ "${MWARCH_OS:-}" = "i86_linux" ]; then
++#    if [ `echo ${LD_LIBRARY_PATH} | grep /usr/lib64`xxx != xxx ]; then
++#        LD_LIBRARY_PATH=`echo ${LD_LIBRARY_PATH} | sed 's@'"/usr/lib64"@""'@'`
++#    fi
++#fi 
++#
+ if [ "${MWARCH_OS:-}" = "amd64_linux" ]; then
+     if [ `echo ${LD_LIBRARY_PATH} | grep /usr/lib64`xxx = xxx ]; then
+             LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib64"
+--- ./LinuxAMD64/mw/setmwruntime.orig	2026-08-05 14:05:08.000000000 -0700
++++ ./LinuxAMD64/mw/setmwruntime	2026-08-05 14:03:24.000000000 -0700
+@@ -24,13 +24,13 @@
+ 		PATH="$PATH:/usr/contrib/bin/X11"
+ 		MWCONFIG_NAME=ia64_ux11;;
+      ia64_ilp64_ux11)
+-		PATH=$PATH:/usr/contrib/bin/X11
++		PATH=$PATH:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/X11
+ 		MWCONFIG_NAME=ia64_ilp64_ux11;;
+      rs6000_aix4)
+-			PATH="$PATH:/usr/bin/X11"
++			PATH="$PATH:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/X11"
+             MWCONFIG_NAME=aix4;;
+      power64_aix4)
+-			PATH="$PATH:/usr/bin/X11"
++			PATH="$PATH:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/X11"
+ 	    MWCONFIG_NAME=aix4_64;;
+      mips_irix6)
+ 			PATH="$PATH:/usr/bin/X11"
+@@ -43,22 +43,22 @@
+ 		X11_LIB_DIR=/usr/lib
+ 	    fi
+ 	    LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${X11_LIB_DIR}"
+-	    PATH="$PATH:/usr/bin/X11"
++	    PATH="$PATH:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/X11"
+ 	    MWCONFIG_NAME=linux;;
+      amd64_linux)
+-	    X11_LIB_DIR=/usr/X11R6/lib64
+-	    if [ ! -f $X11_LIB_DIR/libX11.so ]; then
+-		X11_LIB_DIR=/usr/lib64
+-	    fi
++	    #X11_LIB_DIR=/usr/X11R6/lib64
++	    #if [ ! -f $X11_LIB_DIR/libX11.so ]; then
++		#X11_LIB_DIR=/usr/lib64
++	    #fi
+ 	    #LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${X11_LIB_DIR}"
+ 	    #LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/X11R6/lib64"
+-	    PATH="$PATH:/usr/bin/X11"
++	    PATH="$PATH:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/X11"
+ 	    MWCONFIG_NAME=amd64_linux;;
+ 	i86_sunos5)
+ 		PATH="$PATH:/usr/bin/X11"
+ 		MWCONFIG_NAME=i86_sunos5;;
+ 	amd64_sunos5)
+-		PATH="$PATH:/usr/bin/X11"
++		PATH="$PATH:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/X11"
+ 		MWCONFIG_NAME=amd64_sunos5_64;;
+      *) echo "`basename $0`: Unknown Architecture, cannot set environment"
+        exit;;

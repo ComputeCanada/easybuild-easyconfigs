@@ -1,7 +1,7 @@
 easyblock = "CMakeMake"
 
 name = "OpenCV"
-version = "4.13.0"
+version = "4.14.0"
 
 homepage = "http://opencv.org/"
 description = """OpenCV (Open Source Computer Vision Library) is an open source computer vision
@@ -9,7 +9,7 @@ description = """OpenCV (Open Source Computer Vision Library) is an open source 
  a common infrastructure for computer vision applications and to accelerate
  the use of machine perception in the commercial products."""
 
-toolchain = {"name": "gccflexiblas", "version": "2023a"}
+toolchain = {"name": "gccflexiblascuda", "version": "2023.2.132"}
 
 sources = [
     {
@@ -34,7 +34,8 @@ builddependencies = [
     ("CMake", "3.27.7"),
     ('HDF5', '1.14.2'),
     # ("Julia", "1.9.3"),
-     ('numpy', '2.4.2'),
+    ('numpy', '2.4.2'),
+    ('cuDNN', '9.21.1.3')
 ]
 
 multi_deps = {"Python": ["3.11", "3.12", "3.13", "3.14"]}
@@ -44,7 +45,13 @@ configopts = " ".join(
     [
         "-DWITH_IPP=ON",
         "-DWITH_OPENMP=ON",
-        "-DWITH_CUDA=OFF",
+        '-DCMAKE_LIBRARY_PATH="$CMAKE_LIBRARY_PATH:/usr/lib64/nvidia"',
+        "-DWITH_CUDA=ON",
+        "-DWITH_NVCUVID=ON",
+        "-DWITH_NVCUVENC=ON",
+        "-DCMAKE_CUDA_ARCHITECTURES='%(cuda_cc_cmake)s'",
+        "-DENABLE_CUDA_FIRST_CLASS_LANGUAGE=ON",
+        "-DBUILD_opencv_cudev=ON",
         "-DOPENCV_SKIP_LAPACK_EXTERN_C=ON",
         "-DPYTHON_PACKAGES_PATH=%(installdir)s/lib/python%(pyshortver)s/site-packages",
         "-DPYTHON3_EXECUTABLE=$EBROOTPYTHON/bin/python3",
@@ -70,10 +77,11 @@ postinstallcmds = [
 ]
 
 local_contrib_libs = [
-    "alphamat", "aruco", "bgsegm", "bioinspired", "ccalib", "datasets", "dnn_objdetect", "dnn_superres", "dpm", "face", "freetype",
-    "fuzzy", "hdf", "hfs", "img_hash", "line_descriptor", "optflow", "phase_unwrapping", "plot", "quality", "reg",
-    "rgbd", "saliency", "shape", "stereo", "structured_light", "superres", "surface_matching", "text", "tracking",
-    "videostab", "xfeatures2d", "ximgproc", "xobjdetect", "xphoto"
+    "alphamat", "aruco", "bgsegm", "bioinspired", "ccalib", "cudaarithm", "cudabgsegm", "cudacodec", "cudafeatures2d", "cudafilters",
+    "cudaimgproc", "cudalegacy", "cudaobjdetect", "cudaoptflow", "cudastereo", "cudawarping", "cudev", "datasets", "dnn_objdetect",
+    "dnn_superres", "dpm", "face", "freetype", "fuzzy", "hdf", "hfs", "img_hash", "line_descriptor", "optflow", "phase_unwrapping",
+    "plot", "quality", "reg", "rgbd", "saliency", "shape", "stereo", "structured_light", "superres", "surface_matching", "text",
+    "tracking", "videostab", "xfeatures2d", "ximgproc", "xobjdetect", "xphoto"
 ]
 
 sanity_check_paths = {

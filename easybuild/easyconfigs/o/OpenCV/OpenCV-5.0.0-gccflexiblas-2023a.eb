@@ -1,7 +1,7 @@
 easyblock = "CMakeMake"
 
 name = "OpenCV"
-version = "4.13.0"
+version = "5.0.0"
 
 homepage = "http://opencv.org/"
 description = """OpenCV (Open Source Computer Vision Library) is an open source computer vision
@@ -31,8 +31,8 @@ builddependencies = [
     ("Java", "17"),
     ("Eigen", "3.4.0"),
     ("JasPer", "4.0.0"),
-    ("CMake", "3.27.7"),
-    ('HDF5', '1.14.2'),
+    ("CMake", "3.31.0"),
+    ('HDF5', '1.14.6'),
     # ("Julia", "1.9.3"),
      ('numpy', '2.4.2'),
 ]
@@ -70,7 +70,7 @@ postinstallcmds = [
 ]
 
 local_contrib_libs = [
-    "alphamat", "aruco", "bgsegm", "bioinspired", "ccalib", "datasets", "dnn_objdetect", "dnn_superres", "dpm", "face", "freetype",
+    "alphamat", "bgsegm", "bioinspired", "ccalib", "datasets", "dnn_objdetect", "dnn_superres", "dpm", "face", "freetype",
     "fuzzy", "hdf", "hfs", "img_hash", "line_descriptor", "optflow", "phase_unwrapping", "plot", "quality", "reg",
     "rgbd", "saliency", "shape", "stereo", "structured_light", "superres", "surface_matching", "text", "tracking",
     "videostab", "xfeatures2d", "ximgproc", "xobjdetect", "xphoto"
@@ -80,7 +80,6 @@ sanity_check_paths = {
     "files": [
         "lib/libopencv_core.so",
         "bin/opencv_annotation",
-        "bin/opencv_interactive-calibration",
         "bin/opencv_version",
         "bin/opencv_visualisation",] + [
         "lib/python%(pyshortver)s/site-packages/{}-%(version)s.dist-info/METADATA".format(n) for n in local_dist_names] + [

@@ -37,6 +37,7 @@ dependencies = [
 ]
 
 type = 'psmp'
+library = True
 
 # regression test reports handful of failures,
 # we're assuming those are OK to ignore...
