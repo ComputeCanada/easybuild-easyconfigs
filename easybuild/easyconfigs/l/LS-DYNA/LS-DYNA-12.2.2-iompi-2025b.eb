@@ -37,11 +37,13 @@ postinstallcmds = [
 #     f'gzip -k %(installdir)s/{local_lsdyna_mpp_d}/{local_lsdyna_mpp_d}',
       f'ln -s {local_lsdyna_mpp_s} %(installdir)s/{local_lsdyna_mpp_s}/ls-dyna_s',
       f'ln -s {local_lsdyna_mpp_d} %(installdir)s/{local_lsdyna_mpp_d}/ls-dyna_d',
-      f'chmod +x %(installdir)s/{local_lsdyna_mpp_s}/{local_lsdyna_mpp_s}',
-      f'chmod +x %(installdir)s/{local_lsdyna_mpp_d}/{local_lsdyna_mpp_d}',
       f'/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/patchelf --set-rpath "" %(installdir)s/{local_lsdyna_mpp_s}/ls-dyna_s',
       f'/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/patchelf --set-rpath "" %(installdir)s/{local_lsdyna_mpp_d}/ls-dyna_d',
       f'/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s --add_origin --add_path $EBROOTOPENMPI/lib --verbose',
+      f'chmod ugo+rx %(installdir)s/{local_lsdyna_mpp_s}/ansyscl',
+      f'chmod ugo+rx %(installdir)s/{local_lsdyna_mpp_d}/ansyscl',
+      f'chmod ugo+rx %(installdir)s/{local_lsdyna_mpp_s}/ls-dyna_s',
+      f'chmod ugo+rx %(installdir)s/{local_lsdyna_mpp_d}/ls-dyna_d',
       f'patchelf --print-rpath %(installdir)s/{local_lsdyna_mpp_s}/ls-dyna_s',
       f'patchelf --print-rpath %(installdir)s/{local_lsdyna_mpp_d}/ls-dyna_d',
       f'patchelf --print-interpreter %(installdir)s/{local_lsdyna_mpp_s}/ls-dyna_s',
@@ -51,9 +53,9 @@ postinstallcmds = [
 modextrapaths = {'PATH': [f'{local_lsdyna_mpp_s}',f'{local_lsdyna_mpp_d}']}
 
 sanity_check_paths = {
-    'files': [f"{local_lsdyna_mpp_s}/ls-dyna_s", f"{local_lsdyna_mpp_s}/ansyscl",
-              f"{local_lsdyna_mpp_d}/ls-dyna_d", f"{local_lsdyna_mpp_d}/ansyscl"],
-    'dirs': []
+    'files': [f'{local_lsdyna_mpp_s}/ls-dyna_s', f'{local_lsdyna_mpp_s}/ansyscl',
+              f'{local_lsdyna_mpp_d}/ls-dyna_d', f'{local_lsdyna_mpp_d}/ansyscl'],
+    'dirs':  [f'{local_lsdyna_mpp_s}', f'{local_lsdyna_mpp_d}']
 }
 
 modluafooter = """
