@@ -1,0 +1,32 @@
+python-downloads = "never"
+python-preference = "only-system"
+
+no-cache = true
+concurrent-builds = 1
+
+index-strategy = "unsafe-first-match"
+
+[pip]
+only-binary = ['numpy','scipy','mpi5py','pandas','h5py','Cython','grpcio']
+
+
+[[index]]
+name = "gentoo2023-x86-64-v3"
+url = "/cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3"
+format = "flat"
+
+[[index]]
+name = "gentoo2023-generic"
+url = "/cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic"
+format = "flat"
+
+[[index]]
+name = "generic"
+url = "/cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic"
+format = "flat"
+
+[[index]]
+name = "PyPI"
+url = "https://pypi.org/simple"
+default = true
+
