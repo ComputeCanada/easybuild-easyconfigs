@@ -1,0 +1,52 @@
+name = 'SLEPc'
+version = '3.16.3'
+versionsuffix = '-64bits'
+
+homepage = 'https://slepc.upv.es/'
+description = """SLEPc (Scalable Library for Eigenvalue Problem Computations) is a software library for the solution
+ of large scale sparse eigenvalue problems on parallel computers. It is an extension of PETSc and can be used for
+ either standard or generalized eigenproblems, with real or complex arithmetic. It can also be used for computing a
+ partial SVD of a large, sparse, rectangular matrix, and to solve quadratic eigenvalue problems."""
+
+toolchain = {'name': 'foss', 'version': '2023a'}
+toolchainopts = {'usempi': True, 'openmp': True}
+
+source_urls = ['https://slepc.upv.es/download/distrib']
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['b92bd170632a3de4d779f3f0697e7cb9b663e2c34606c9e97d899d7c1868014e']
+
+# sources = ['%(namelower)s-%(version)s.tar.gz']
+dependencies = [('PETSc', '3.16.6', '-64bits')]
+# For the extension
+builddependencies = [
+    ('SciPy-Stack', '2025a'),
+    ('mpi4py', '4.0.3'),
+]
+
+multi_deps = {'Python': ['3.10']}
+multi_deps_extensions_only = True
+
+exts_defaultclass = 'PythonPackage'
+exts_default_options = {
+    # disable "pip check" which would fail with several:
+    # > $PACKAGE requires (numpy|mpi4py|msgpack), which is not installed 
+    'sanity_pip_check': False,
+}
+exts_list = [
+    ('slepc4py', '3.16.3', {
+        'modulename': 'slepc4py',
+        'source_urls': [PYPI_SOURCE],
+        'checksums' : ['d97652efe60163d30c24eb1ef1b1ba98bb8239fd7452bdf8207c2505da48d77e'],
+        'preconfigopts': '#',
+	'check_ldshared': False,
+	'buildopts': '#',
+        'runtest': False,
+    }),
+]
+exts_filter = ("python -c 'import %(ext_name)s'", '')
+
+petsc_arch = 'installed-arch-linux2-c-opt'
+
+#modextrapaths = {'EBPYTHONPREFIXES': [''],}
+
+moduleclass = 'numlib'
