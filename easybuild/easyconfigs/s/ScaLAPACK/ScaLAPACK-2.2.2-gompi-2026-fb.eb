@@ -1,0 +1,49 @@
+name = 'ScaLAPACK'
+version = '2.2.2'
+versionsuffix = '-fb'
+
+homepage = 'https://www.netlib.org/scalapack/'
+description = """The ScaLAPACK (or Scalable LAPACK) library includes a subset of LAPACK routines
+ redesigned for distributed memory MIMD parallel computers."""
+
+toolchain = {'name': 'gompi', 'version': '2026'}
+toolchainopts = {'extra_fflags': '-lpthread', 'openmp': True, 'pic': True, 'usempi': True}
+
+source_urls = ['https://github.com/Reference-ScaLAPACK/scalapack/archive/refs/tags/']
+sources = ['v%(version)s.tar.gz']
+patches = [
+    'ScaLAPACK-%(version)s_libname-suffix.patch',
+]
+checksums = [
+    {'v2.2.2.tar.gz': 'a2f0c9180a210bf7ffe126c9cb81099cf337da1a7120ddb4cbe4894eb7b7d022'},
+    {'ScaLAPACK-2.2.2_libname-suffix.patch': '0ac9fbdd9a9fa88959f5e015cdc3474a4901a59e131e810f9590b4598ecab6ef'},
+]
+
+builddependencies = [
+    ('CMake', '4.4.2'),
+]
+
+dependencies = [
+    ('FlexiBLAS', '3.5.0'),
+]
+
+preconfigopts = 'export CFLAGS="$CFLAGS -std=gnu89" &&'  # https://bugzilla.redhat.com/show_bug.cgi?id=2178710
+# Other CMakeLists.txt in ScaLAPACK 2.2.2 are CMake 3.5+
+preconfigopts += 'sed -i "s/VERSION 2.8/VERSION 3.5/" %(start_dir)s/BLACS/INSTALL/CMakeLists.txt && '
+
+# Config Opts based on AOCL User Guide:
+# https://developer.amd.com/wp-content/resources/AOCL_User%20Guide_2.2.pdf
+
+configopts = '-DBUILD_SHARED_LIBS=ON '
+configopts += '-DBLAS_LIBRARIES="$EBROOTFLEXIBLAS/lib/libflexiblas.%s" ' % SHLIB_EXT
+configopts += '-DLAPACK_LIBRARIES="$EBROOTFLEXIBLAS/lib/libflexiblas.%s" ' % SHLIB_EXT
+
+preconfigopts = [preconfigopts + 'export CFLAGS="$CFLAGS -DInt=long" FCFLAGS="$FCFLAGS -i8" && ', preconfigopts]
+configopts = [configopts.replace('libflexiblas', 'libflexiblas64') + ' -DLIBNAME_SUFFIX=64', configopts]
+
+sanity_check_paths = {
+    'files': ['lib/libscalapack.%s' % SHLIB_EXT, 'lib64/libscalapack.%s' % SHLIB_EXT],
+    'dirs': ["lib", "lib64"],
+}
+
+moduleclass = 'numlib'
