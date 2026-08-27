@@ -10,7 +10,7 @@ description = """AOCL-LAPACK is AMD's optimized version of
 toolchain = {'name': 'GCC', 'version': '15.3.0'}
 
 builddependencies = [
-    ('AOCL-LAPACK', version, '', True),
+    ('AOCL-LAPACK', version, '', ('GCCcore', '15.3.0')),
 ]
 
 moduleclass = 'lib'
