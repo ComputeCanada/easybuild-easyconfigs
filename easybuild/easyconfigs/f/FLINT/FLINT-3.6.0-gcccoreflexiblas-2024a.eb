@@ -1,0 +1,42 @@
+easyblock = 'ConfigureMake'
+
+name = 'FLINT'
+version = '3.6.0'
+
+homepage = 'http://www.flintlib.org/'
+description = """FLINT (Fast Library for Number Theory) is a C library in support of computations
+ in number theory. Operations that can be performed include conversions, arithmetic, computing GCDs,
+ factoring, solving linear systems, and evaluating special functions. In addition, FLINT provides
+ various low-level routines for fast arithmetic. FLINT is extensively documented and tested."""
+
+toolchain = {'name': 'gcccoreflexiblas', 'version': '2024a'}
+toolchainopts = {'pic': True}
+
+source_urls = ['http://www.flintlib.org']
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['b95e2c7792f5eea4a1c8d2d42c4098434756832e57a094b295eb5dfdc9b4c36b']
+
+builddependencies = [
+    ('NTL', '11.6.0')
+]
+
+configopts = " ".join([
+    "--with-gmp=$EBROOTGENTOO",
+    "--with-mpfr=$EBROOTGENTOO",
+    "--with-blas=$EBROOTFLEXIBLAS",
+    "--with-ntl=$EBROOTNTL",
+    'ac_cv_search_cblas_dgemm=-lflexiblas',  # Force FLINT to use FlexiBLAS by setting cache variable beforehand
+])
+
+buildopts = 'V=1'
+
+runtest = 'check'
+
+sanity_check_paths = {
+    'files': [
+        'lib/lib%(namelower)s.so',
+    ],
+    'dirs': ['include'],
+}
+
+moduleclass = 'math'
