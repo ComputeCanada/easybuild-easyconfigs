@@ -23,20 +23,11 @@ postinstallcmds = [
 '''
     cd $EBROOTINTELMINCOMPILERS
     publicdir=%(installdir)s
-    shortver='2026.1'
-    tbbshortver='2023.1'
-    tcmshortver='1.5'
-    umfshortver='1.1'
+    shortver=%(version_major_minor)s
     for i in $(grep -h "installdir.*" compiler/$shortver/share/doc/compiler/[cf]redist.txt | cut -c 13-); do
        if [ -f compiler/$shortver/$i ]; then
          mkdir -p $(dirname $publicdir/compiler/$shortver/$i)
-         cp -p compiler/$shortver/$i $publicdir/compiler/$shortver/$i
-       fi
-    done
-    for i in $(find tbb) $(find tcm) $(find umf); do
-       if [ -f $i ]; then
-         mkdir -p $(dirname $publicdir/$i)
-         cp -p $i $publicdir/$i
+         cp -a compiler/$shortver/$i $publicdir/compiler/$shortver/$i
        fi
     done
     for i in $(find . -type l); do
@@ -44,15 +35,7 @@ postinstallcmds = [
          cp -a $i $publicdir/$i
        fi
     done
-    for i in tbb/$tbbshortver/lib/* tcm/$tcmshortver/lib/* umf/$umfshortver/lib/*; do
-       if [ -L $i ]; then
-         cp -a $i $publicdir/$i
-       fi
-    done
-    ln -s $shortver $publicdir/compiler/latest
-    ln -s $tbbshortver $publicdir/tbb/latest
-    ln -s $tcmshortver $publicdir/tcm/latest
-    ln -s $umfshortver $publicdir/umf/latest
+    cp -a tbb tcm umf $publicdir
 '''
 ]
 
