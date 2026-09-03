@@ -1,0 +1,71 @@
+easyblock = 'Bundle'
+
+name = 'intel-compilers-redist'
+version = '2026.1.0'
+modaltsoftname = 'intel'
+
+hidden = True
+
+altroot = 'intel-compilers'
+
+homepage = 'https://software.intel.com/content/www/us/en/develop/tools/oneapi/hpc-toolkit.html'
+description = "Intel C, C++ & Fortran compilers (redistributable runtime libraries)"
+
+toolchain = SYSTEM
+
+dependencies = [
+    ('intel-compilers', version),
+]
+
+# This easyconfig copies redistributable components from restricted to soft
+# The generated module is hidden and not used
+postinstallcmds = [
+'''
+    installdir=$EBROOTINTELMINCOMPILERS
+    publicdir=%(installdir)s
+    shortver='2026.1'
+    tbbshortver='2023.1'
+    for i in $(grep -h "installdir.*" $installdir/compiler/$shortver/share/doc/compiler/[cf]redist.txt | cut -c 13-); do
+       if [ -f $installdir/compiler/$shortver/$i ]; then
+         mkdir -p $(dirname $publicdir/compiler/$shortver/$i)
+         cp -p $installdir/compiler/$shortver/$i $publicdir/compiler/$shortver/$i
+       fi
+    done
+    for i in $(cd $installdir && find tbb); do
+       if [ -f $installdir/$i ]; then
+         mkdir -p $(dirname $publicdir/$i)
+         cp -p $installdir/$i $publicdir/$i
+       fi
+    done
+    cd $installdir
+    for i in compiler/$shortver/lib/libur_adapter_cuda.so.*; do
+       cp -a $i $publicdir/$i
+    done
+    for i in $(find . -type l); do
+       if [ -f $publicdir/$i ]; then
+         cp -a $i $publicdir/$i
+       fi
+    done
+    for i in tbb/$tbbshortver/lib/*; do
+       if [ -L $i ]; then
+         cp -a $i $publicdir/$i
+       fi
+    done
+    ln -s $tbbshortver $publicdir/tbb/latest
+    ln -s $shortver $publicdir/compiler/latest
+    for i in $(cd $installdir && find tcm); do
+       if [ -f $installdir/$i ]; then
+         mkdir -p $(dirname $publicdir/$i)
+         cp -p $installdir/$i $publicdir/$i
+       fi
+    done
+    for i in tcm/1.4/lib/*; do
+       if [ -L $i ]; then
+         cp -a $i $publicdir/$i
+       fi
+    done
+    ln -s 1.4 $publicdir/tcm/latest
+'''
+]
+
+moduleclass = 'lib'
