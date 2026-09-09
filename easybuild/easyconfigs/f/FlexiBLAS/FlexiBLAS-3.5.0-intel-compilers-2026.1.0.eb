@@ -1,0 +1,62 @@
+name = 'FlexiBLAS'
+version = '3.5.0'
+
+homepage = 'https://gitlab.mpi-magdeburg.mpg.de/software/flexiblas-release'
+description = """FlexiBLAS is a wrapper library that enables the exchange of the BLAS and LAPACK implementation
+used by a program without recompiling or relinking it."""
+
+toolchain = {'name': 'intel-compilers', 'version': '2026.1.0'}
+toolchainopts = {'pic': True}
+
+source_urls = ['https://gitlab.mpi-magdeburg.mpg.de/api/v4/projects/386/packages/generic/flexiblas-source/v3.5.0/']
+sources =  [SOURCELOWER_TAR_GZ]
+patches = [
+    'FlexiBLAS-3.4.5_fix-imkl.patch',
+    'FlexiBLAS-3.0.4_remove-semicolon.patch',
+]
+checksums = [
+    {'flexiblas-3.5.0.tar.gz': '4f135fd3d4d844f221624b13734acd0d221a4347a19fa78604a6cbcaa3f477ea'},
+    {'FlexiBLAS-3.4.5_fix-imkl.patch': 'd583d570f216ca7914a0f664ffa1a292350db4ff6feca623abc6e3574d7d6245'},
+    {'FlexiBLAS-3.0.4_remove-semicolon.patch': 'a3bbcff7aeca6f8bab989e7e3a8069f2b7b660e4559042221eecaa30dc0ce300'},
+]
+
+builddependencies = [
+    ('CMake', '4.4.2'),
+    ('Python', '3.14.7'),  # required for running the tests
+    ('BLIS', '2.1'),
+    ('OpenBLAS', '0.3.34'),
+    ('AOCL-LAPACK', '5.3'),
+    # imkl is commented out, since installing it requires accepting the Intel oneAPI EULA;
+    # note: also commented out the lines below to add imkl to 'backends'!
+    ('imkl', {'arch=x86_64': '2026.1.0', 'arch=*': False}, '', True),
+]
+
+# LP64 .so should be libflexiblas_intel
+preconfigopts = r"sed -i 's/\(  PROPERTIES OUTPUT_NAME ${flexiblasname}\)/\1_intel/' ../flexiblas-%(version)s/src/CMakeLists.txt &&"
+
+# icx with -ax doesn't play well with FlexiBLAS's dynamic loading
+preconfigopts += 'CFLAGS="${CFLAGS/ -axCore-AVX512/}" '
+
+# note: first listed backend will be used as default by FlexiBLAS,
+# unless otherwise specified via easyconfig parameter flexiblas_default
+local_backends = ['OpenBLAS', 'BLIS']
+
+if ARCH == 'x86_64':
+    local_backends.append('imkl')
+
+backends = local_backends
+
+configopts = '-DEXTRA="%s" ' % ';'.join(backends + ['AOCL'])
+configopts = [configopts + ' -DINTEGER8=ON -Dimkl_LIBRARY="mkl_intel_ilp64;mkl_intel_thread;mkl_core;iomp5;pthread;m;dl"' +
+              ' -DBLIS_LIBRARY=blis64 -DOpenBLAS_LIBRARY=openblas64 -DAOCL_LIBRARY="flame64;blis-mt64"',
+              configopts + '-DAOCL_LIBRARY="flame;blis-mt"']
+
+flexiblas_default = 'imkl'
+
+postinstallcmds = [
+    # symlink to be able to use the GCC-compiled FlexiBLAS; the Intel-compiled one is called
+    # libflexiblas_intel.so.
+    'ln -s ../../../../../../x86-64-v3/Core/%(namelower)score/%(version)s/lib64/libflexiblas.so{,.3,.3.5} %(installdir)s/lib64',
+]
+
+moduleclass = 'lib'

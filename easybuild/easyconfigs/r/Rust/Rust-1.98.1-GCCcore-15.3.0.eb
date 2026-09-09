@@ -1,0 +1,24 @@
+name = 'Rust'
+version = '1.98.1'
+
+homepage = 'https://www.rust-lang.org'
+description = """Rust is a systems programming language that runs blazingly fast, prevents segfaults,
+ and guarantees thread safety."""
+
+toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
+
+source_urls = ['https://static.rust-lang.org/dist/']
+sources = ['rustc-%(version)s-src.tar.gz']
+checksums = [
+    {'rustc-1.98.1-src.tar.gz': 'dc9f8b917b32444d6c7ac43cc1b409013d3a9a633338bb60c14cdae1d15ee65a'},
+]
+
+builddependencies = [
+    ('CMake', '4.4.2'),
+    ('Python', '3.14.7'),
+]
+
+# Ensure build do not use all available cpus
+modextravars = {'CARGO_BUILD_JOBS': "1"}
+
+moduleclass = 'lang'
