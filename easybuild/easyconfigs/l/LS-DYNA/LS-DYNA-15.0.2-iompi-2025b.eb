@@ -1,7 +1,7 @@
 name = 'LS-DYNA'
 version = '15.0.2'
 easyblock = "Binary"
-modaltsoftname = 'ls-dyna-mpi'
+modaltsoftname = 'ls-dyna-mpp'
 local_lsdyna_mpp_s = 'ls-dyna_mpp_s_R15_0_2_x64_centos79_ifort190_avx512_openmpi405_sharelib'
 local_lsdyna_mpp_d = 'ls-dyna_mpp_d_R15_0_2_x64_centos79_ifort190_avx512_openmpi405_sharelib'
 
@@ -14,9 +14,10 @@ time integration.
 """
 
 # module load StdEnv/2023
+# ~/easybuild-easyconfigs/easybuild/easyconfigs/i/iompi/iompi-2025b.eb
 toolchain = {'name': 'iompi', 'version': '2025b'}
 
-# download sources from ftp.lstc.com
+# download/extract/repackage sources from ansys customer support space
 sources = [
       f'{local_lsdyna_mpp_s}.tgz',
       f'{local_lsdyna_mpp_d}.tgz'

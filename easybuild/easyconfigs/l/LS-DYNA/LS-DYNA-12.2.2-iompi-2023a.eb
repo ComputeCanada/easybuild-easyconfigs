@@ -1,9 +1,9 @@
 name = 'LS-DYNA'
-version = '13.2.0'
+version = '12.2.2'
 easyblock = "Binary"
 modaltsoftname = 'ls-dyna-mpp'
-local_lsdyna_mpp_s = 'ls-dyna_mpp_s_R13_2_0_x64_centos79_ifort190_avx512_openmpi405_sharelib'
-local_lsdyna_mpp_d = 'ls-dyna_mpp_d_R13_2_0_x64_centos79_ifort190_avx512_openmpi405_sharelib'
+local_lsdyna_mpp_s = 'ls-dyna_mpp_s_R12_2_2_x64_centos79_ifort160_avx512_openmpi405_sharelib'
+local_lsdyna_mpp_d = 'ls-dyna_mpp_d_R12_2_2_x64_centos79_ifort160_avx512_openmpi405_sharelib'
 
 homepage = 'http://www.lstc.com/products/ls-dyna'
 description = """LS-DYNA is a general-purpose finite element program capable of simulating complex real world problems. 
@@ -14,8 +14,8 @@ time integration.
 """
 
 # module load StdEnv/2023
-# ~/easybuild-easyconfigs/easybuild/easyconfigs/i/iompi/iompi-2025b.eb
-toolchain = {'name': 'iompi', 'version': '2025b'}
+# ~/easybuild-easyconfigs/easybuild/easyconfigs/i/iompi/iompi-2023a.eb
+toolchain = {'name': 'iompi', 'version': '2023a'}
 
 # download/extract/repackage sources from ansys customer support space
 sources = [
@@ -25,8 +25,8 @@ sources = [
 
 # sha256sum 
 checksums = [
-      '001001f31412a19b71ff5f07c01a3f1271788c307967b55592f1dd59f5369a79',
-      '96f3be50313e1d2fd74b64885c0a2c72b6a7d51a277b2189e3cb21bd3678bfed'
+      '94724dce0d5c61774dcd709c26693bcf5a5c74bc574a0c8323ea346a055fd792',
+      'd42bfa1f9ca83203d2f34480d6d300992639784ac003b62d161b1e8c46b3e9ce'
 ]
 
 extract_sources = True

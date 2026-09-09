@@ -1,9 +1,9 @@
 name = 'LS-DYNA'
-version = '13.2.0'
+version = '17.0.1'
 easyblock = "Binary"
 modaltsoftname = 'ls-dyna-mpp'
-local_lsdyna_mpp_s = 'ls-dyna_mpp_s_R13_2_0_x64_centos79_ifort190_avx512_openmpi405_sharelib'
-local_lsdyna_mpp_d = 'ls-dyna_mpp_d_R13_2_0_x64_centos79_ifort190_avx512_openmpi405_sharelib'
+local_lsdyna_mpp_s = 'ls-dyna_mpp_s_R17_0_1_x64_rhel810_ifx252_avx512_openmpi405_sharelib'
+local_lsdyna_mpp_d = 'ls-dyna_mpp_d_R17_0_1_x64_rhel810_ifx252_avx512_openmpi405_sharelib'
 
 homepage = 'http://www.lstc.com/products/ls-dyna'
 description = """LS-DYNA is a general-purpose finite element program capable of simulating complex real world problems. 
@@ -25,8 +25,8 @@ sources = [
 
 # sha256sum 
 checksums = [
-      '001001f31412a19b71ff5f07c01a3f1271788c307967b55592f1dd59f5369a79',
-      '96f3be50313e1d2fd74b64885c0a2c72b6a7d51a277b2189e3cb21bd3678bfed'
+      '1e3dffa7100ae47b6a786f17469434807d36041a647b3636440b45ae363fc06a',
+      '615fc1896a2ef3a9d849d3a86f19e79c34b84e71f2489227f1301ed134ac10b7'
 ]
 
 extract_sources = True
