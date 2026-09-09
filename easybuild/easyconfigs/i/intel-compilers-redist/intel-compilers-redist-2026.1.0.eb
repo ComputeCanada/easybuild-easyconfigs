@@ -1,0 +1,42 @@
+easyblock = 'Bundle'
+
+name = 'intel-compilers-redist'
+version = '2026.1.0'
+modaltsoftname = 'intel'
+
+hidden = True
+
+altroot = 'intel-compilers'
+
+homepage = 'https://software.intel.com/content/www/us/en/develop/tools/oneapi/hpc-toolkit.html'
+description = "Intel C, C++ & Fortran compilers (redistributable runtime libraries)"
+
+toolchain = SYSTEM
+
+dependencies = [
+    ('intel-compilers', version),
+]
+
+# This easyconfig copies redistributable components from restricted to soft
+# The generated module is hidden and not used
+postinstallcmds = [
+'''
+    cd $EBROOTINTELMINCOMPILERS
+    publicdir=%(installdir)s
+    shortver=%(version_major_minor)s
+    for i in $(grep -h "installdir.*" compiler/$shortver/share/doc/compiler/[cf]redist.txt | cut -c 13-); do
+       if [ -f compiler/$shortver/$i ]; then
+         mkdir -p $(dirname $publicdir/compiler/$shortver/$i)
+         cp -a compiler/$shortver/$i $publicdir/compiler/$shortver/$i
+       fi
+    done
+    for i in $(find . -type l); do
+       if [ -f $publicdir/$i ]; then
+         cp -a $i $publicdir/$i
+       fi
+    done
+    cp -a tbb tcm umf $publicdir
+'''
+]
+
+moduleclass = 'lib'

@@ -1,5 +1,5 @@
---- arch/makefile.include.intel.orig	2026-03-12 14:40:59.000000000 -0700
-+++ arch/makefile.include.intel	2026-05-12 09:10:59.000000000 -0700
+--- arch/makefile.include.intel.orig	2026-07-17 10:53:22.000000000 -0700
++++ arch/makefile.include.intel	2026-09-02 12:40:57.000000000 -0700
 @@ -10,8 +10,8 @@
  
  CPP         = fpp -f_com=no -free -w0  $*$(FUFFIX) $*$(SUFFIX) $(CPP_OPTIONS)
@@ -29,7 +29,7 @@
  LLIBS       = -lstdc++
  
  ##
-@@ -48,27 +48,62 @@
+@@ -48,27 +48,59 @@
  
  # Intel MKL (FFTW, BLAS, LAPACK, and scaLAPACK)
  # (Note: for Intel Parallel Studio's MKL use -mkl instead of -qmkl)
@@ -71,6 +71,9 @@
 +CPP_OPTIONS    += -DVASP2WANNIER90
 +LLIBS          += -lwannier
 +
++#VASPsol support
++CPP_OPTIONS += -Dsol_compat
++
 +#Libxc-support
 +CPP_OPTIONS += -DUSELIBXC
 +LLIBS       += -lxcf03 -lxc
@@ -105,10 +108,4 @@
 +CXX_ML      = mpiicpc -cxx=icpx
 +CXXFLAGS_ML = -O3 -std=c++17 -Wall
 +INCLUDE_ML  =
-+
-+#support LIBMBD
-+CPP_OPTIONS += -DLIBMBD
-+LIBMBD_ROOT ?= $(EBROOTLIBMBD)
-+LLIBS       +=  -lmbd
-+INCS        += -I$(LIBMBD_ROOT)/include/mbd
 +

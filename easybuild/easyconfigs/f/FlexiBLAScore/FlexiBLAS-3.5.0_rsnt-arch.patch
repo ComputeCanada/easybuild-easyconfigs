@@ -1,0 +1,23 @@
+--- flexiblas-3.5.0/src/paths.c.orig	2025-10-25 04:44:56.000000000 +0000
++++ flexiblas-3.5.0/src/paths.c	2026-08-25 18:14:35.940379905 +0000
+@@ -198,6 +198,20 @@
+     const char * delim = ":";
+ #endif
+ 
++    char * arch = getenv("RSNT_ARCH") == "avx512" ? "x86-64-v4" : "x86-64-v3";
++    if ( arch){
++        // .../easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1/lib64/flexiblas ->
++        // .../easybuild/software/2023/x86-64-v[34]/Compiler/gcccore/flexiblas/3.3.1/lib64/flexiblas
++        const char *default_lib_path = CMAKE_INSTALL_FULL_LIBDIR "/" FLEXIBLAS_LIBRARY_DIR;
++        v = strstr(default_lib_path, "/x86-64-v3/Core/flexiblascore/");
++        if ( v){
++            size_t len = strlen(default_lib_path) + 8 + 1;
++            p = malloc(len);
++            snprintf(p, len, "%.*s/%s/Compiler/gcccore/flexiblas/%s", v - default_lib_path, default_lib_path, arch, v + 30);
++            __flexiblas_add_path(p);
++            free(p);
++        }
++    }
+     if ( getenv(ENV_FLEXIBLAS_LIBRARY_PATH)){
+         v = strdup(getenv(ENV_FLEXIBLAS_LIBRARY_PATH));
+         v = csc_str_remove_char(v, '"');

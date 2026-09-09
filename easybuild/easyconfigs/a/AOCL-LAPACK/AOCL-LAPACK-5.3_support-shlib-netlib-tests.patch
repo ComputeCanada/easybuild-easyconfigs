@@ -1,0 +1,47 @@
+Support the Netlib test with shared library for AOCL-LAPACK
+
+Bart Oldeman <bart.oldeman@calculquebec.ca>
+diff -ur libflame-5.3.orig/CMakeLists.txt libflame-5.3/CMakeLists.txt
+--- libflame-5.3.orig/CMakeLists.txt	2026-05-11 15:02:33.000000000 +0000
++++ libflame-5.3/CMakeLists.txt	2026-08-27 13:46:00.047675850 +0000
+@@ -1347,10 +1347,6 @@
+ 
+ if (BUILD_NETLIB_TEST)
+ 
+-	if (BUILD_SHARED_LIBS)
+-		message(FATAL_ERROR "Netlib test is not supported for shared library build")
+-	endif()
+-
+ 	if(WIN32)
+ 		add_subdirectory(netlib-test)
+ 	else()
+diff -ur libflame-5.3.orig/netlib-test/run-netlib-test.sh libflame-5.3/netlib-test/run-netlib-test.sh
+--- libflame-5.3.orig/netlib-test/run-netlib-test.sh	2026-05-11 15:02:33.000000000 +0000
++++ libflame-5.3/netlib-test/run-netlib-test.sh	2026-08-27 13:55:07.651133617 +0000
+@@ -8,7 +8,7 @@
+ LAPACK_LIB=libflame.a
+ LAPACK_LIB_PATH=
+ AOCLUTILS_LIB_PATH=
+-AOCLUTILS_LIB=libaoclutils.a
++AOCLUTILS_LIB=libaoclutils.so
+ DTL_LIB=libaocldtl.a
+ DTL_LIB_PATH=
+ ILP64=0
+@@ -113,7 +113,7 @@
+ 
+ FORTRAN_FLAGS="gfortran -fopenmp"
+ C_FLAGS="-O2"
+-TESTLAPACKLIB="$PWD/liblapack.a $AOCLUTILS_LIB_PATH/$AOCLUTILS_LIB"
++TESTLAPACKLIB="$LAPACK_LIB_PATH/$LAPACK_LIB $AOCLUTILS_LIB_PATH/$AOCLUTILS_LIB"
+ 
+ if [[ $ILP64 =~ ("1"|"ON") ]]
+ then
+@@ -132,7 +132,7 @@
+ 	GCOV_FLAGS="-lgcov --coverage"
+ fi
+ 
+-OMP_NUM_THREADS=1 make FC="$FORTRAN_FLAGS" CFLAGS="$C_FLAGS" LDFLAGS+="-lstdc++ -lpthread -fopenmp $GCOV_FLAGS" LAPACKLIB="$TESTLAPACKLIB" -j
++OMP_NUM_THREADS=1 make FC="$FORTRAN_FLAGS" CFLAGS="$C_FLAGS" LDFLAGS+="-Wl,-rpath=$LAPACK_LIB_PATH -lstdc++ -lpthread -fopenmp $GCOV_FLAGS" LAPACKLIB="$TESTLAPACKLIB" BLASLIB="$BLAS_LIB_PATH/$BLAS_LIB" -j
+ 
+ if [[ $AOCL_LAPACK_SUMMARY = "1" ]]
+ then

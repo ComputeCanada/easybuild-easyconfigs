@@ -1,0 +1,47 @@
+--- src/pot.F.orig	2026-09-02 09:41:32.000000000 -0700
++++ src/pot.F	2026-09-02 09:44:23.000000000 -0700
+@@ -737,6 +737,12 @@
+ !=======================================================================
+ 
+       CALL POT_FLIP(CVTOT, GRIDC,WDES%NCDIJ )
++! solvation__
++! vaclevel
++      IF (LSOL) CALL GET_FERMISHIFT(LATT_CUR, T_INFO, GRIDC, WDES, CWORK, CHTOT)
++! vaclevel
++! solvation__
++
+ 
+       DO ISP=1,WDES%NCDIJ
+          CALL SETUNB_COMPAT(CVTOT(1,ISP),GRIDC)
+--- src/mpi.F.orig	2026-09-02 09:47:40.000000000 -0700
++++ src/mpi.F	2026-09-02 12:05:22.000000000 -0700
+@@ -2917,6 +2917,29 @@
+       PROFILING_STOP('m_sumb_s')
+ 
+       END SUBROUTINE M_sumb_s
++! Subroutine for VASPsol - Added by D. Gaissmaier
++!----------------------------------------------------------------------
++!
++! Global sum function - required for VASPsol
++!
++!----------------------------------------------------------------------
++
++      SUBROUTINE M_sum_1(COMM, v1)
++      USE mpimy
++      IMPLICIT NONE
++
++      TYPE(communic) COMM
++      REAL(q) vec(1),v1
++
++      vec(1)=v1
++
++      CALL M_sumb_d(COMM, vec, 1)
++
++      v1=vec(1)
++
++      RETURN
++      END SUBROUTINE
++! End of VASPsol subroutine
+ 
+ 
+ !----------------------------------------------------------------------

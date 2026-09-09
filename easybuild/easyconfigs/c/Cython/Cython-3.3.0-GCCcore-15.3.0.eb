@@ -1,0 +1,35 @@
+easyblock = 'PythonPackage'
+
+name = 'Cython'
+version = '3.3.0'
+
+homepage = 'https://cython.org/'
+description = """
+Cython is an optimising static compiler for both the Python programming
+language and the extended Cython programming language (based on Pyrex).
+"""
+docurls = [
+    'https://cython.org/#documentation',
+    'https://github.com/cython/cython',
+]
+
+toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
+
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['eed0d93fbca7087f143b42c34b05a825849bdf17f101572c2105acfa49aa88b8']
+
+builddependencies = [('binutils', '2.46.1')]
+
+multi_deps = {'Python': ['3.14']}
+hidden = True
+
+sanity_check_paths = {
+    'files': ['bin/cygdb', 'bin/cython', 'bin/cythonize'],
+    'dirs': ['lib/python%(pyshortver)s/site-packages'],
+}
+
+sanity_check_commands = [
+    'cython --version',
+]
+
+moduleclass = 'lang'

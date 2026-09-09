@@ -1,0 +1,16 @@
+easyblock = 'SystemCompiler'
+ 
+name = 'GCC'
+version = '15.3.0'
+ 
+homepage = 'https://gcc.gnu.org/'
+description = """The GNU Compiler Collection includes front ends for C, C++, Objective-C, Fortran, Java, and Ada,
+ as well as libraries for these languages (libstdc++, libgcj,...)."""
+ 
+toolchain = SYSTEM
+
+builddependencies = [('GCCcore', '15.3.0')]
+
+modextrapaths = {'PATH': '%(version_major)s'}
+ 
+moduleclass = 'compiler'

@@ -27,4 +27,6 @@ dependencies = [
     ('libpng', '1.6.38'),
 ]
 
+postinstallcmds = ['mv %(builddir)s/share %(installdir)s/']
+
 moduleclass = 'bio'
