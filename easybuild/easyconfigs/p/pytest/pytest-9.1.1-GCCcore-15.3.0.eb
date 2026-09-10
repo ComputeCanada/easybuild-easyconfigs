@@ -1,0 +1,33 @@
+easyblock = 'PythonPackage'
+
+name = 'pytest'
+version = '9.1.1'
+
+homepage = 'https://pytest.org'
+description = """pytest: simple powerful testing with Python"""
+
+toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
+
+builddependencies = [('binutils', '2.40')]
+multi_deps = {'Python': ['3.14']}
+
+installopts = '--no-index --no-deps'
+sources = ['requirements-%(version)s.txt']
+checksums = ['e8fd8e9e562205fe3a271c41975a2a4e8a52d79abb4fd2bac5db267c435d3e50']
+
+exts_filter = ('python -c "import pytest"', "")
+
+unpack_sources = False
+use_pip = True
+use_pip_for_deps = True
+use_pip_requirement = True
+fix_python_shebang_for = ['bin/*']
+sanity_pip_check = True
+exts_defaultclass = 'PythonPackage'
+
+sanity_check_paths = {
+    'files': ['bin/pytest'],
+    'dirs': ['lib/python%(pyshortver)s/site-packages'],
+}
+
+moduleclass = 'tools'
