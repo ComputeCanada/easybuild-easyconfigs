@@ -33,6 +33,7 @@ builddependencies = [
 
 # LP64 .so should be libflexiblas_intel
 preconfigopts = r"sed -i 's/\(  PROPERTIES OUTPUT_NAME ${flexiblasname}\)/\1_intel/' ../flexiblas-%(version)s/src/CMakeLists.txt &&"
+preconfigopts += r"sed -i 's/-xCORE-AVX2//' ../flexiblas-%(version)s/libcscutils/CMakeModules/CCompilerSettings.cmake &&"
 
 # icx with -ax doesn't play well with FlexiBLAS's dynamic loading
 preconfigopts += 'CFLAGS="${CFLAGS/ -axCore-AVX512/}" '
@@ -46,7 +47,7 @@ if ARCH == 'x86_64':
 
 backends = local_backends
 
-configopts = '-DEXTRA="%s" ' % ';'.join(backends + ['AOCL'])
+configopts = '-DLTO=OFF -DEXTRA="%s" ' % ';'.join(backends + ['AOCL'])
 configopts = [configopts + ' -DINTEGER8=ON -Dimkl_LIBRARY="mkl_intel_ilp64;mkl_intel_thread;mkl_core;iomp5;pthread;m;dl"' +
               ' -DBLIS_LIBRARY=blis64 -DOpenBLAS_LIBRARY=openblas64 -DAOCL_LIBRARY="flame64;blis-mt64"',
               configopts + '-DAOCL_LIBRARY="flame;blis-mt"']
