@@ -1,7 +1,7 @@
 easyblock = 'CMakeMake'
 
 name = 'Catch2'
-version = '3.14.0'
+version = '3.16.0'
 
 homepage = 'https://github.com/catchorg/Catch2'
 description = """A modern, C++-native, header-only,
@@ -13,7 +13,7 @@ toolchain = SYSTEM
 
 source_urls = ['https://github.com/catchorg/Catch2/archive/']
 sources = ['v%(version)s.tar.gz']
-checksums = ['ba2a939efead3c833c499cf487e185762f419a71d30158cd1b43c6079c586490']
+checksums = ['0957cae5821b17ce07f0833aaa52b5137643a8382203221f363a8303c109af34']
 
 builddependencies = [
     ('binutils', '2.45'),
