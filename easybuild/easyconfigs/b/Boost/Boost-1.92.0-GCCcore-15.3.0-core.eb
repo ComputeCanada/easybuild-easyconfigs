@@ -1,0 +1,35 @@
+name = 'Boost'
+version = '1.92.0'
+
+modaltsoftname = 'boost-core'
+versionsuffix = '-core'
+hidden = True
+
+homepage = 'https://www.boost.org/'
+description = """Boost provides free peer-reviewed portable C++ source libraries."""
+
+toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
+toolchainopts = {'pic': True}
+
+source_urls = ['https://archives.boost.io/release/%(version)s/source']
+sources = ['%%(namelower)s_%s.tar.gz' % '_'.join(version.split('.'))]
+checksums = ['c4a3b310ddd2472416e091067166b0713be97c63f38c212c484ada022fd296ce']
+
+# In order to build `libboost_numpy*`
+builddependencies = [('numpy', '2.5.3'),]
+
+dependencies = [
+    ('bzip2', '1.0.8'),
+    ('zlib', '1.2.13'),
+    ('XZ', '5.4.2'),
+    ('zstd', '1.5.5'),
+    ('ICU', '73.2'),
+]
+
+multi_deps = {'Python': ['3.14']}
+
+# disable MPI, build Boost libraries with tagged layout
+boost_mpi = False
+tagged_layout = True
+
+moduleclass = 'devel'
