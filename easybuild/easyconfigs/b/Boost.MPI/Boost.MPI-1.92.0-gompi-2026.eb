@@ -10,7 +10,7 @@ toolchain = {'name': 'gompi', 'version': '2026'}
 toolchainopts = {'pic': True, 'usempi': True}
 
 source_urls = ['https://archives.boost.io/release/%(version)s/source']
-sources = ['%%(namelower)s_%s.tar.gz' % '_'.join(version.split('.'))]
+sources = ['boost_%s.tar.gz' % '_'.join(version.split('.'))]
 patches = ['Boost.MPI-1.92.0_mpi-python-operator-fix.patch']
 checksums = [
     {'boost_1_92_0.tar.gz': 'c4a3b310ddd2472416e091067166b0713be97c63f38c212c484ada022fd296ce'},
