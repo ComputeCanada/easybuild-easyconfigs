@@ -1,6 +1,6 @@
 easyblock = 'EB_Boost'
 
-name = 'Boost'
+name = 'Boost.MPI'
 version = '1.92.0'
 
 homepage = 'https://www.boost.org/'
