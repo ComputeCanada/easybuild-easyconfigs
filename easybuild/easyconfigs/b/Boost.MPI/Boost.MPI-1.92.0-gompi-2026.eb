@@ -1,0 +1,38 @@
+easyblock = 'EB_Boost'
+
+name = 'Boost'
+version = '1.92.0'
+
+homepage = 'https://www.boost.org/'
+description = """Boost provides free peer-reviewed portable C++ source libraries."""
+
+toolchain = {'name': 'gompi', 'version': '2026'}
+toolchainopts = {'pic': True, 'usempi': True}
+
+source_urls = ['https://archives.boost.io/release/%(version)s/source']
+sources = ['%%(namelower)s_%s.tar.gz' % '_'.join(version.split('.'))]
+patches = ['Boost.MPI-1.92.0_mpi-python-operator-fix.patch']
+checksums = [
+    {'boost_1_92_0.tar.gz': 'c4a3b310ddd2472416e091067166b0713be97c63f38c212c484ada022fd296ce'},
+    {'Boost.MPI-1.92.0_mpi-python-operator-fix.patch':
+     'ddf6c6ccd5916708e1bf506feb28d325b326ef7a662cd97a6f3cbc4783b7966a'},
+]
+
+# In order to build `libboost_numpy*`
+builddependencies = [('numpy', '2.5.3'),]
+
+dependencies = [
+    ('bzip2', '1.0.8'),
+    ('zlib', '1.2.13'),
+    ('XZ', '5.4.2'),
+    ('zstd', '1.5.5'),
+    ('ICU', '73.2'),
+]
+
+multi_deps = {'Python': ['3.14']}
+
+# enable MPI, build Boost libraries with tagged layout
+boost_mpi = True
+tagged_layout = True
+
+moduleclass = 'devel'
