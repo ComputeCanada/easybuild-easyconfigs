@@ -68,7 +68,7 @@ poetry==2.4.3+computecanada
 poetry_core==2.4.0+computecanada
 poetry_plugin_bundle==1.7.0+computecanada
 ptyprocess==0.7.0+computecanada
-pybind11==3.1.0+computecanada
+pybind11==2.13.6+computecanada
 pycparser==3.0+computecanada
 pygments==2.21.0+computecanada
 pylev==1.4.0+computecanada
