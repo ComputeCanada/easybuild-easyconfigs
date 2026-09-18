@@ -13,7 +13,7 @@ multi_deps = {
 multi_deps_load_default = False
 
 sources = ['requirements-%(version)s.txt']
-checksums = ['4921305a3dfc0e477cdad72942e7838db1d50027d4b8c511d9b17d0aab2b6fb0']
+checksums = ['9748bd2e80f1e1730d68d421bba542c752212a74bf315d5878519bf80ea16370']
 
 # wheels must be available from the wheelhouse
 installopts = '--no-index '
