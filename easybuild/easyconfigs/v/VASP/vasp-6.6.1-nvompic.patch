@@ -1,0 +1,32 @@
+--- src/.objects.orig	2026-09-04 14:09:53.000000000 -0700
++++ src/.objects	2026-09-04 14:11:10.000000000 -0700
+@@ -145,7 +145,7 @@
+ 	charge.o \
+ 	us.o \
+ 	extpot.o \
+-	paw.o \
++	pawn.o \
+ 	Lebedev-Laikov.o \
+ 	stockholder.o \
+ 	pot_electrostat.o \
+--- arch/makefile.include.nvhpc_acc.orig	2026-09-04 13:48:12.000000000 -0700
++++ arch/makefile.include.nvhpc_acc	2026-09-11 10:33:25.000000000 -0700
+@@ -92,14 +92,13 @@
+ LAPACK      = -llapack
+ 
+ # scaLAPACK (mandatory)
+-SCALAPACK   = -Mscalapack
++SCALAPACK   = -lscalapack
+ 
+-LLIBS      += $(SCALAPACK) $(LAPACK) $(BLAS)
++LLIBS      += $(SCALAPACK) -lflexiblas
+ 
+ # FFTW (mandatory)
+-FFTW_ROOT  ?= /path/to/your/fftw/installation
+-LLIBS      += -L$(FFTW_ROOT)/lib -lfftw3
+-INCS       += -I$(FFTW_ROOT)/include
++LLIBS      +=  -lfftw3
++INCS       += -I$(EBROOTFFTW)/include
+ 
+ # Use cusolvermp (optional)
+ # supported as of NVHPC-SDK 24.1 (and needs CUDA-11.8)
