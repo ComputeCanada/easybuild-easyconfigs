@@ -48,7 +48,7 @@ local_lapack_ilp64_component[2]['checksums'].extend([
     {'AOCL-LAPACK-5.1_libname-suffix.patch':
      '88fb092df0f4aa553d94036dc0a4609df0f905a0c31a3fd4daeb4451bf44ff7f'},
     {'AOCL-LAPACK-5.3_support-shlib-netlib-tests.patch':
-     'ee4dd7b5c6f12b2e58e61aae13c7fb7d4ad5903d98fcead3777a11de817a333a'}
+     'b79e115ba252445f69c97c8af82a1d746756caf3533f818f913ff36213721900'},
 ])
 local_lapack_ilp64_component[2]['configopts'] += (' -DENABLE_ILP64=ON -DLIBNAME_SUFFIX=64 '
     '-DAOCL_ROOT=$EBROOTAOCLMINBLAS -DAOCL_BLAS_INCLUDE_DIR=$EBROOTAOCLMINBLAS/include/blis64 '
