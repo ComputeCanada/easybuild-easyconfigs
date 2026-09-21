@@ -28,7 +28,12 @@ local_lapack_component = [name, version, {
     'source_urls': ['https://github.com/amd/libflame/archive/refs/tags'],
     'checksums': ['ecb74c879b4d6bb33e159300304a9b48206d2c2b546dceb7d097b339eb127b9c'],
     'start_dir': 'libflame-%(version)s',
-    'preconfigopts': 'sed -i "s/-pie//" ../libflame-5.3/cmake/CompilerFlags.cmake && ',
+    'preconfigopts': ('sed -i "s/-pie//" ../libflame-5.3/cmake/CompilerFlags.cmake && '
+                      'sed -i "s/gfortran -f/$FS $FCFLAGS -q/" %(start_dir)s/netlib-test/run-netlib-test.sh && '
+                      'sed -i "s/fdefault-integer-8/i8/" %(start_dir)s/netlib-test/run-netlib-test.sh && '
+                      'sed -i "s/ -j$/ TIMER=NONE -j/" %(start_dir)s/netlib-test/run-netlib-test.sh && '
+                      'sed -i "s/-frecursive//" %(start_dir)s/netlib-test/lapack-3.12/make.inc.example && '
+                      'mkdir -p %(start_dir)s/lib && touch %(start_dir)s/lib/libflame64.so && '),
     'configopts': ('-DCMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH=$EBROOTAOCLMINBLAS '
                    '-DENABLE_F2C_DOTC=ON -DENABLE_VOID_RETURN_COMPLEX_FUNCTION=ON '
                    '-DCMAKE_C_FLAGS_RELEASE="$CFLAGS -mtune=generic -DNDEBUG"'),
@@ -51,7 +56,8 @@ local_lapack_ilp64_component[2]['checksums'].extend([
 ])
 local_lapack_ilp64_component[2]['configopts'] += (' -DENABLE_ILP64=ON -DLIBNAME_SUFFIX=64 '
     '-DAOCL_ROOT=$EBROOTAOCLMINBLAS -DAOCL_BLAS_INCLUDE_DIR=$EBROOTAOCLMINBLAS/include/blis64 '
-    '-DAOCL_BLAS_LIB=libblis-mt64.so')
+    '-DAOCL_BLAS_LIB=libblis-mt64.so '
+    '-DEXT_LAPACK_LIBRARY_PATH=%(start_dir)s/lib -DEXT_LAPACK_LIBNAME=libflame64.so')
 
 components = [
     ('AOCL-Utils', version, {
