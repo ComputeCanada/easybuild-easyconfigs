@@ -89,4 +89,7 @@ test_suite_ignore_patterns = [
     "std/time/time.zone/time.zone.db/time.zone.db.access",
 ]
 
+# By removing this ld.lld will go via our ld wrapper script which injects RPATHs
+postinstallcmds = ['rm %(installdir)s/bin/ld.lld']
+
 moduleclass = 'compiler'
