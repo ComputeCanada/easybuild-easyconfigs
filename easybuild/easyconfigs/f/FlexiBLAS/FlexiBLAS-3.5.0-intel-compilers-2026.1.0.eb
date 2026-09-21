@@ -13,11 +13,13 @@ sources =  [SOURCELOWER_TAR_GZ]
 patches = [
     'FlexiBLAS-3.4.5_fix-imkl.patch',
     'FlexiBLAS-3.0.4_remove-semicolon.patch',
+    '../FlexiBLAScore/FlexiBLAS-3.5.0_revert-xerbla.patch',
 ]
 checksums = [
     {'flexiblas-3.5.0.tar.gz': '4f135fd3d4d844f221624b13734acd0d221a4347a19fa78604a6cbcaa3f477ea'},
     {'FlexiBLAS-3.4.5_fix-imkl.patch': 'd583d570f216ca7914a0f664ffa1a292350db4ff6feca623abc6e3574d7d6245'},
     {'FlexiBLAS-3.0.4_remove-semicolon.patch': 'a3bbcff7aeca6f8bab989e7e3a8069f2b7b660e4559042221eecaa30dc0ce300'},
+    {'FlexiBLAS-3.5.0_revert-xerbla.patch': '757d3d483f5731587aa3441ee28f05f4043735a33f4571636fdfb491e6cbb747'},
 ]
 
 builddependencies = [
