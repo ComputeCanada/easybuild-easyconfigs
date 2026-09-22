@@ -1,7 +1,7 @@
 easyblock = 'Bundle'
 
 name = 'Apptainer'
-version = '1.5.3'
+version = '1.5.4'
 
 homepage = 'https://apptainer.org'
 description = """Apptainer/Singularity is an application containerization solution for High-Performance Computing (HPC). The goal
@@ -65,17 +65,13 @@ exec %(installdir)s/bin/apptainer.bin ${1+"$@"}"""
 components = [
     ('apptainer', version, {
         'source_urls': ['https://github.com/%(name)s/%(name)s/releases/download/v%(version)s'],
-        'patches': [
-            'Apptainer-1.1.3_mksquashfs.patch',
-	    'Apptainer-1.5.3_fix-Go-1.27.1.patch',
-        ],
+        'patches': ['Apptainer-1.1.3_mksquashfs.patch'],
         'checksums': [
-            '5a3bf360a5240086324aa7f7005ab7eeee91095e2091078b3f9783eaf6e7288a',
+            'ec1f51e696ba384f90bc7ab2c7a438fee70da98763d001b8f3175d14a91cfcf6',
             '38a3da492afcfa5b80538803a3fc4433fa7ed7e93822ea5ddd4a10c87046005d',
-            'b63376641883e72eacdd470d80bfd7ec20a513b113ca0425986412e45c5320e3',
         ],
         'configure_cmd': './mconfig',
-        'prebuildopts': 'cd builddir && go mod vendor && ',
+        'prebuildopts': 'cd builddir &&',
         'preinstallopts': 'cd builddir &&',
         'installopts': (' && mv %(installdir)s/bin/apptainer{,.bin}'
                         ' && echo \'' + local_wrapper_script + '\' > %(installdir)s/bin/apptainer'
@@ -122,6 +118,9 @@ postinstallcmds = [
     # so that --nv uses the system and not the Gentoo ldconfig -p
     'ln -s /sbin/ldconfig %(installdir)s/libexec/apptainer/bin/ldconfig',
 ]
+
+# This restores LD_LIBRARY_PATH with --nv from 1.4 behaviour to avoid issues with bind-mounting /cvmfs
+modextravars = {'APPTAINERENV_LD_LIBRARY_PATH': '/.singularity.d/libs'}
 
 sanity_check_paths = {
     'files': ['bin/apptainer', 'libexec/apptainer/bin/squashfuse_ll', 'libexec/apptainer/bin/fakeroot-sysv',
