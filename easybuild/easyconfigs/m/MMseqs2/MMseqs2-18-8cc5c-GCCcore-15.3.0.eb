@@ -1,0 +1,28 @@
+easyblock = 'CMakeMake'
+
+name = 'MMseqs2'
+version = "18-8cc5c"
+
+homepage = 'https://mmseqs.com'
+description = "MMseqs2: ultra fast and sensitive search and clustering suite"
+
+toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
+
+source_urls = ['https://github.com/soedinglab/MMseqs2/archive/']
+sources = ['%(version)s.tar.gz']
+checksums = ['3541b67322aee357fd9ca529750d36cb1426aa9bcd1efb2dc916e35219e1a41c']
+
+builddependencies = [('CMake', '4.4.2')]
+
+separate_build_dir = True
+
+configopts = '-DCMAKE_BUILD_TYPE=RELEASE -DNATIVE_ARCH=0'
+
+modextrapaths = {'PATH': 'util'}
+
+sanity_check_paths = {
+    'files': ['bin/mmseqs'],
+    'dirs': ['util'],
+}
+
+moduleclass = 'bio'

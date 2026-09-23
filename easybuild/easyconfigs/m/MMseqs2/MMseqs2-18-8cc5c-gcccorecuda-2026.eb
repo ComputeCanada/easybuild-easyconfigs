@@ -1,0 +1,32 @@
+easyblock = 'CMakeMake'
+
+name = 'MMseqs2'
+version = "18-8cc5c"
+
+homepage = 'https://mmseqs.com'
+description = "MMseqs2: ultra fast and sensitive search and clustering suite"
+
+toolchain = {'name': 'gcccorecuda', 'version': '2026'}
+
+source_urls = ['https://github.com/soedinglab/MMseqs2/archive/']
+sources = ['%(version)s.tar.gz']
+patches = ['MMseqs2-18-8cc5c-thrust-headers.patch']
+checksums = [
+        '3541b67322aee357fd9ca529750d36cb1426aa9bcd1efb2dc916e35219e1a41c',
+        'c2a683e42b33549fc817208c6d51668c6a64f0c5104de7d14f9c5bc3043accea'
+]
+
+builddependencies = [('CMake', '4.4.2')]
+
+separate_build_dir = True
+
+configopts = '-DCMAKE_BUILD_TYPE=RELEASE -DNATIVE_ARCH=0 -DENABLE_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="%(cuda_cc_cmake)s"'
+
+modextrapaths = {'PATH': 'util'}
+
+sanity_check_paths = {
+    'files': ['bin/mmseqs'],
+    'dirs': ['util'],
+}
+
+moduleclass = 'bio'
