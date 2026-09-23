@@ -1,0 +1,30 @@
+easyblock = 'Tarball'
+
+name = 'cuDSS'
+version = '0.8.0.10'
+
+homepage = 'https://developer.nvidia.com/cudss'
+description = """The NVIDIA cuDSS: A high-performance CUDA Library for Direct Sparse Solvers."""
+
+toolchain = {'name': 'CUDAcore', 'version': '13.3.1'}
+toolchainopts = {'optarch': 'False'}
+local_cuda_major = toolchain['version'].split('.')[0] # major
+
+source_urls = ['https://developer.download.nvidia.com/compute/cudss/redist/libcudss/linux-x86_64']
+sources = [f'lib%(namelower)s-linux-x86_64-%(version)s_cuda{local_cuda_major}-archive.tar.xz']
+checksums = ['ba18f5fd80dcbbe905d158caac5b3061d848442bb5abd477b5f296b4257a4937']
+
+sanity_check_paths = {
+    'files': [
+        "lib/libcudss.so",
+        "lib/libcudss_commlayer_nccl.so",
+        "lib/libcudss_commlayer_openmpi.so",
+        "lib/libcudss_mtlayer_gomp.so",
+        "lib/libcudss_static.a",
+    ],
+    'dirs': ['include', 'lib'],
+}
+
+accept_eula = True
+
+moduleclass = 'numlib'
