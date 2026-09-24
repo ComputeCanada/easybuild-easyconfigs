@@ -6,7 +6,7 @@ version = '20250930' # no actual version
 homepage = 'https://github.com/google/XNNPACK'
 description = """High-efficiency floating-point neural network inference operators for mobile, server, and Web."""
 
-toolchain = {'name': 'gfbfc', 'version': '2023.2.129'}
+toolchain = {'name': 'gcccorecuda', 'version': '2023.2.129'}
 toolchainopts = {'pic': True}
 
 github_account = 'google'
