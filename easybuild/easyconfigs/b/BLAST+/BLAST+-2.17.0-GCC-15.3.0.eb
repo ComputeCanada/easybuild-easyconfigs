@@ -1,0 +1,65 @@
+easyblock = 'ConfigureMake'
+
+name = 'BLAST+'
+version = '2.17.0'
+
+homepage = 'https://blast.ncbi.nlm.nih.gov/'
+description = """Basic Local Alignment Search Tool, or BLAST, is an algorithm
+for comparing primary biological sequence information, such as the amino-acid
+sequences of different proteins or the nucleotides of DNA sequences."""
+
+toolchain = {'name': 'GCC', 'version': '15.3.0'}
+toolchainopts = {'usempi': True, 'pic': True}
+
+source_urls = ['https://ftp.ncbi.nlm.nih.gov/blast/executables/%(namelower)s/%(version)s/']
+sources = ['ncbi-blast-%(version)s+-src.tar.gz']
+patches = ['BLAST+-2.17.0_fix-removed-boost-dummy-cond.patch']
+checksums = [
+    {'ncbi-blast-2.17.0+-src.tar.gz': '502057a88e9990e34e62758be21ea474cc0ad68d6a63a2e37b2372af1e5ea147'},
+    {'BLAST+-2.17.0_fix-removed-boost-dummy-cond.patch':
+     'c0bed1448441f3c7582357053cb5d38fcdcdfaf45d0c4a4c04f315d22ce5574d'},
+]
+
+builddependencies = [
+    ('Boost', '1.92.0'),
+    ('LMDB', '0.9.35'),
+    ('Python', '3.14'),
+    ('Perl', '5.44.0'),
+]
+
+dependencies = [
+]
+
+# remove line that prepends system paths to $PATH from configure script
+
+preconfigopts = r'sed -i "s|^PATH=\(.*\)$|#PATH=\1 |" %(start_dir)s/src/build-system/configure && '
+
+_base_configopts = " ".join([
+    "--with-z=$EBROOTGENTOO",
+    "--with-bz2=$EBROOTGENTOO",
+    "--with-pcre=$EBROOTGENTOO",
+    "--with-gmp=$EBROOTGENTOO",
+    "--with-png=$EBROOTGENTOO",
+    "--with-jpeg=$EBROOTGENTOO",
+    "--with-openssl=$EBROOTGENTOO",
+    "--with-tiff=$EBROOTGENTOO",
+    "--with-libxml=$EBROOTGENTOO",
+    "--with-freetype=$EBROOTGENTOO",
+    "--with-zstd=$EBROOTGENTOO",
+    "--with-lzo=$EBROOTGENTOO",
+    "--with-boost=$EBROOTBOOST",
+    "--with-lmdb=$EBROOTLMDB",
+    "--with-perl=$EBROOTPERL",
+    "--with-64",
+])
+# Building both shared and static libs in configopts:
+
+configopts = [f'{_base_configopts} {x}' for x in ('--with-dll', '--with-static')]
+
+sanity_check_paths = {
+    'files': ['bin/blastn', 'bin/blastp', 'bin/blastx',
+              'lib/libblast.a', 'lib/libblast.%s' % SHLIB_EXT],
+    'dirs': ['include'],
+}
+
+moduleclass = 'bio'
