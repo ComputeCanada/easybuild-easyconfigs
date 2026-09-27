@@ -1,0 +1,75 @@
+easyblock = 'ConfigureMake'
+
+name = 'PostgreSQL'
+version = '18.6'
+
+homepage = 'https://www.postgresql.org/'
+description = """PostgreSQL is a powerful, open source object-relational database system.
+ It is fully ACID compliant, has full support for foreign keys,
+ joins, views, triggers, and stored procedures (in multiple languages).
+ It includes most SQL:2008 data types, including INTEGER,
+ NUMERIC, BOOLEAN, CHAR, VARCHAR, DATE, INTERVAL, and TIMESTAMP.
+ It also supports storage of binary large objects, including pictures,
+ sounds, or video. It has native programming interfaces for C/C++, Java,
+ .Net, Perl, Python, Ruby, Tcl, ODBC, among others, and exceptional documentation."""
+
+toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
+
+source_urls = ['http://ftp.postgresql.org/pub/source/v%(version)s/']
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['983ee554ec53dbeb9b70797bef9fcf4e67e117e7e48ca1463cc80b3ff8e8ff3f']
+
+builddependencies = [
+    ('Perl', '5.44.0'),
+    ('Cython', '3.3.0'),
+]
+
+osdependencies = [OS_PKG_OPENSSL_DEV]
+
+configopts = '--with-python --with-openssl'
+
+multi_deps = {'Python': ['3.14']}
+multi_deps_extensions_only = True
+
+
+exts_defaultclass = 'PythonPackage'
+exts_filter = ("python -c 'import psycopg, %(ext_name)s'", '')
+exts_list = [
+    ('psycopg', '3.3.6', {
+        'source_tmpl': '%(name)s-%(version)s.tar.gz',
+        'source_urls': ['https://pypi.python.org/packages/source/%(nameletter)s/%(name)s'],
+        'checksums': ['c081f2250df751a943036e42db6df4571c66cd0aabe8291a7a506512b12007d2'],
+    }),
+    ('psycopg_binary', '3.3.6', {
+        'preinstallopts': "python ./tools/ci/copy_to_binary.py && cd psycopg_binary && ",
+        'source_tmpl': '%(version)s.tar.gz',
+        'source_urls': ['https://github.com/psycopg/psycopg/archive/refs/tags'],
+        'checksums': ['bfa3560402b8f8ac2bf9408c6354b5c8c951d64871629a14526f942361560836'],
+    }),
+    ('psycopg_c', '3.3.6', {
+        'source_tmpl': '%(name)s-%(version)s.tar.gz',
+        'source_urls': ['https://pypi.python.org/packages/source/%(nameletter)s/%(name)s'],
+        'checksums': ['29c568426ad61c1b702c7d73505c43ca2c9fc5d97a8431d8d9049e731e319ff8'],
+    }),
+]
+
+sanity_check_paths = {
+    'files': [
+        'bin/psql',
+        'bin/pg_config',
+        'lib/libpq.a',
+        'lib/libpq.%s' % SHLIB_EXT,
+    ],
+    'dirs': [
+        'bin',
+        'lib',
+        'lib/python%(pyshortver)s/site-packages/',
+        'share'
+    ],
+}
+
+modextrapaths = {
+    'EBPYTHONPREFIXES': [''],
+}
+
+moduleclass = 'data'
