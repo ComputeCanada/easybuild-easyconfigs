@@ -6,7 +6,7 @@ version = '6.6.1'
 homepage = 'http://www.vasp.at'
 description = """The Vienna Ab initio Simulation Package (VASP) is a computer program for atomic scale
 materials modelling, e.g. electronic structure calculations and quantum-mechanical molecular dynamics,
-based on Density Futional Theory (DFT)."""
+based on Density Futional Theory (DFT).  This version of VASP is optimized for GPU-based computing and supports the HDF5 library exclusively."""
 
 toolchain = {'name': 'nvompic', 'version': '2024a'}
 local_binfiles = ['vasp_std', 'vasp_gam', 'vasp_ncl']
