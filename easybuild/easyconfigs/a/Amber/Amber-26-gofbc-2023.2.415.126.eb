@@ -1,0 +1,66 @@
+name = 'Amber'
+version = '26'  # All 3 updates are already applied in the downloaded source tarball
+
+homepage = 'https://ambermd.org/AmberTools.php'
+description = "Amber-PMEMD is Amber’s high-performance MD engine, optimized for both CPU and GPU execution. Unlike earlier Amber versions, the amber-pmemd module no longer includes AmberTools."
+
+toolchain = {'name': 'gofbc', 'version': '2023.2.415.126'}
+toolchainopts = {'usempi': True, 'openmp': True}
+
+# Download requires accepting non-commercial license
+sources = ['pmemd26.tar.bz2']
+patches = [
+    'AmberTools-20_cmake-locate-netcdf.patch',
+    'AmberTools-22_CMake-FlexiBLAS.patch',
+    'AmberTools-20_fix_missing_MPI_LIBRARY_error.patch',
+    '%(name)s-24-fix_xray_missing-type.patch',
+    'Amber-26-3rdPartyTools.patch',
+    'Amber-26-CudaConfig.patch'
+]
+checksums = [
+    {'pmemd26.tar.bz2': '0478ccce892f3525e995e9c85458d552c6060b73dd28acd03c366e61ecf23a14'},
+    {'AmberTools-20_cmake-locate-netcdf.patch': '0f7cd116b67b4fe1c8ecad8fec5168c603b9e3e121adcfea56a31bda0ec16471'},
+    {'AmberTools-22_CMake-FlexiBLAS.patch': '9543812c24c4b7842f64f1f8abaf2c92b5c4c0fadcdbd9811e76b81a778f0d36'},
+    {'AmberTools-20_fix_missing_MPI_LIBRARY_error.patch':
+     '0b89a0624167bc23876bcdefcb1055f591e38e3bd559a71d5749e342bd311acc'},
+    {'Amber-24-fix_xray_missing-type.patch': '5e7b5ba0018ee49eb2ba316414364757c01a038f99aad3872e8b53f3269a3766'},
+    {'Amber-26-3rdPartyTools.patch': 'e985cfb88a0a5406aeb275df92f87018389f7ac248705a7f28c26808f3c65e2a'},
+    {'Amber-26-CudaConfig.patch': '13f4fb3cceda766726a6597475c84cf3976dcc2505bb2e66b5a7a089e00834a3'},
+]
+
+builddependencies = [
+    ('CMake', '3.27.7', '', SYSTEM),
+    ('NCCL', '2.26.2', '', ('gcccorecuda', '2023a')),
+    ('Python', '3.11', '', SYSTEM),
+    ('SciPy-Stack', '2024b', '', SYSTEM),
+]
+dependencies = [
+    ('netCDF', '4.9.2', '', ('gompi', '2023a')),
+    ('netCDF-Fortran', '4.6.1', '', ('gompi', '2023a')),
+    ('PLUMED', '2.10.0', '', ('gofb', '2023a')),    
+]
+
+#static = False
+configopts = " -DPMEMD_ONLY=TRUE -DBUILD_PYTHON=FALSE "
+
+postinstallcmds = [
+    "/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/ --any_interpreter --add_origin --add_path %(installdir)s/lib",
+]
+# All tests are expected to pass or be skipped
+runtest = False
+modaltsoftname = '%(namelower)s-pmemd'
+patchlevels = (
+    0,
+    0,
+)  # (AmberTools, Amber)
+
+sanity_check_paths = {
+    'files': ['bin/pmemd.cuda'],
+    'dirs': [],
+}
+
+sanity_check_commands = [
+    """if [ -n "$(find %(installdir)s/lib*/python*/site-packages -name '*.egg*')" ] ; then echo 'Found .egg file, please use pip. See https://github.com/ComputeCanada/software-stack/issues/137' ; exit 1; else  exit 0; fi""",
+]
+
+moduleclass = 'chem'

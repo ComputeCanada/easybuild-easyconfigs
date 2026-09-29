@@ -1,0 +1,30 @@
+--- cmake/3rdPartyTools.cmake.orig	2026-09-29 14:32:24.984125089 -0400
++++ cmake/3rdPartyTools.cmake	2026-09-29 16:13:15.082424865 -0400
+@@ -13,7 +13,8 @@
+ kmmd
+ libm
+ mkl
+-plumed)
++plumed
++nccl)
+ 
+ set(3RDPARTY_TOOL_USES
+ "for fundamental linear algebra calculations"
+@@ -25,7 +26,8 @@
+ "Machine-learning molecular dynamics"
+ "for fundamental math routines if they are not contained in the C library"
+ "for BLAS/LAPACK/FFTW on Intel hardware"
+-"tools for enchanced sampling, free energies, and trajectory analysis")
++"tools for enchanced sampling, free energies, and trajectory analysis"
++"for inter-GPU communications")
+ 
+ # Logic to disable tools
+ set(3RDPARTY_SUBDIRS "")
+@@ -571,6 +573,7 @@
+ 	endif()
+ endif()
+ 
++list(REMOVE_ITEM FORCE_EXTERNAL_LIBS fftw boost)
+ foreach(TOOL ${FORCE_EXTERNAL_LIBS})
+ 	colormsg(YELLOW "Forcing ${TOOL} to be sourced externally")
+ 
