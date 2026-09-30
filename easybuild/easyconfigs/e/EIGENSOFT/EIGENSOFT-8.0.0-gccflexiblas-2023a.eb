@@ -1,0 +1,45 @@
+# Provided binaries required OpenBLAS and GSL libraries
+easyblock = 'MakeCp'
+
+name = 'EIGENSOFT'
+version = '8.0.0'
+
+homepage = 'http://www.hsph.harvard.edu/alkes-price/software/'
+description = """The EIGENSOFT package combines functionality from our population genetics methods (Patterson et al. 
+2006)  and our EIGENSTRAT stratification correction method (Price et al. 2006). The EIGENSTRAT method uses principal 
+components  analysis to explicitly model ancestry differences between cases and controls along continuous axes of 
+variation;  the resulting correction is specific to a candidate marker's variation in frequency across ancestral 
+populations,  minimizing spurious associations while maximizing power to detect true associations. The EIGENSOFT 
+package has a built-in plotting script and supports multiple file formats and quantitative phenotypes."""
+
+toolchain = {'version': '2023a', 'name': 'gccflexiblas'}
+
+source_urls = ['https://github.com/DReichLab/EIG/archive']
+sources = ['v%(version)s.tar.gz']
+patches = ['%(name)s-%(version)s_Fix_makefile_flexiblas.patch']
+checksums = [
+    {'v8.0.0.tar.gz': 'e3459e8ac0134da369910454854eae5c7b261e8816318ccbd2d371b4c6c35741'},
+    {'EIGENSOFT-8.0.0_Fix_makefile_flexiblas.patch':
+     '8fe87046bf855fe063836e7f0227a2e84351fb61691cd05f0af65ce9b791b1cf'},
+]
+
+builddependencies = [('GSL', '2.7')]
+
+dependencies = [('Perl', '5.36.1')]
+
+start_dir = 'src'
+
+# -lm and -pthread are missing in the Makefile
+# also run "make install" after make to copy all binaries to the bin dir
+buildopts = 'LDLIBS="-lgsl $LIBBLAS -llapacke $LIBS" && make install'
+
+fix_perl_shebang_for = ['bin/*.perl', 'bin/ploteig']
+
+files_to_copy = ['bin', 'CONVERTF', 'EIGENSTRAT', 'POPGEN', 'README']
+
+sanity_check_paths = {
+    'files': ['bin/baseprog', 'bin/convertf', 'bin/eigenstrat', 'bin/eigenstratQTL'],
+    'dirs': [],
+}
+
+moduleclass = 'bio'
