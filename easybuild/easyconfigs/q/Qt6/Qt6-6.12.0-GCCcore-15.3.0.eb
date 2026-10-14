@@ -110,7 +110,7 @@ configopts += "-DCMAKE_SYSROOT='' "
 postinstallcmds = ["setrpaths.sh --path %(installdir)s/plugins/platforms --add_path='$ORIGIN/../../lib'"]
 
 # Dummy bindings for PyQt6-Qt6
-local_dist_names = {'pyqt_qt6': 'PyQt6-Qt6'}
+local_dist_names = {'pyqt6_qt6': 'PyQt6-Qt6'}
 
 # This step does not iterate as sanity_check does.
 postinstallcmds += [
