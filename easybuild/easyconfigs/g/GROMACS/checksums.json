@@ -5,6 +5,7 @@
   "GROMACS-2023.1_fix_tests_for_gmx_thread_mpi.patch": "6df844bb3bbc51180446a3595c61a4ef195e5f975533a04cef76841aa763aec1",
   "GROMACS-2023.1_set_omp_num_threads_env_for_ntomp_tests.patch": "7f41bda16c9c2837624265dda4be252f655d1288ddc4486b1a2422af30d5d199",
   "GROMACS-2023.2-disable-generateVelocitiesTest.patch": "f3dbd28765cac511ca9e78da6e03319bdb7178b9bddf91c9af78b7b985065bb9",
+  "GROMACS-2024.1-fix-gmxapi-version.patch": "df30b21352a26d8e01d693e2822db0ea45015c23f900a6ceb68522d44e6e790c",
   "GROMACS-LS-2016.3_mdstress_flexiblas.patch": "4177a5b32f7054f82ab74c94a655e169786a03c63972742bddc450c9444e9341",
   "GROMACS-v2020.6-colvars.tar.gz": "19cc0236e5beaaa14b4c11713c2787ad9680a5a6a278607d079e34867a24347a",
   "gmxapi-0.3.2.tar.gz": "6a509b0bc5d064bda763889bbfc8bca87c8910553425d834dced629a010372a8",
@@ -37,7 +38,9 @@
   "gromacs-2025.3.tar.gz": "8bdfca0268f3f10a7ca3c06e59b62f73ea02420c67211c0ff3912f32d7833c65",
   "gromacs-2025.4.tar.gz": "ca17720b4a260eb73649211e9f6a940ee7543452129844213c3accb0a927a5c3",
   "gromacs-2026.1.tar.gz": "d95a313f56db7e05ee3a21e50f582fdee5176c2f60b900bab2461fd95c5e81be",
+  "gromacs-2026.3.tar.gz": "1094b7bbc6a3960223827114626657110b40096cdf9598a727935fc84ebf8aa0",
   "gromacs-ls-2016.3-12282019.tar.gz": "20f4d4f255800432be188abe41b7fec923cacc5fc895914b3beac0808ddf1919",
   "gromacs-swaxs-release-2021.swaxs-0.5.1.tar.gz": "a117cc970be9f30ecaed5a14052a97b0289882aea443bace8428afeeffe28055",
+  "networkx-3.6.1.tar.gz": "26b7c357accc0c8cde558ad486283728b65b6a95d85ee1cd66bafab4c8168509",
   "pybind11-2.9.2.tar.gz": "e5541f8bccf9111d1a94f7897593b55c4cf1a28d5e8cfc8225a855651f011071"
 }
