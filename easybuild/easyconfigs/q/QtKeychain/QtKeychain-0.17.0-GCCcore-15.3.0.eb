@@ -1,0 +1,29 @@
+easyblock = 'CMakeMake'
+
+name = 'QtKeychain'
+version = '0.17.0'
+
+homepage = 'https://github.com/frankosterfeld/qtkeychain'
+description = "Platform-independent Qt API for storing passwords securely."
+
+toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
+
+source_urls = ['https://github.com/frankosterfeld/qtkeychain/archive/']
+sources = ['%(version)s.tar.gz']
+checksums = ['3b85c3929034b0a99da777130c34d99f006fcd3a9d56564159399a33fee0e504']
+
+builddependencies = [
+    ('binutils', '2.46.1'),
+    ('CMake', '4.4.2'),
+]
+
+dependencies = [
+    ('Qt6', '6.12.0'),
+]
+
+sanity_check_paths = {
+    'files': ['lib/libqt6keychain.%s' % SHLIB_EXT],
+    'dirs': [],
+}
+
+moduleclass = 'tools'
