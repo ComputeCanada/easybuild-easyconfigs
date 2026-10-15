@@ -1,0 +1,128 @@
+easyblock = 'CMakeMake'
+
+name = 'TRIQS'
+version = '4.0.2'
+
+homepage = 'https://triqs.github.io/triqs'
+description = """
+ TRIQS (Toolbox for Research on Interacting Quantum Systems) is a
+ scientific project providing a set of C++ and Python libraries to
+ develop new tools for the study of interacting quantum systems.
+"""
+
+docurls = ['https://triqs.github.io/triqs/%(version_major_minor)s.x/']
+software_license = 'LicenseGPLv3'
+
+toolchain = {'name': 'gofb', 'version': '2026'}
+toolchainopts = {'pic': True, 'usempi': True}
+
+source_urls = ['https://github.com/TRIQS/triqs/releases/download/%(version)s/']
+sources = ['triqs-%(version)s.tar.gz']
+checksums = ['0890b07541d4aea0ade35769084b903a68e2ca9a803f85c225b82dc7454f123e']
+
+dependencies = [
+    ('Boost', '1.92.0'),
+    ('LLVM', '22.1.8'),
+    ('FFTW', '3.3.11'),
+    ('HDF5', '2.2.0'),
+    ('mpi4py', '4.1.2'),
+    ('SciPy-Stack', '2026b'),
+]
+
+builddependencies = [
+    ('CMake', '4.4.2'),
+    ('pytest', '9.1.1'),
+]
+
+multi_deps = {'Python': ['3.14']}
+
+#install Python package Mako needed for configure step
+preconfigopts = ' && '.join([
+    'PYTHONPATH=$PYTHONPATH:%(builddir)s/lib/python%(pyshortver)s/site-packages',
+    'pip install mako==1.4.1 --prefix=%(builddir)s/ && '
+])
+
+installopts = ' && '.join([
+# reinstall mako needed for TRIQS extension 
+# don't use keeppreviousinstall=True as we need manually to delete the installdir during rebuild
+    " && pip install --prefix=%(installdir)s mako==1.4.1 --no-index",
+# msgpack is needed for the pip sanity check because of HDF5
+#     "pip install --prefix=%(installdir)s msgpack==1.2.2 --no-index",
+# TRIQS set LD_LIBRARY_PATH for its Python extension to find its lib
+# However, we do not use LD_LIBRARY_PATH and to avoid sourcing triqsvar.sh
+# each time, we add installdir/lib to the RPATH
+    "/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/lib --any_interpreter --add_path %(installdir)s/lib64"
+])
+
+separate_build_dir = True
+
+#runtest = 'test'
+
+exts_defaultclass = "CMakePythonPackage"
+exts_default_options = {
+    'sanity_pip_check': False,
+}
+exts_list = [
+    ('triqs_maxent', '4.0.1', {
+        'configopts': "-DBuild_Documentation=OFF -DMeasureG2=ON -DHybridisation_is_complex=ON -DLocal_hamiltonian_is_complex=ON",
+        'source_urls': ['https://github.com/TRIQS/maxent/releases/download/%(version)s/'],
+        'sources': ['maxent-%(version)s.tar.gz'],
+        'checksums': ['178c857a49ac379184cad42724109b816234757ee4829db65538b95a050649ed'],
+    }),
+    ('triqs_cthyb', '4.0.1', {
+        'source_urls': ['https://github.com/TRIQS/cthyb/releases/download/%(version)s/'],
+        'sources': ['cthyb-%(version)s.tar.gz'],
+        'checksums': ['5dea33eb5a7ebe4b72a90fa89ba6381bc1be79b9b9ae4386555b49b25470583e'],
+    }),
+    ('triqs_hubbardI', '4.0.0', {
+        'modulename': 'triqs_hubbardI',
+        'source_urls': ['https://github.com/TRIQS/hubbardI/releases/download/%(version)s/'],
+        'sources': ['hubbardI-%(version)s.tar.gz'],
+        'checksums': ['57b0a4c36560148797e65c3ff09d6988d73cdc09f597abd60490ba7ae276e519'],
+    }),
+    ('triqs_tprf', '4.0.1', {
+        'source_urls': ['https://github.com/TRIQS/tprf/releases/download/%(version)s/'],
+        'sources': ['tprf-%(version)s.tar.gz'],
+        'checksums': ['ac3ed567e22446f95f3d14983f4e85faa9f8867dabdc8db62934e56a486c2ced'],
+    }),
+    ('triqs_dftkit', '4.0.0', {
+        'source_urls': ['https://github.com/TRIQS/dftkit/releases/download/%(version)s/'],
+        'sources': ['dftkit-%(version)s.tar.gz'],
+        'checksums': ['97b01d61af8132dde0e280ae4a872eec29908d7eb4b03fb649f848af83ae6bf7'],
+    }),
+    ('triqs_dft_tools', '4.0.0', {
+        'source_urls': ['https://github.com/TRIQS/dft_tools/releases/download/%(version)s/'],
+        'sources': ['dft_tools-%(version)s.tar.gz'],
+        'checksums': ['377c5f076f30fcfbbfab5f216c1b12d7fe63bb665cb02977b5237d0480162be5'],
+    }),
+    ('solid_dmft', '4.0.0', {
+        'source_urls': ['https://github.com/TRIQS/solid_dmft/archive/refs/tags/'],
+        'sources': ['%(version)s.tar.gz'],
+        'checksums': ['cea5a6b14965aab753a9908c244f371d785043c658acc002e1a66a65dfb87dc1'],
+    }),
+    ('triqs_modest', '4.0.1', {
+        'source_urls': ['https://github.com/TRIQS/modest/releases/download/%(version)s/'],
+        'sources': ['modest-%(version)s.tar.gz'],
+        'checksums': ['9854e00b946ab8cf9a900bb13a8d99cab083168a183abf37f518c833dfe49b0c'],
+    }),
+]
+
+sanity_check_paths = {
+    'files': ['bin/dmftproj', 'bin/init_dmftpr', 'bin/plot_maxent', 'bin/plovasp',
+              'bin/solid_dmft', 'bin/vasp_dmft', 'lib/libtriqs.%s' % SHLIB_EXT],
+    'dirs': ['include/triqs', 'include/itertools', 'include/mpi', 'include/cpp2py',
+             'lib/python%(pyshortver)s/site-packages', 'share'],
+}
+
+sanity_check_commands = [
+    "c++2cxx --help",
+    "c++2py --help",
+    "c++2rst --help",
+    "python -c 'import triqs'"
+]
+
+modextrapaths = {
+    'EBPYTHONPREFIXES': [''],
+}
+
+moduleclass = 'phys'
