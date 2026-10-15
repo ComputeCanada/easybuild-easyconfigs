@@ -1,0 +1,30 @@
+easyblock = 'CMakeMake'
+
+name = 'AMPL-ASL'
+version = '1.0.1'
+
+homepage = 'https://github.com/ampl/asl'
+description = " An open-source library for mathematical programming. "
+
+toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
+
+source_urls = ['https://github.com/ampl/asl/archive/', 'https://github.com/ampl/asl/archive/refs/tags/']
+sources = ['v%(version)s.tar.gz']
+patches = [
+]
+checksums = ['57b767161fd95869757daa0761d9b19fa39ad5de4315f95a3c0dff08b0d4c4f2']
+
+builddependencies = [
+    ('CMake', '4.4.2'),
+]
+
+configopts = " -DBUILD_EXAMPLES=OFF -DBUILD_MT_LIBS=ON "
+
+separate_build_dir = True
+
+sanity_check_paths = {
+    'files': ['lib/libasl.a'],
+    'dirs': ['include/asl', 'share'],
+}
+
+moduleclass = 'math'
