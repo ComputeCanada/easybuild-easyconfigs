@@ -1,0 +1,82 @@
+easyblock = 'ConfigureMake'
+
+name = 'QScintilla'
+version = '2.14.1'
+
+homepage = 'https://www.riverbankcomputing.com/software/qscintilla'
+description = "QScintilla is a port to Qt of Neil Hodgson's Scintilla C++ editor control"
+
+toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
+
+source_urls = ['https://www.riverbankcomputing.com/static/Downloads/QScintilla/%(version)s/']
+sources = ['QScintilla_src-%(version)s.tar.gz']
+checksums = ['dfe13c6acc9d85dfcba76ccc8061e71a223957a6c02f3c343b30a9d43a4cdd4d']
+
+builddependencies = [
+    ('binutils', '2.46.1'),
+]
+
+dependencies = [
+    ('Qt6', '6.12.0'),
+]
+
+multi_deps = {'Python': ['3.14']}
+multi_deps_extensions_only = True
+
+# run qmake instead of configure
+skipsteps = ['configure']
+
+start_dir = 'src'
+
+prebuildopts = 'export CPATH=$EBROOTQT6/include/QtWidgets:$EBROOTQT6/include/QtPrintSupport:$CPATH && '
+# do not install to Qt dirs but to QScintilla dirs
+prebuildopts += (
+    "sed -i "
+    r"-e 's|\$\$\[QT_INSTALL_HEADERS\]|%(installdir)s/include|g' "
+    r"-e 's|\$\$\[QT_INSTALL_LIBS\]|%(installdir)s/lib|g' "
+    "%(start_dir)s/features/%(namelower)s2.prf && "
+)
+prebuildopts += (
+    "sed -i "
+    r"-e 's|\$\$\[QT_HOST_DATA\]|%(installdir)s/data|g' "
+    r"-e 's|\$\$\[QT_INSTALL_DATA\]|%(installdir)s/data|g' "
+    r"-e 's|\$\$\[QT_INSTALL_HEADERS\]|%(installdir)s/include|g' "
+    r"-e 's|\$\$\[QT_INSTALL_LIBS\]|%(installdir)s/lib|g' "
+    r"-e 's|\$\$\[QT_INSTALL_TRANSLATIONS\]|%(installdir)s/trans|g' "
+    "%(start_dir)s/%(namelower)s.pro && "
+)
+prebuildopts += 'qmake %(namelower)s.pro && '
+
+# install python bindings to let `import PyQt6.Qsci` works
+# the existing easyblock doesn't support the new python binding installation procedure
+postinstallcmds = [f"""
+    cd ../Python
+    for pyver in {" ".join(multi_deps["Python"])}; do
+        module load python/$pyver
+        cp pyproject{{-qt6,}}.toml
+        echo "[tool.sip.project]" >> pyproject.toml
+        sipdir=$EBROOTQT6/lib/python$pyver/site-packages/PyQt6/bindings
+        echo "sip-include-dirs=[\\"$sipdir\\"]" >> pyproject.toml
+        CPATH=$EBROOTQT6/include/QtWidgets:$EBROOTQT6/include/QtPrintSupport:$CPATH \
+            sip-install --target-dir %(installdir)s/lib/python$pyver/site-packages \
+                        --api-dir %(installdir)s/qsci/api/python \
+                        --qsci-include-dir %(installdir)s/include \
+                        --qsci-library-dir %(installdir)s/lib
+        mkdir -p %(installdir)s/share/sip/PyQt6
+        rm -rf %(installdir)s/share/sip/PyQt6/Qsci
+        mv %(installdir)s/lib/python$pyver/site-packages/PyQt6/bindings/Qsci %(installdir)s/share/sip/PyQt6/Qsci
+        ln -s ../../../../../share/sip/PyQt6/Qsci %(installdir)s/lib/python$pyver/site-packages/PyQt6/bindings/Qsci
+        patchelf --add-needed libqscintilla2_qt6.so.15 %(installdir)s/lib/python$pyver/site-packages/PyQt6/Qsci.abi3.so
+        patchelf --add-rpath '$ORIGIN/../../..' %(installdir)s/lib/python$pyver/site-packages/PyQt6/Qsci.abi3.so
+    done
+"""
+]
+
+sanity_check_paths = {
+    'files': ['lib/lib%%(namelower)s%%(version_major)s_qt6.%s' % SHLIB_EXT],
+    'dirs': ['lib/python%(pyshortver)s/site-packages'],
+}
+
+sanity_check_commands = ['python -s -c "import PyQt6.Qsci"']
+
+moduleclass = 'vis'
