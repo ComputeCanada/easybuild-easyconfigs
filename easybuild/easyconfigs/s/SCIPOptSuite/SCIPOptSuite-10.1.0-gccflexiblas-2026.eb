@@ -1,0 +1,66 @@
+easyblock = "CMakeMake"
+
+name = "SCIPOptSuite"
+version = "10.1.0"
+
+homepage = "https://scipopt.org/"
+description = """SCIP is currently one of the fastest non-commercial solvers for mixed integer programming (MIP)
+and mixed integer nonlinear programming (MINLP). It is also a framework for constraint integer programming and
+branch-cut-and-price. It allows for total control of the solution process and the access of detailed
+information down to the guts of the solver."""
+
+toolchain = {"name": "gccflexiblas", "version": "2026"}
+
+source_urls = ['https://scipopt.org/download/release/']
+sources = ['%(namelower)s-%(version)s.tgz']
+checksums = ['c0739d5524269baa5ccdc77d78810cc17843dec083000d46ddf889e770ceaeb8']
+
+builddependencies = [
+    ("CMake", "4.4.2"),
+    ("Boost", "1.92.0"),
+    ("tbb", "2022.3.0"),
+    ("GSL", "2.8"),
+    ("AMPL-MP", "4.1.0"),
+    ("AMPL-ASL", "1.0.1"),
+    ("Ipopt", "3.14.20"),
+    ("METIS", "5.1.0"),
+    ('Cython', '3.3.0'),
+    ('numpy', '2.5.3')
+]
+
+multi_deps = {'Python': ['3.14'] }
+multi_deps_extensions_only = True
+
+configopts = ' -DTPI=omp '
+
+exts_defaultclass = 'PythonPackage'
+exts_list = [
+    ('pyscipopt', '6.3.0', {
+        'sources' : [SOURCE_TAR_GZ],
+        'source_urls': [PYPI_SOURCE],
+        'checksums': ['d9d1d36ed916b1ce1129627055145014b93f66711f8d974fdab941773d8d0adb'],
+        'prebuildopts': " export SCIPOPTDIR=$EBROOTSCIPOPTSUITE && ",
+        'use_pip': True,
+        'sanity_pip_check': False,
+    }),
+]
+exts_filter = ("module load scipy-stack && python -c 'import %(ext_name)s'", '')
+
+modextrapaths = { 'EBPYTHONPREFIXES' : '' }
+
+sanity_check_paths = {
+    "files": [
+        "bin/scip",
+        "lib/libscip.so",
+    ],
+    "dirs": [
+        "bin",
+        "lib",
+        "include",
+        "include/scip",
+    ],
+}
+
+sanity_check_commands = ['scip --version']
+
+moduleclass = "math"
