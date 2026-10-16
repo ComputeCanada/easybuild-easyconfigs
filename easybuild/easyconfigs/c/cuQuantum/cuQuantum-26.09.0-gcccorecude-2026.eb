@@ -1,0 +1,89 @@
+easyblock = 'Tarball'
+
+name = 'cuQuantum'
+version = '26.09.0.8'
+
+homepage = 'https://developer.nvidia.com/cuquantum-sdk'
+description = """NVIDIA cuQuantum SDK is a high-performance library for
+quantum information science and beyond"""
+
+toolchain = {'name': 'gcccorecuda', 'version': '2026'}
+toolchainopts = {'optarch': False}
+
+# By downloading, you accept the cuQuantum Software License Agreement
+# (https://developer.nvidia.com/cuquantum-license-agreement)
+accept_eula = True
+source_urls = ['https://developer.download.nvidia.com/compute/cuquantum/redist/cuquantum/linux-x86_64/']
+sources = ['cuquantum-linux-x86_64-%(version)s_cuda%(cudamajver)s-archive.tar.xz']
+checksums = ['92ecbba2b5783db20a966aa67e24206501eef3907ec09dd51cfb4753aea65731']
+
+builddependencies = {
+    ('cuTENSOR', '2.8.0.6', '', ('CUDAcore', '13.3.1')),
+    ('Cython', '3.3.0'),
+    ('python-build-bundle', '2026b'),
+    ('pytest', '9.1.1'),
+    ('numpy', '2.5.3'),
+}
+
+multi_deps = {'Python': ['3.14']}
+multi_deps_extensions_only = True
+
+# Does not support P100s
+# cuda_compute_capabilities = ['8.0', '9.0', '10.0']
+
+installopts = ' && '.join([
+    '.',
+    '/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/lib --any_interpreter --add_path $EBROOTCUDACORE/lib',
+    '/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/lib --any_interpreter --add_path $EBROOTCUTENSOR/lib',
+    #cupy is required for cuquantum python extension
+    'pip install cupy==14.2.0 --no-index --prefix=%(installdir)s',
+])
+
+local_extoptions = ' && '.join([
+    'export CUQUANTUM_ROOT=$EBROOTCUQUANTUM',
+    'export CUTENSOR_ROOT=$EBROOTCUTENSOR',
+    'cd python',
+    '',  #for trailing character
+])
+
+local_patch_setup = "sed -i -e \"s/'cupy-cuda13x>=13.6.0'/'cupy>=13.6.0'/\" -e \"s/'cuda-bindings>=13.0.3, <14.0.0'/'cuda-bindings==13.3.*'/\" setup.py"
+
+exts_defaultclass = "PythonPackage"
+exts_list = [
+    ('cuquantum', '26.09.0', {
+        'prebuildopts': local_extoptions,
+        'preinstallopts': f"{local_extoptions} {local_patch_setup} && ",
+        'source_urls': ['https://github.com/NVIDIA/cuQuantum/archive/refs/tags/'],
+        'sources': ['v%(version)s.tar.gz'],
+        'use_pip': True,
+        'pip_ignore_installed': False,
+        'sanity_pip_check': False,
+        'checksums': ['6355e68f72a30907877e329588ad42ed51dd558d9541c1807a950f0cd5527af5'],
+    }),
+]
+exts_filter = ("module load numpy/.2.5.3;  python -c 'import cuquantum'", '')
+
+sanity_check_paths = {
+    'files': ['include/custatevec.h', 'lib/libcutensornet.so'],
+    'dirs': ['include', 'lib'],
+}
+
+"""
+Starting cuQuantum-python v25.03, cuDensityMat, cuStateVec, and cuTensorNet C
+APIs are exposed under cuquantum.bindings.cudensitymat,
+cuquantum.bindings.custatevec, and cuquantum.bindings.cutensornet. From v26.09,
+cuStateVec Ex C APIs are under cuquantum.bindings.custatevecEx. The original
+bindings under cuquantum.custatevec and cuquantum.cutensornet are deprecated
+and will be removed in a future release.
+"""
+# https://docs.nvidia.com/cuda/cuquantum/latest/python/bindings.html#low-level-python-bindings
+sanity_check_commands = [
+    'module load numpy/.2.5.3 && python -c "from cuquantum import tensornet"',
+    'module load numpy/.2.5.3 && python -c "from cuquantum.bindings import custatevec, cudensitymat, cutensornet"',
+    'module load numpy/.2.5.3 && python -c "from cuquantum.tensornet import contract, Network"',
+]
+
+modextrapaths = {'EBPYTHONPREFIXES': ''}
+modextravars = {'CUQUANTUM_ROOT': '%(installdir)s'}
+
+moduleclass = 'numlib'
