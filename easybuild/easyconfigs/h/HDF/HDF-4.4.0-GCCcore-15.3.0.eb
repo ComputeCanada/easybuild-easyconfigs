@@ -1,0 +1,45 @@
+easyblock = 'CMakeMake'
+
+name = 'HDF'
+version = '4.4.0'
+
+homepage = 'https://support.hdfgroup.org/products/hdf4/'
+description = """
+ HDF (also known as HDF4) is a library and multi-object file format for
+ storing and managing data between machines.
+"""
+
+toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
+toolchainopts = {'pic': True}
+
+source_urls = ['https://github.com/HDFGroup/hdf4/archive/refs/tags/']
+sources = ['%(namelower)s%(version)s.tar.gz']
+checksums = ['ba0a299eb66a959d0499c0497d6c2e37e2149d7fc05d7bf4ba60eeba3b95ac33']
+
+builddependencies = [
+    ('CMake', '4.4.2'),
+    ('binutils', '2.46.1'),
+    ('Bison', '3.8.2'),
+    ('flex', '2.6.4'),
+]
+
+dependencies = [
+    ('libjpeg-turbo', '3.1.4.1'),
+    ('libaec', '1.1.7'),
+    ('zlib', '2.3.2'),
+    ('libtirpc', '1.3.7'),
+]
+
+configopts = '-DHDF4_ENABLE_SZIP_SUPPORT=ON'
+
+sanity_check_paths = {
+    'files': ['bin/h4cc', 'lib/libhdf.a', 'lib/libhdf4.settings', 'lib/libmfhdf.a',
+              f'lib/libmfhdf.{SHLIB_EXT}'],
+    'dirs': ['cmake'],
+}
+
+sanity_check_commands = [
+    "h4cc --help",
+]
+
+moduleclass = 'data'
