@@ -1,0 +1,127 @@
+From 5c2e966ace24e66370ad1550700539aca30cfa8a Mon Sep 17 00:00:00 2001
+From: Even Rouault <even.rouault@spatialys.com>
+Date: Tue, 1 Sep 2026 12:14:34 +0200
+Subject: [PATCH] HDF4: fix build against libhdf4 4.4.0dev
+
+Fixes #15126
+
+In https://github.com/HDFGroup/hdf4/issues/909 , the hdf4 team confirmed
+the change in prototypes were intended.
+
+Tested against https://github.com/HDFGroup/hdf4 at 6f4209bc698019263fc40a477eea4cc32da957c8
+---
+ frmts/hdf4/hdf-eos/EHapi.c  |  7 ++++++-
+ frmts/hdf4/hdf-eos/GDapi.c  |  7 ++++++-
+ frmts/hdf4/hdf-eos/SWapi.c  |  7 ++++++-
+ frmts/hdf4/hdf-eos/helper.c | 13 +++++++++++++
+ 4 files changed, 31 insertions(+), 3 deletions(-)
+
+diff --git a/frmts/hdf4/hdf-eos/EHapi.c b/frmts/hdf4/hdf-eos/EHapi.c
+index a493f4bf04c8..c75e5d63315e 100644
+--- a/frmts/hdf4/hdf-eos/EHapi.c
++++ b/frmts/hdf4/hdf-eos/EHapi.c
+@@ -20,6 +20,7 @@ this permission notice appear in supporting documentation.
+ #include <limits.h>
+ #include "mfhdf.h"
+ #include "HdfEosDef.h"
++#include "hfile.h"
+ 
+ /* Set maximum number of HDF-EOS files to HDF limit (MAX_FILE) */
+ #define NEOSHDF MAX_FILE
+@@ -1628,8 +1629,12 @@ EHinquire(const char *filename, const char *type, char *objectlist, int32 * strb
+ 	/* ------------------------------ */
+ 	vGrpID = Vattach(HDFfid, vgRef, "r");
+ 	VgetnameSafe(vGrpID, name, sizeof(name));
++#if LIBVER_MAJOR == 4 && LIBVER_MINOR >= 4
++    size_t sz = sizeof(class);
++    Vgetclass(vGrpID, class, &sz);
++#else
+ 	Vgetclass(vGrpID, class);
+-
++#endif
+ 
+ 	/* If object of desired type (SWATH, POINT, GRID) ... */
+ 	/* -------------------------------------------------- */
+diff --git a/frmts/hdf4/hdf-eos/GDapi.c b/frmts/hdf4/hdf-eos/GDapi.c
+index 4316695b058c..0b32d954de43 100644
+--- a/frmts/hdf4/hdf-eos/GDapi.c
++++ b/frmts/hdf4/hdf-eos/GDapi.c
+@@ -90,6 +90,7 @@ Jun  05, 2003 Bruce Beaumont / Abe Taaheri
+ #include "hcomp.h"
+ #include <math.h>
+ #include "HdfEosDef.h"
++#include "hfile.h"
+ 
+ #include "hdf4compat.h"
+ 
+@@ -346,8 +347,12 @@ GDattach(int32 fid, const char *gridname)
+ 		/* ---------------------------- */
+ 		vgid[0] = Vattach(HDFfid, vgRef, "r");
+ 		VgetnameSafe(vgid[0], name, sizeof(name));
++#if LIBVER_MAJOR == 4 && LIBVER_MINOR >= 4
++        size_t sz = sizeof(class);
++        Vgetclass(vgid[0], class, &sz);
++#else
+ 		Vgetclass(vgid[0], class);
+-
++#endif
+ 
+ 		/*
+ 		 * If Vgroup with gridname and class GRID found, load tables
+diff --git a/frmts/hdf4/hdf-eos/SWapi.c b/frmts/hdf4/hdf-eos/SWapi.c
+index a0de0b679fee..bf140b2dbbf3 100644
+--- a/frmts/hdf4/hdf-eos/SWapi.c
++++ b/frmts/hdf4/hdf-eos/SWapi.c
+@@ -79,6 +79,7 @@ June 05, 2003 Abe Taaheri / Bruce Beaumont
+ #include "mfhdf.h"
+ #include "hcomp.h"
+ #include "HdfEosDef.h"
++#include "hfile.h"
+ #include <math.h>
+ 
+ #include "hdf4compat.h"
+@@ -302,8 +303,12 @@ SWattach(int32 fid, const char *swathname)
+ 		/* ---------------------------- */
+ 		vgid[0] = Vattach(HDFfid, vgRef, "r");
+ 		VgetnameSafe(vgid[0], name, sizeof(name));
++#if LIBVER_MAJOR == 4 && LIBVER_MINOR >= 4
++        size_t sz = sizeof(class);
++        Vgetclass(vgid[0], class, &sz);
++#else
+ 		Vgetclass(vgid[0], class);
+-
++#endif
+ 
+ 		/*
+ 		 * If Vgroup with swathname and class SWATH found, load
+diff --git a/frmts/hdf4/hdf-eos/helper.c b/frmts/hdf4/hdf-eos/helper.c
+index a0eabbaf9a57..8bb642eb63a4 100644
+--- a/frmts/hdf4/hdf-eos/helper.c
++++ b/frmts/hdf4/hdf-eos/helper.c
+@@ -1,8 +1,20 @@
+ #include "mfhdf.h"
+ #include "HdfEosDef.h"
++#include "hfile.h"
+ 
+ int32 VgetnameSafe(int32 vkey, char *vgname, size_t vgnamesize)
+ {
++#if LIBVER_MAJOR == 4 && LIBVER_MINOR >= 4
++    size_t len = 0;
++    if( Vgetname(vkey, NULL, &len) != SUCCEED ||
++        len >= vgnamesize ||
++        Vgetname(vkey, vgname, &vgnamesize) != SUCCEED)
++    {
++         vgname[0] = 0;
++         return DFE_BADLEN;
++    }
++    return SUCCEED;
++#else
+     uint16 name_len = 0;
+     if (Vgetnamelen(vkey, &name_len) != SUCCEED)
+     {
+@@ -15,4 +27,5 @@ int32 VgetnameSafe(int32 vkey, char *vgname, size_t vgnamesize)
+          return DFE_BADLEN;
+     }
+     return Vgetname(vkey, vgname);
++#endif
+ }

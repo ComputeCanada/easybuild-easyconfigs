@@ -1,0 +1,104 @@
+easyblock = 'CMakeMake'
+
+name = 'GDAL'
+version = '3.13.3'
+
+homepage = 'https://www.gdal.org/'
+description = """GDAL is a translator library for raster geospatial data formats that is released under an X/MIT style
+ Open Source license by the Open Source Geospatial Foundation. As a library, it presents a single abstract data model
+ to the calling application for all supported formats. It also comes with a variety of useful commandline utilities for
+ data translation and processing."""
+
+toolchain = {'name': 'gccflexiblas', 'version': '2026'}
+
+source_urls = ['https://download.osgeo.org/gdal/%(version)s']
+sources = [SOURCELOWER_TAR_XZ]
+patches = [
+    "GDAL-3.7.2_fix-python-CC-CXX.patch",
+    "GDAL-3.7.2_fix-python-CC-CXX-libtool.patch",
+    "GDAL-3.13.3_pip-install.patch",
+    "GDAL-3.13.3_HDF-4.4.0.patch",
+]
+checksums = [
+    {'gdal-3.13.3.tar.xz': 'a3348c2102dd91962290007d7c293b467bb1b0cd89f086f24bb97b9b653a9804'},
+    {'GDAL-3.7.2_fix-python-CC-CXX.patch': '923d39620a87030ae5267c77c439d0050265e180afbdb81dadfbcf5def0fd013'},
+    {'GDAL-3.7.2_fix-python-CC-CXX-libtool.patch': '276c3a4677db9208973312542cc0c79a40a6b9daf248c352b6ea7de73315c8b6'},
+    {'GDAL-3.13.3_pip-install.patch': '76497dfdb5e6a0b1239626a36187a615e2129e97f7e7fa9dd391d1da98d054a7'},
+    {'GDAL-3.13.3_HDF-4.4.0.patch': '612981950a33dd1eceece526938126fcee6f14f3c6881272c4bf4a9e1bec6534'},
+]
+
+builddependencies = [
+    ('CMake', '4.4.2'),
+    ('SciPy-Stack', '2026b'),
+    ('SWIG', '4.4.1'),
+    ('pkgconf', '2.5.1'),
+    ('Bison', '3.8.2'),
+]
+
+dependencies = [
+    ('netCDF', '4.10.1'),
+    ('expat', '2.7.3'),
+    ('GEOS', '3.14.1'),
+    ('SQLite', '3.51.1'),
+    ('libxml2', '2.15.1'),
+    ('libpng', '1.6.56'),
+    ('libjpeg-turbo', '3.1.4.1'),
+    ('JasPer', '4.2.9'),
+    ('LibTIFF', '4.7.1'),
+    ('zlib', '2.3.3'),
+    ('cURL', '8.17.0'),
+    ('PCRE', '8.45'),
+    ('PROJ', '9.9.0'),
+    ('libgeotiff', '1.7.4'),
+    ('HDF', '4.4.0'),
+    ('HDF5', '2.2.0'),
+    ('Armadillo', '15.6.0'),
+    ('CFITSIO', '4.7.0'),
+    ('zstd', '1.5.7'),
+    ('giflib', '6.1.3'),
+    ('json-c', '0.18'),
+    ('Xerces-C++', '3.3.0'),
+    ('PCRE2', '10.47'),
+    ('OpenEXR', '3.4.12'),
+    ('Brunsli', '0.1'),
+    ('Qhull', '2020.2'),
+    ('LERC', '4.2.0'),
+    ('OpenJPEG', '2.5.4'),
+    ('PostgreSQL', '18.6'),
+    ('libspatialite', '5.1.0'),
+]
+
+multi_deps = {'Python': ['3.14']*2}
+
+
+# common configopts for static, shared library builds
+_base_configopts = ' '.join([
+    '-DGDAL_USE_INTERNAL_LIBS=OFF',
+    #'-DArrow_DIR=$EBROOTARROW',
+    '-DGEOTIFF_INCLUDE_DIR=$EBROOTLIBGEOTIFF/include',
+    '-DPython_ROOT=$EBROOTPYTHON',
+])
+
+# iterative build for both static and shared libraries
+configopts = [' '.join([_base_configopts, x]) for x in
+              len(multi_deps['Python'])//2*['-DBUILD_SHARED_LIBS=OFF'] +
+              len(multi_deps['Python'])//2*['']]
+
+postinstallcmds = [
+    "/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s --add_path %(installdir)s/lib64"
+]
+
+modextrapaths = {'EBPYTHONPREFIXES': '' }
+modluafooter = '''
+  extensions("osgeo/%(version)s")
+  whatis("Extensions: osgeo-%(version)s")
+'''
+
+sanity_check_paths = {
+    'files': ['lib/libgdal.a', 'lib/libgdal.%s' % SHLIB_EXT],
+    'dirs': ['bin', 'include', 'lib/python%(pyshortver)s/site-packages']
+}
+
+sanity_check_commands = ["python%(pyshortver)s -c 'import osgeo.gdal'"]
+
+moduleclass = 'data'

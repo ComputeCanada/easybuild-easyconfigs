@@ -1,0 +1,134 @@
+From b03b03bd40cb2c6fc17c1f5ae738cce4e47d8603 Mon Sep 17 00:00:00 2001
+From: Even Rouault <even.rouault@spatialys.com>
+Date: Mon, 1 Jun 2026 21:17:19 +0200
+Subject: [PATCH] Python bindings: use 'pip install' instead of 'python
+ setup.py install'
+
+Fixes #9965
+
+Co-authored-by: Bas Couwenberg <sebastic@xs4all.nl>
+---
+ docker/ubuntu-full/Dockerfile                 |  1 +
+ docker/ubuntu-full/bh-gdal.sh                 |  2 +-
+ docker/ubuntu-small/Dockerfile                |  3 ++-
+ swig/python/CMakeLists.txt                    | 27 -------------------
+ swig/python/install_python.cmake.in           |  4 +--
+ 6 files changed, 7 insertions(+), 38 deletions(-)
+
+diff --git a/docker/ubuntu-full/Dockerfile b/docker/ubuntu-full/Dockerfile
+index 50a707aa4fb3..996deca64b3f 100644
+--- a/docker/ubuntu-full/Dockerfile
++++ b/docker/ubuntu-full/Dockerfile
+@@ -65,6 +65,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+     && DEBIAN_FRONTEND=noninteractive apt-get install -y --fix-missing --no-install-recommends \
+        libopenjp2-7-dev${APT_ARCH_SUFFIX} libcairo2-dev${APT_ARCH_SUFFIX} \
+        python3-dev${APT_ARCH_SUFFIX} python3-numpy${APT_ARCH_SUFFIX} python3-setuptools${APT_ARCH_SUFFIX} \
++       python3-pip${APT_ARCH_SUFFIX} \
+        libpng-dev${APT_ARCH_SUFFIX} libjpeg-dev${APT_ARCH_SUFFIX} libgif-dev${APT_ARCH_SUFFIX} liblzma-dev${APT_ARCH_SUFFIX} libgeos-dev${APT_ARCH_SUFFIX} \
+        curl libxml2-dev${APT_ARCH_SUFFIX} libexpat-dev${APT_ARCH_SUFFIX} libxerces-c-dev${APT_ARCH_SUFFIX} \
+        libnetcdf-dev${APT_ARCH_SUFFIX} libpoppler-dev${APT_ARCH_SUFFIX} libpoppler-private-dev${APT_ARCH_SUFFIX} \
+diff --git a/docker/ubuntu-full/bh-gdal.sh b/docker/ubuntu-full/bh-gdal.sh
+index d7faaacdafc4..793cc0f5fd5f 100755
+--- a/docker/ubuntu-full/bh-gdal.sh
++++ b/docker/ubuntu-full/bh-gdal.sh
+@@ -99,7 +99,7 @@ fi
+         -DGDAL_USE_EXPRTK:BOOL=ON \
+ 
+     ninja
+-    DESTDIR="/build" ninja install
++    DEB_PYTHON_INSTALL_LAYOUT=deb_system DESTDIR="/build" ninja install
+ 
+     cd ..
+ 
+diff --git a/docker/ubuntu-small/Dockerfile b/docker/ubuntu-small/Dockerfile
+index ec5053b3f1a3..092cedabc105 100644
+--- a/docker/ubuntu-small/Dockerfile
++++ b/docker/ubuntu-small/Dockerfile
+@@ -64,6 +64,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+     && apt-get update -y \
+     && DEBIAN_FRONTEND=noninteractive apt-get install -y --fix-missing --no-install-recommends \
+        python3-dev${APT_ARCH_SUFFIX} python3-numpy${APT_ARCH_SUFFIX} python3-setuptools${APT_ARCH_SUFFIX} \
++       python3-pip${APT_ARCH_SUFFIX} \
+        libjpeg-dev${APT_ARCH_SUFFIX} libgeos-dev${APT_ARCH_SUFFIX} \
+        libexpat-dev${APT_ARCH_SUFFIX} libxerces-c-dev${APT_ARCH_SUFFIX} \
+        libwebp-dev${APT_ARCH_SUFFIX} libpng-dev${APT_ARCH_SUFFIX} \
+@@ -198,7 +199,7 @@ RUN --mount=type=cache,id=ubuntu-small-gdal,target=$HOME/.cache \
+         -DGDAL_USE_GEOTIFF_INTERNAL=ON ${GDAL_CMAKE_EXTRA_OPTS} \
+         -DBUILD_TESTING=OFF \
+     && ninja \
+-    && DESTDIR="/build" ninja install \
++    && DEB_PYTHON_INSTALL_LAYOUT=deb_system DESTDIR="/build" ninja install \
+     && cd .. \
+     && if test "${RSYNC_REMOTE:-}" != ""; then \
+         echo "Uploading cache..."; \
+diff --git a/swig/python/CMakeLists.txt b/swig/python/CMakeLists.txt
+index fe1d2ea69ccc..b46b43091be8 100644
+--- a/swig/python/CMakeLists.txt
++++ b/swig/python/CMakeLists.txt
+@@ -448,7 +448,6 @@ if __name__ == '__main__':
+     OUTPUT_VARIABLE SITE_PACKAGE_DIR
+     OUTPUT_STRIP_TRAILING_WHITESPACE)
+ 
+-  set(INSTALL_ARGS "--single-version-externally-managed --record=record.txt")
+   set(CAN_USE_CMAKE_INSTALL_PREFIX_FROM_CMAKE_INSTALL FALSE)
+   set(IGNORE_CMAKE_INSTALL_PREFIX_CONFIGURE_TIME_DIFFERENT_FROM_RUNTIME FALSE)
+   if (DEFINED GDAL_PYTHON_INSTALL_PREFIX)
+@@ -473,8 +472,6 @@ if __name__ == '__main__':
+         OUTPUT_STRIP_TRAILING_WHITESPACE)
+       if ("${STD_UNIX_LAYOUT}" STREQUAL "TRUE")
+         set(CAN_USE_CMAKE_INSTALL_PREFIX_FROM_CMAKE_INSTALL TRUE)
+-      elseif (DEFINED GDAL_PYTHON_INSTALL_LIB)
+-        set(INSTALL_ARGS "${INSTALL_ARGS} \"--install-lib=${GDAL_PYTHON_INSTALL_LIB}\"")
+       endif ()
+     else ()
+       set(CAN_USE_CMAKE_INSTALL_PREFIX_FROM_CMAKE_INSTALL TRUE)
+@@ -484,32 +481,8 @@ if __name__ == '__main__':
+   # setuptools 60.0 defaults to SETUPTOOLS_USE_DISTUTILS=local, and thus Debian's specific --install-layout distutils
+   # option cannot be used
+   if (DEFINED GDAL_PYTHON_INSTALL_LAYOUT)
+-    set(INSTALL_ARGS "${INSTALL_ARGS} --install-layout=${GDAL_PYTHON_INSTALL_LAYOUT}")
+     set(SETUPTOOLS_USE_DISTUTILS stdlib)
+   elseif ("${SITE_PACKAGE_DIR}" MATCHES "dist-packages")
+-
+-    # We are running on Debian, but test if our setuptools version supports
+-    # Debian --install-layout
+-    # This might not be the case if using a regular (non-Debian patched) Python
+-    # installation or setuptools (cf https://github.com/OSGeo/gdal/issues/11636)
+-    execute_process(
+-        COMMAND env GDAL_PYTHON_CHECK_SOURCE_FILES=no GDAL_PYTHON_BINDINGS_WITHOUT_NUMPY=yes ${Python_EXECUTABLE_CMAKE} setup.py install --help
+-        OUTPUT_VARIABLE SETUP_INSTALL_HELP
+-        OUTPUT_STRIP_TRAILING_WHITESPACE
+-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+-    )
+-    # If so, uses it.
+-    if ("${SETUP_INSTALL_HELP}" MATCHES "install-layout")
+-        set(INSTALL_ARGS "${INSTALL_ARGS} --install-layout=deb")
+-    endif()
+-
+-    if (NOT DEFINED GDAL_PYTHON_INSTALL_LIB AND "${PREFIX_FOR_TRIMMEDSYSCONFIG}" STREQUAL "/usr/local")
+-        # Scenario of https://github.com/OSGeo/gdal/issues/10242
+-        # For some reason patched setuptools of Debian fails to install by default
+-        # in /usr/local/lib/python{version}/dist-packages even when passing
+-        # --prefix=/usr/local and --install-layout=deb
+-        set(INSTALL_ARGS "${INSTALL_ARGS} \"--install-lib=${SITE_PACKAGE_DIR}\"")
+-    endif()
+     if(Python_VERSION VERSION_LESS 3.12)
+         # It no longer seems needed to mess with SETUPTOOLS_USE_DISTUTILS
+         # with Debian Python 3.12 (or maybe its setuptools 68.1.2 version...),
+diff --git a/swig/python/install_python.cmake.in b/swig/python/install_python.cmake.in
+index dd679ade2478..62c97918d254 100644
+--- a/swig/python/install_python.cmake.in
++++ b/swig/python/install_python.cmake.in
+@@ -23,10 +23,10 @@ else()
+    set(PATH_SEP ":")
+ endif()
+ if(DEFINED INSTALL_PREFIX)
+-   execute_process(COMMAND ${CMAKE_COMMAND} -E env "PATH=@PROJECT_BINARY_DIR@/apps${PATH_SEP}$ENV{PATH}" "@Python_EXECUTABLE_CMAKE@" "@SETUP_PY_FILENAME@" install ${ROOT_DIR_ARG} @INSTALL_ARGS@ "${INSTALL_PREFIX}"
++   execute_process(COMMAND ${CMAKE_COMMAND} -E env "PATH=@PROJECT_BINARY_DIR@/apps${PATH_SEP}$ENV{PATH}" "@Python_EXECUTABLE_CMAKE@" -m pip install --no-build-isolation --ignore-installed ${ROOT_DIR_ARG} @INSTALL_ARGS@ "${INSTALL_PREFIX}" .
+                    WORKING_DIRECTORY "@CMAKE_CURRENT_BINARY_DIR@" RESULT_VARIABLE res)
+ else()
+-   execute_process(COMMAND ${CMAKE_COMMAND} -E env "PATH=@PROJECT_BINARY_DIR@/apps${PATH_SEP}$ENV{PATH}" "@Python_EXECUTABLE_CMAKE@" "@SETUP_PY_FILENAME@" install ${ROOT_DIR_ARG} @INSTALL_ARGS@
++   execute_process(COMMAND ${CMAKE_COMMAND} -E env "PATH=@PROJECT_BINARY_DIR@/apps${PATH_SEP}$ENV{PATH}" "@Python_EXECUTABLE_CMAKE@" -m pip install --no-build-isolation --ignore-installed ${ROOT_DIR_ARG} @INSTALL_ARGS@ .
+                    WORKING_DIRECTORY "@CMAKE_CURRENT_BINARY_DIR@" RESULT_VARIABLE res)
+ endif()
+ if(NOT res EQUAL 0)
