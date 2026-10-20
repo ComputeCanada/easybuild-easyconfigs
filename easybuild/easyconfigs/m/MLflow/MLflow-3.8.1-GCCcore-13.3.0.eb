@@ -29,7 +29,8 @@ postinstallcmds = [
   "echo '#!/bin/sh' >> %(installdir)s/bin/mlflow-server",
   "echo export EBPYTHONPREFIXES=$EBROOTARROW:$EBROOTSCIPYMINSTACK:%(installdir)s >> %(installdir)s/bin/mlflow-server",
   'echo exec %(installdir)s/bin/mlflow server \${1+\\"\$@\\"} >> %(installdir)s/bin/mlflow-server',
-  "chmod +x %(installdir)s/bin/mlflow-server"
+  "chmod +x %(installdir)s/bin/mlflow-server",
+  '/cvmfs/soft.computecanada.ca/easybuild/easybuild-computecanada-config/generate_cvmfs_filebundle.py --executable %(installdir)s/bin/mlflow-server --args "--uvicorn-ops=--uds /tmp/some.socket --disable-security-middleware" --follow-fork --timeout 120'
 ]
 
 sanity_check_paths = {

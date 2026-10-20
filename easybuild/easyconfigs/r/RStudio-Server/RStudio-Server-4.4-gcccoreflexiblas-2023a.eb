@@ -66,6 +66,7 @@ configopts = " ".join([
     "-DRSTUDIO_USE_PAM=OFF",
 ])
 
+postinstallcmds = ["R_HOME=%(installdir)s/lib64/R PATH=$R_HOME/bin:$PATH R_DOC_DIR=%(installdir)s/lib64/R/doc R_INCLUDE_DIR=%(installdir)s/lib64/R/include R_SHARE_DIR=%(installdir)s/lib64/R/share /cvmfs/soft.computecanada.ca/easybuild/easybuild-computecanada-config/generate_cvmfs_filebundle.py --executable %(installdir)s/bin/rsession --args '--standalone=1 --program-mode=server --log-stderr=1 --session-timeout-minutes=0 --user-identity=$USER --www-port=8888' --follow-fork"]
 # R has a dep on Java 17 which is incompatible at build time, so explicitly use 11 here...
 prebuildopts = "module load java/11.0.22 && "
 
