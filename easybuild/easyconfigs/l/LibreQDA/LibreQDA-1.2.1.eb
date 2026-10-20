@@ -27,6 +27,7 @@ postinstallcmds = ['mkdir %(installdir)s/bin; ln -s %(installdir)s/bundle/bin/li
 
 local_language_map = {'fr': 'fr_FR', 'fr_CA': 'fr_FR', 'en': 'en_US', 'en_CA': 'en_US', 'en_UK': 'en_US'}
 postinstallcmds += ['ln -s %s %%(installdir)s/bundle/lib/python%%(pyshortver)s/site-packages/taguette/l10n/%s' % (src, dst) for dst, src in local_language_map.items()]
+postinstallcmds += ['module load libreqda/%(version)s; /cvmfs/soft.computecanada.ca/easybuild/easybuild-computecanada-config/generate_cvmfs_filebundle.py --executable %(installdir)s/bin/taguette --args "--no-browser --base_path /user/ebuser/libreqda --unix_socket /tmp/jupyter-server-proxy-26n1zk0n/socket --debug" --prefix /cvmfs/soft.computecanada.ca']
 
 sanity_check_paths = {
     'files': ['bundle/bin/libreqda', 'bin/libreqda', 'bin/taguette'],
