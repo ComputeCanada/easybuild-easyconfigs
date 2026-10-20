@@ -20,8 +20,8 @@ checksums = ['094d39c7ea32682ba451a0c9b250545833cbb6cf24e0193fe727bdd39613b0eb']
 
 builddependencies = [
     ('binutils', '2.45'),
-    ('CMake', '4.2.1'),
-    ('Perl', '5.42.0'),  # required for pod2html
+    ('CMake', '4.4.2'),
+    ('Perl', '5.44.0'),  # required for pod2html
 ]
 
 sanity_check_paths = {
