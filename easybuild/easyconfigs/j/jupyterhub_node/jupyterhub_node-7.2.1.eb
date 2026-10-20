@@ -26,6 +26,6 @@ postinstallcmds += ['rm -rf %(installdir)s/etc/jupyter/nbconfig']
 local_configs = ['jupyter_notebook_config.json', 'jupyter_server_config.json', 'labconfig', 'nbconfig']
 postinstallcmds += ['ln -s /cvmfs/soft.computecanada.ca/config/jupyterhub_node/v%%(version_major)s/etc/jupyter/%s %%(installdir)s/etc/jupyter/%s' % (x,x) for x in local_configs]
 postinstallcmds += ['ln -s /cvmfs/soft.computecanada.ca/config/jupyterhub_node/v%(version_major)s/lib/usercustomize %(installdir)s/lib/usercustomize']
-postinstallcmds += ['module load jupyterhub_node/.%%(version)s jupyterlab-apps; /cvmfs/soft.computecanada.ca/easybuild/easybuild-computecanada-config/generate_cvmfs_filebundle.py --executable %s' % x for x in ['batchspawner-singleuser', 'jupyterhub-singleuser', 'jupyter-lab']]
+postinstallcmds += ['module load jupyterhub_node/.%%(version)s jupyterlab-apps; /cvmfs/soft.computecanada.ca/easybuild/easybuild-computecanada-config/generate_cvmfs_filebundle.py --executable %s' % x for x in ['batchspawner-singleuser', 'jupyterhub-singleuser']]
 hidden = True
 moduleclass = 'lib'

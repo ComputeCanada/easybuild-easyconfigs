@@ -28,6 +28,7 @@ dependencies = [
 
 install_cmd = "cd OpenRefine-%(version)s && unset JAVA_TOOL_OPTIONS && ./refine -m 2048m build && cp -a * %(installdir)s"
 
+postinstallcmds = ['/cvmfs/soft.computecanada.ca/easybuild/easybuild-computecanada-config/generate_cvmfs_filebundle.py --executable %(installdir)s/refine --args "-i 127.0.0.1 -p 48291 -H * -x refine.headless=true" --follow-forks']
 sanity_check_paths = {
     'files': ['refine'],
     'dirs': ['server/classes'],
