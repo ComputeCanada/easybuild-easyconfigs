@@ -17,6 +17,7 @@ postinstallcmds = [
     'chmod go+rX -R %(installdir)s/extensions',
     '/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s --add_origin ',
     'sed -i -e "s;#!/bin/sh;#!/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/bash;g" %(installdir)s/bin/code-server'
+    "/cvmfs/soft.computecanada.ca/easybuild/easybuild-computecanada-config/generate_cvmfs_filebundle.py --executable %(installdir)s/bin/code-server --args '--auth=none --disable-telemetry --socket=/tmp/test.socket'"
 ]
 exts_defaultclass = 'VSCodeExtension'
 exts_default_options = {
