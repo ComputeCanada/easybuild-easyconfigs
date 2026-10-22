@@ -1,0 +1,17 @@
+name = 'NCCL'
+version = '2.30.7'
+
+homepage = 'https://developer.nvidia.com/nccl'
+description = """The NVIDIA Collective Communications Library (NCCL) implements multi-GPU and multi-node collective
+communication primitives that are performance optimized for NVIDIA GPUs."""
+
+toolchain = {'name': 'gcccorecuda', 'version': '2023.2.132'}
+
+github_account = 'NVIDIA'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s-1.tar.gz']
+checksums = ['292a7f7a27b6754acaf46b5506a60758ca7b18cc1dfbd3d1d4e1e229d0863b4e']
+
+builddependencies = [('binutils', '2.44')]
+
+moduleclass = 'lib'
