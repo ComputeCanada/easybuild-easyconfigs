@@ -7,7 +7,7 @@ blinker==1.9.0+computecanada
 build==1.6.1+computecanada
 cachecontrol==0.14.4+computecanada
 cachy==0.3.0+computecanada
-certifi==2026.7.22+computecanada
+certifi==2026.10.19+computecanada
 cffi==2.1.1+computecanada
 charset_normalizer==3.5.1+computecanada
 cleo==2.1.0+computecanada
@@ -78,6 +78,7 @@ pyproject_metadata==0.12.1+computecanada
 python_discovery==1.6.0+computecanada
 python_dotenv==1.2.3+computecanada
 pytoml==0.1.21+computecanada
+pyyaml==6.0.3+computecanada
 rapidfuzz==3.14.6+computecanada
 requests==2.34.2+computecanada
 requests_toolbelt==1.0.0+computecanada
