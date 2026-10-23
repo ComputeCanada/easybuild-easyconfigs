@@ -73,9 +73,9 @@ exts_list = [
         'sources': ['%(namelower)s-%(version)s.tar.gz'],
     }),
     ('PyQt6', '6.12.0', {
-        'preinstallopts': 'sed -i "s/not self.confirm_license:/False:/" project.py && ',
         'modulename': 'PyQt6.QtCore',
         'sources': ['%(namelower)s-%(version)s.tar.gz'],
+        'preinstallopts': 'sed -i "s/not self.confirm_license:/False:/" project.py && LIBRARY_PATH=$EBROOTGENTOO/lib64/pulseaudio:$LIBRARY_PATH ',
     }),
     ('PySide6', '6.12.0', {
     	'sources': ['pyside-setup-everywhere-src-%(version)s.tar.xz'],
