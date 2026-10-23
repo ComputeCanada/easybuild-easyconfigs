@@ -1,0 +1,22 @@
+name = 'Rosetta'
+version = "3.15"
+
+homepage = 'https://www.rosettacommons.org'
+description = """Rosetta is the premier software suite for modeling macromolecular structures. As a flexible,
+multi-purpose application, it includes tools for structure prediction, design, and remodeling of proteins and
+nucleic acids."""
+
+toolchain = {'name': 'gompi', 'version': '2026'}
+toolchainopts = {'usempi': True}
+
+sources = ['%(namelower)s_source_%(version)s_bundle.tar.bz2']
+checksums = ['ac4665fb0173ac1e1ed060d4a894964d14a32aba49e3ee2f3f50e83c26ba0fb1', 'ecc8ddf98dd659caa73ea687a1bdf449038be4158d300b7119f07dc9bb483dca']
+patches = ['Rosetta-3.15-fix_cxxversion.patch']
+
+dependencies = [('libxml2', '2.9.10')]
+
+configopts = " cxx_ver = '*' "
+
+serialization = True
+
+moduleclass = 'bio'
