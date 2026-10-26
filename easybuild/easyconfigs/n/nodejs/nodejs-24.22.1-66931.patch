@@ -1,0 +1,34 @@
+From e7d2afea856e565b4be2d02a16b13322b64202cc Mon Sep 17 00:00:00 2001
+From: Filip Skokan <panva.ip@gmail.com>
+Date: Thu, 22 Oct 2026 15:41:07 +0200
+Subject: [PATCH] crypto: fix builds with older OpenSSL 3.0
+
+Ubuntu 22.04's default libssl-dev still lacks EVP_PKEY_PRIVATE_KEY
+even when fully updated. Provide the OpenSSL 3.0.12 definition when
+the headers do not define it so --shared-openssl builds work.
+
+Fixes: https://github.com/nodejs/node/issues/66926
+Signed-off-by: Filip Skokan <panva.ip@gmail.com>
+Assisted-by: Codex
+---
+ deps/ncrypto/ncrypto.cc | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/deps/ncrypto/ncrypto.cc b/deps/ncrypto/ncrypto.cc
+index d35d601abc70..a48b953dc1b0 100644
+--- a/deps/ncrypto/ncrypto.cc
++++ b/deps/ncrypto/ncrypto.cc
+@@ -43,6 +43,13 @@
+                     nullptr)
+ #endif
+ 
++// Ubuntu 22.04's default libssl-dev still lacks EVP_PKEY_PRIVATE_KEY when
++// fully updated. The macro was added upstream in OpenSSL 3.0.12.
++#if NCRYPTO_USE_OPENSSL3_PROVIDER && !defined(EVP_PKEY_PRIVATE_KEY)
++#define EVP_PKEY_PRIVATE_KEY                                                   \
++  (EVP_PKEY_KEY_PARAMETERS | OSSL_KEYMGMT_SELECT_PRIVATE_KEY)
++#endif
++
+ namespace ncrypto {
+ namespace {
+ using BignumCtxPointer = DeleteFnPtr<BN_CTX, BN_CTX_free>;
