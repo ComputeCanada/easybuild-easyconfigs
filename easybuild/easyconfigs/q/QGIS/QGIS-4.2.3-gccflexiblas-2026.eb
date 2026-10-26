@@ -1,0 +1,128 @@
+easyblock = 'CMakeMake'
+
+name = 'QGIS'
+version = '4.2.3'
+
+homepage = 'http://www.qgis.org/'
+description = "QGIS is a user friendly Open Source Geographic Information System (GIS)"
+
+toolchain = {'name': 'gccflexiblas', 'version': '2026'}
+toolchainopts = {'pic': True, 'cstd': 'gnu++11'}
+
+source_urls = ['http://qgis.org/downloads/']
+sources = [SOURCELOWER_TAR_BZ2]
+patches = ['QGIS-4.2.3_drop-QTEST_DISABLE_KEYPAD_NAVIGATION.patch']
+checksums = [
+    {'qgis-4.2.3.tar.bz2': 'b044889d895c07d9355512cba76973822830153f6f15feb0d5e00077d3d76e59'},
+    {'QGIS-4.2.3_drop-QTEST_DISABLE_KEYPAD_NAVIGATION.patch':
+     '39c27c2fb849e36b1a0803efb5f86463787b9e60eef2b8ab61896678572df55d'},
+]
+
+builddependencies = [
+    ('CMake', '4.4.2'),
+    ('flex', '2.6.4'),
+    ('Bison', '3.8.2'),
+    ('PostgreSQL', '18.6'),
+    ('Abseil', '20260107.1'),
+    ('HDF', '4.4.0'),
+]
+
+dependencies = [
+#    ('Qt5Webkit', '5.212.0-alpha4'), # replaced by QtWebEngine, not used
+    ('Qt6', '6.12.0'),
+    ('SQLite', '3.51.1'),
+    ('GDAL', '3.13.3'),
+#    ('libspatialindex', '2.1.0'), # using vendored one because of incompatibility
+    ('Qwt', '6.3.0'),
+#    ('QwtPolar', '1.1.1'),
+    ('expat', '2.7.3'),
+    ('QCA', '2.3.12'),
+    ('QScintilla', '2.14.1'),
+    ('GSL', '2.8'),
+#    ('QJson', '0.9.0'),
+    ('libzip', '1.11.4'),
+    ('QtKeychain', '0.17.0'),
+    ('ICU', '78.3'),
+    ('protobuf', '36.1'),
+    ('SciPy-Stack', '2026b'),
+    ('PDAL', '2.10.2'),
+    ('draco', '1.5.7'),
+]
+multi_deps = {'Python': ['3.14'] }
+separate_build_dir = True
+
+# specify locations that CMake can't figure out correctly
+_copts = [
+	"-DCMAKE_PREFIX_PATH=$EBROOTQT6",
+	"-DQSCINTILLA_LIBRARY=$EBROOTQSCINTILLA/lib/libqscintilla2_qt6.%s" % SHLIB_EXT,
+	"-DWITH_QTWEBENGINE=OFF",
+	"-DPYQT6_SIP_DIR=$EBROOTQT6/lib/python%(pyshortver)s/site-packages/PyQt6/bindings",
+	"-DQSCI_SIP_DIR=$EBROOTQSCINTILLA/share/sip/PyQt6",
+	"-DWITH_INTERNAL_SPATIALINDEX=ON",
+]
+configopts = ' '.join(_copts)
+
+prebuildopts = 'LIBRARY_PATH=$LIBRARY_PATH:$EBROOTGENTOO/lib64/pulseaudio '
+
+sanity_check_paths = {
+    'files': ['bin/qgis', 'bin/qgis_bench', 'lib/libqgis_analysis.%s' % SHLIB_EXT,
+              'lib/libqgis_app.%s' % SHLIB_EXT, 'lib/libqgis_core.%s' % SHLIB_EXT, 'lib/libqgis_gui.%s' % SHLIB_EXT,
+              'lib/libqgis_native.%s' % SHLIB_EXT, 'lib/libqgispython.%s' % SHLIB_EXT],
+    'dirs': ['include/qgis', 'man', 'share/qgis'],
+}
+
+postinstallcmds = [
+	"/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --any_interpreter --add_origin --add_path %(installdir)s/lib --path %(installdir)s/lib/qgis/plugins ",
+	"/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --any_interpreter --add_origin --add_path %(installdir)s/lib --path %(installdir)s/share/qgis/python ",
+]
+
+exts_defaultclass = 'PythonPackage'
+exts_default_options = {
+    'source_urls': [PYPI_SOURCE],
+    'sanity_pip_check': False,
+}
+exts_list = [
+    ('psycopg2', '2.9.13', {
+        'checksums': ['d36784fc2dae69523ba4b79c7d1d1b4d6e83e87836874f111262f4db940b16a6'],
+    }),
+    ('PyYAML', '6.0.3', {
+        'modulename': 'yaml',
+        'sources': ['%(namelower)s-%(version)s.tar.gz'],
+        'checksums': ['d76623373421df22fb4cf8817020cbb7ef15c725b9d5e45f17e189bfc384190f'],
+    }),
+    ('requests', '2.34.2', {
+        'checksums': ['f288924cae4e29463698d6d60bc6a4da69c89185ad1e0bcc4104f584e960b9ed'],
+    }),
+    ('urllib3', '2.7.0', {
+        'checksums': ['231e0ec3b63ceb14667c67be60f2f2c40a518cb38b03af60abc813da26505f4c'],
+    }),
+    ('idna', '3.19', {
+        'checksums': ['5e0811a4383b21dc5838069f801c4fb62113b7447663d2530d2bd6e77b49bf15'],
+    }),
+    ('lxml', '6.1.3', {
+        'checksums': ['45222d94ddd511536f3b2f7d9deae3b2339b4ce0f075f1ca25703b07cad9dd21'],
+    }),
+    ('OWSLib', '0.36.0', {
+        'modulename': 'owslib',
+        'sources': ['%(namelower)s-%(version)s.tar.gz'],
+        'checksums': ['b1ea352ee84f37a1a8ae44122b13cbd3b5b7bf9af0f74d84fe9ed7d9613b9543'],
+    }),
+    ('MarkupSafe', '3.0.4', {
+        'modulename': 'markupsafe',
+        'sources': ['%(namelower)s-%(version)s.tar.gz'],
+        'checksums': ['2e9ad7dd851bf45fab9f75cbff4cb493fee9979e8d8c7c9c3ee119022518edd6'],
+    }),
+    ('Jinja2', '3.1.6', {
+        'modulename': 'jinja2',
+        'sources': ['%(namelower)s-%(version)s.tar.gz'],
+        'checksums': ['0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d'],
+    }),
+]
+
+exts_filter = ("python -c 'import %(ext_name)s'", '')
+modextrapaths = {
+    'EBPYTHONPREFIXES': [''],
+    'PYTHONPATH': ['share/qgis/python', 'share/qgis/python/plugins'],
+}
+
+moduleclass = 'geo'
