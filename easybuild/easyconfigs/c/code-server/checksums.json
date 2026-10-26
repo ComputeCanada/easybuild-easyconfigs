@@ -18,6 +18,7 @@
   "anwar.resourcemonitor-1.0.10.vsix": "40149c68723171069e17607bcad28140890993942204e93a71f87427b31ebe5f",
   "code-server-4.101.1-linux-amd64.tar.gz": "a114881f57ca6651895e404bd392e722436b8538f0473af4f424c8ff88d97503",
   "code-server-4.101.2-linux-amd64.tar.gz": "ac57f0640db1130f8544c9e05b837ce6e0a302f4a41db0e8e282fb308b631ec3",
+  "code-server-4.141.1-env-variables.patch": "159323746e3c1b01a9a9cee739312d16bab99f987774dff7e51995d12cbea10d",
   "code-server-4.141.1-linux-amd64.tar.gz": "45fd3cfbff9fd0c36fe37105859b0f4f7a0544341ca4e322657f5b3caeca1cbe",
   "code-server-env-variables.patch": "10f5d33716a10736752f3b921982b79a681d1dff33a210de5fb90b8423c9460a",
   "eamodio.gitlens-2025.6.2505.vsix": "5bb7750b3fdde1253154869d75f123cf07d381eee486e3db2fe6e97075a3e9df",

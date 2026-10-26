@@ -10,7 +10,7 @@ source_urls = [
         'https://github.com/coder/%(name)s/releases/download/v%(version)s/',
 ]
 sources = ['%(name)s-%(version)s-linux-%(mapped_arch)s.tar.gz']
-patches = ['code-server-env-variables.patch']
+patches = ['code-server-4.141.1-env-variables.patch']
 
 postinstallcmds = [
     'mkdir -p %(installdir)s/extensions/foxundermoon.shell-format-7.0.1/bin; pushd %(installdir)s/extensions/foxundermoon.shell-format-7.0.1/bin; wget https://github.com/mvdan/sh/releases/download/v3.14.1/shfmt_v3.14.1_linux_amd64; chmod +x shfmt_v3.14.1_linux_amd64; popd',

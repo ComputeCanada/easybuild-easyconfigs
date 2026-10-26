@@ -1,0 +1,44 @@
+diff -ru code-server-4.141.1-linux-amd64.orig/bin/code-server code-server-4.141.1-linux-amd64/bin/code-server
+--- code-server-4.141.1-linux-amd64.orig/bin/code-server	2025-06-25 18:32:32.568686085 +0000
++++ code-server-4.141.1-linux-amd64/bin/code-server	2025-06-25 18:33:44.801477349 +0000
+@@ -25,4 +25,39 @@
+ }
+
+ ROOT="$(root)"
+-exec "$ROOT/lib/node" "$ROOT" "$@"
++SKIP_SETUP=false
++for arg in "$@"; do
++  if [[ "$arg" == "--install-extension" || "$arg" == --install-extension=* || "$arg" == "--help" || "$arg" == "-h" ]]; then
++    SKIP_SETUP=true
++    break
++  fi
++done
++
++EXTRA_ARGS=()
++if [[ "$SKIP_SETUP" = "false" ]]; then
++  EXTENSIONS_DIR=${CODESERVER_EXTENSIONS_DIR:-$HOME/.local/share/code-server/extensions}
++  CENTRAL_EXTENSIONS_DIR=${MODULE_CODESERVER_EXTENSIONS_DIR:-$ROOT/extensions}
++  if [[ -d "$CENTRAL_EXTENSIONS_DIR" && "$CENTRAL_EXTENSIONS_DIR" != "$EXTENSIONS_DIR" ]]; then
++    mkdir -p "$EXTENSIONS_DIR"
++    for ext_link in "$EXTENSIONS_DIR"/*; do
++      if [[ -L "$ext_link" && ! -e "$ext_link" ]]; then
++        rm -f "$ext_link"
++      fi
++    done
++    for ext in "$CENTRAL_EXTENSIONS_DIR"/*; do
++      if [[ -d "$ext" ]]; then
++        ext_name=$(basename "$ext")
++        if [[ ! -e "$EXTENSIONS_DIR/$ext_name" && ! -L "$EXTENSIONS_DIR/$ext_name" ]]; then
++          ln -s "$ext" "$EXTENSIONS_DIR/$ext_name"
++        fi
++      fi
++    done
++  fi
++
++  USER_DATA_DIR=${CODESERVER_USER_DATA_DIR:-$HOME/.local/share/code-server}
++  python3 /cvmfs/soft.computecanada.ca/config/code-server/merge-settings.py /cvmfs/soft.computecanada.ca/config/code-server/settings.json "$USER_DATA_DIR/User/settings.json"
++
++  EXTRA_ARGS=(--extensions-dir "${EXTENSIONS_DIR}" --user-data-dir "${USER_DATA_DIR}" --disable-update-check)
++fi
++
++exec "$ROOT/lib/node" "$ROOT" "${EXTRA_ARGS[@]}" "$@"
