@@ -140,20 +140,18 @@ for _, envvar in ipairs({{"R_LIBS", "R_LIBS_USER"}}) do
 end
 
 -- Also check the default ~/R/<platform>-library/<x.y>/ directories
-if not found_match then
+if not found_match and (os.getenv("R_LIBS_USER") or "") == "" then
     local home = os.getenv("HOME") or ""
-    local handle = io.popen('ls -d "' .. home .. '"/R/*-library/*/ 2>/dev/null')
-    if handle then
-        for line in handle:lines() do
-            local ver = line:match("/(%d+%.%d+)/?$")
-            if ver == rstudio_r_version then
-                found_match = true
-                break
-            elseif ver then
-                mismatch_ver = ver
-            end
+    local quoted_home = "'" .. home:gsub("'", [['"'"']]) .. "'"
+    local listing = capture("ls -d " .. quoted_home .. "/R/*-library/*/ 2>/dev/null")
+    for line in listing:gmatch("[^\\n]+") do
+        local ver = line:match("/(%d+%.%d+)/?$")
+        if ver == rstudio_r_version then
+            found_match = true
+            break
+        elseif ver then
+            mismatch_ver = ver
         end
-        handle:close()
     end
 end
 
