@@ -100,4 +100,67 @@ if os.getenv('SLURM_TMPDIR') then
 else
     setenv('RSTUDIO_DATA_HOME', pathJoin(os.getenv('HOME'), '.rstudio/{version}'))
 end
+
+-- Warn if the user's R library paths do not contain libraries for the R version
+-- required by this RStudio-Server module (R {version}.x).
+-- Strategy: if any path already matches the required version, skip the warning.
+-- Only warn when mismatched library paths are found and none match.
+local rstudio_r_version = "{version}"
+
+local function r_ver_from_path(path)
+    -- Extract a 'x.y' version component from a filesystem path
+    for part in path:gmatch("[^/]+") do
+        if part:match("^%d+%.%d+$") then return part end
+    end
+    return nil
+end
+
+local function scan_paths(paths_str, required)
+    -- Scan colon-separated paths; return (true, nil) on match, (false, ver) on mismatch
+    if not paths_str or paths_str == "" then return false, nil end
+    local mismatch = nil
+    for p in paths_str:gmatch("[^:]+") do
+        local ver = r_ver_from_path(p)
+        if ver == required then return true, nil end
+        if ver then mismatch = ver end
+    end
+    return false, mismatch
+end
+
+local found_match = false
+local mismatch_ver = nil
+
+for _, envvar in ipairs({{"R_LIBS", "R_LIBS_USER"}}) do
+    if not found_match then
+        local val = os.getenv(envvar)
+        local m, mis = scan_paths(val, rstudio_r_version)
+        if m then found_match = true
+        elseif mis then mismatch_ver = mis end
+    end
+end
+
+-- Also check the default ~/R/<platform>-library/<x.y>/ directories
+if not found_match then
+    local home = os.getenv("HOME") or ""
+    local handle = io.popen('ls -d "' .. home .. '"/R/*-library/*/ 2>/dev/null')
+    if handle then
+        for line in handle:lines() do
+            local ver = line:match("/(%d+%.%d+)/?$")
+            if ver == rstudio_r_version then
+                found_match = true
+                break
+            elseif ver then
+                mismatch_ver = ver
+            end
+        end
+        handle:close()
+    end
+end
+
+if not found_match and mismatch_ver then
+    LmodWarning([[This version of RStudio-Server requires R {version}.x, but your R library ]] ..
+        [[path(s) contain packages installed for R ]] .. mismatch_ver .. [[.x. ]] ..
+        [[Your installed R packages may not work correctly. Consider installing packages ]] ..
+        [[for R {version}.x or loading a version of RStudio-Server matching your R libraries.]])
+end
 """.format(version=version)
