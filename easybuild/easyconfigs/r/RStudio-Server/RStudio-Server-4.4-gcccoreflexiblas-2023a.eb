@@ -24,7 +24,7 @@ builddependencies = [
     ('ant', '1.10.14'),
     ('SOCI', '4.0.3'),
     ('CMake', '3.27.7'),
-    ('nodejs', '24.22.1'),
+    ('nodejs', '22.23.4'),
     ('yaml-cpp', '0.7.0'),
     ('Java', '11.0.22'),
 ]
