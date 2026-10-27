@@ -9,7 +9,7 @@ description = "Run VS Code on any machine anywhere and access it in the browser.
 
 toolchain = SYSTEM
 
-dependencies = [('code-server', '4.101.2')]
+dependencies = [('code-server', '4.141.1')]
 
 moduleclass = 'tools'
 
