@@ -14,6 +14,7 @@ patches = [
      'Python-3.13.1_runshared-ld-preload.patch',
      'Python-3.14.2_skip-inf-recursion-tests.patch',
      'Python-3.14.2-custom-ctypes.patch',
+     'Python-3.13.1_ssl-distrust-compromised-eMudhra-intermediate-CA-keys-CVE-2026-115557.patch',
 ]
 
 # Like patches, but these will only be applied if EasyBuild is configured to filter $LD_LIBRARY_PATH
@@ -37,6 +38,8 @@ dependencies = [
     ('OpenSSL', '1.1', '', SYSTEM),
 ]
 
+preconfigopts = "PROFILE_TASK='-m test --pgo -i test_system_transitions'"
+
 install_pip = True
 
 exts_default_options = {
@@ -51,7 +54,7 @@ exts_list = [
     ('flit_core', '3.12.0'),
     ('wheel', '0.46.3'),
     ('setuptools', '82.0.0', {'patches': ['setuptools-fix_trove_classifiers_hassle.patch'], 'sources': ['setuptools-82.0.0.tar.gz']}),
-    ('pip', '26.0.1'),
+    ('pip', '26.0.1', {'patches': ['pip-25.3_remove-emSign-root-cert.patch']}),
     ('packaging', '26.0'),
     ('setuptools_scm', '9.2.2'),
     ('pathspec', '0.12.1'),
