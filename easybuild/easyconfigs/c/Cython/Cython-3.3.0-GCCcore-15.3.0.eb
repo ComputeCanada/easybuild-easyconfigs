@@ -20,7 +20,7 @@ checksums = ['eed0d93fbca7087f143b42c34b05a825849bdf17f101572c2105acfa49aa88b8']
 
 builddependencies = [('binutils', '2.46.1')]
 
-multi_deps = {'Python': ['3.14']}
+multi_deps = {'Python': ['3.14', '3.15']}
 hidden = True
 
 sanity_check_paths = {
