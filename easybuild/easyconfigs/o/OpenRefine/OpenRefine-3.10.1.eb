@@ -1,0 +1,37 @@
+easyblock = 'PackedBinary'
+
+name = 'OpenRefine'
+version = '3.10.1'
+
+homepage = 'https://github.com/OpenRefine/OpenRefine'
+description = """OpenRefine is a power tool that allows you to load data, understand it, clean it up, reconcile it,
+ and augment it with data coming from the web."""
+
+toolchain = SYSTEM
+
+source_urls = ['https://github.com/OpenRefine/OpenRefine/archive/']
+sources = ['%(version)s.tar.gz']
+patches = [('OpenRefine-3.9.3.patch', 1)]
+checksums = [
+    {'3.10.1.tar.gz': 'ed14d83322331e597f6e1ecbd67a83c232d6f4eedddd41b15dd1bcc4ab41b8fd'},
+    {'OpenRefine-3.9.3.patch': 'b7dd9a5b732bb305abca80604a721699315e105192e794e22bd2a3d3c1b5cdfe'},
+]
+
+builddependencies = [
+    ('Maven', '3.9.10'),
+    ('nodejs', '24.22.1', '', ('GCCcore', '15.3.0')),
+]
+
+dependencies = [
+    ('Java', '25'),
+]
+
+install_cmd = "cd OpenRefine-%(version)s && unset JAVA_TOOL_OPTIONS && ./refine -m 2048m build && cp -a * %(installdir)s"
+
+postinstallcmds = ['/cvmfs/soft.computecanada.ca/easybuild/easybuild-computecanada-config/generate_cvmfs_filebundle.py --executable %(installdir)s/refine --args "-i 127.0.0.1 -p 48291 -H * -x refine.headless=true" --follow-forks']
+sanity_check_paths = {
+    'files': ['refine'],
+    'dirs': ['server/classes'],
+}
+
+moduleclass = 'tools'
