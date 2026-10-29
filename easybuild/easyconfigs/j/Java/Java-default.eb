@@ -10,7 +10,7 @@ Java applications on desktops and servers."""
 
 toolchain = SYSTEM
 
-dependencies = [('Java', '17')]
+dependencies = [('Java', '25')]
 
 moduleclass = 'lang'
 
