@@ -19,7 +19,7 @@ checksums = [
 
 builddependencies = [
     ('Maven', '3.9.10'),
-    ('nodejs', '20.16.0'),
+    ('nodejs', '24.22.1'),
 ]
 
 dependencies = [
