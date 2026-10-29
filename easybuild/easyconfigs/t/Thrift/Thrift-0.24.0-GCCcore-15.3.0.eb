@@ -17,7 +17,7 @@ builddependencies = [
     ("Boost", "1.92.0", "-core"),
 ]
 
-multi_deps = {"Python": ["3.14"]}
+multi_deps = {"Python": ["3.14", "3.15"]}
 
 preconfigopts = " bash bootstrap.sh && export PY_PREFIX=%(installdir)s && PYTHON_SETUPUTIL_ARGS='--no-deps --no-build-isolation --verbose' && "
 
