@@ -41,7 +41,7 @@ builddependencies = [
 #    ('Python', '2.7.18', '-bare'),
 #    ('re2c', '3.1'),
 #     ('SciPy-Stack', '2023b'),
-     ('nodejs', '18.17.1'),
+     ('nodejs', '24.22.1'),
     ('snappy', '1.1.10'),
     ('JasPer', '4.0.0'),
 ]
