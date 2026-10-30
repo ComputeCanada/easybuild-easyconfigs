@@ -11,11 +11,13 @@ toolchain = SYSTEM
 # this is a bundle of Python packages
 exts_defaultclass = 'PythonPackage'
 
-builddependencies = [('Python', '3.15')]
+builddependencies = [('Python', '3.15.2')]
 preinstallopts = ['python -m venv %(installdir)s/venv && source %(installdir)s/venv/bin/activate && ']
 install_cmd = 'pip install'
 installopts = '--no-index --no-deps -r requirements-%(version)s.txt'
 sources = ['requirements-%(version)s.txt']
+checksums = ['a03d096458dc39cf4ef86188ebad6c7a9fb70de3ea9342a2f02f2975e55e3a3e']
+
 postinstallcmds = ['mkdir %(installdir)s/bin; ln -s %(installdir)s/venv/bin/pybabel %(installdir)s/bin']
 
 sanity_check_paths = {
