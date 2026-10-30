@@ -50,7 +50,7 @@ dependencies = [
     ('GTK3', '3.24.52'),
     ('libiconv', '1.18'),
 ]
-multi_deps = {'Python': ['3.14']}
+multi_deps = {'Python': ['3.14', '3.15']}
 multi_deps_extensions_only = True
 
 exts_defaultclass = 'PythonPackage'  
