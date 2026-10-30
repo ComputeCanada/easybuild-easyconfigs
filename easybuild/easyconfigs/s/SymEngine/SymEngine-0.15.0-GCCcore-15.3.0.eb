@@ -36,7 +36,7 @@ configopts = " ".join([
     "-DWITH_TCMALLOC=OFF",
 ])
 
-multi_deps = {'Python': ['3.14']}
+multi_deps = {'Python': ['3.14', '3.14']}
 multi_deps_extensions_only = True
 
 exts_defaultclass = 'PythonPackage'
