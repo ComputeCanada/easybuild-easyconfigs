@@ -24,7 +24,7 @@ builddependencies = [
     ('Cython', '3.3.0'),
 ]
 
-multi_deps = {'Python': ['3.14']}
+multi_deps = {'Python': ['3.14', '3.15']}
 multi_deps_extensions_only = True
 
 configopts = " ".join([
