@@ -28,7 +28,7 @@ builddependencies = [
     ('numpy', '2.5.3')
 ]
 
-multi_deps = {'Python': ['3.14'] }
+multi_deps = {'Python': ['3.14', '3.15'] }
 multi_deps_extensions_only = True
 
 configopts = ' -DTPI=omp '
