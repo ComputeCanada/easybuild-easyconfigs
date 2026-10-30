@@ -20,7 +20,7 @@ builddependencies = [
     ('numpy', '2.5.3'),
     ('SWIG', '4.4.1'),
 ]
-multi_deps = {'Python': ['3.14', '3.14'] }
+multi_deps = {'Python': ['3.14', '3.15'] * 2 }
 modextrapaths = {
 	'EBPYTHONPREFIXES': '',
 }
