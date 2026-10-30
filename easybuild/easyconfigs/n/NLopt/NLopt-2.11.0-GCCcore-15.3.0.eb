@@ -29,7 +29,7 @@ local_configopts = '-DNLOPT_PYTHON=ON -DPython_EXECUTABLE=$EBROOTPYTHON/bin/pyth
 configopts = [
     '-DBUILD_SHARED_LIBS=ON ' + local_configopts,
     '-DBUILD_SHARED_LIBS=OFF ' + local_configopts,
-]
+] * 2
 postinstallcmds = ['/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s/lib --add_path %(installdir)s/lib']
 
 sanity_check_paths = {
