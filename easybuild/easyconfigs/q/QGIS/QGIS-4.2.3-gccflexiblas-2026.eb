@@ -48,7 +48,7 @@ dependencies = [
     ('PDAL', '2.10.2'),
     ('draco', '1.5.7'),
 ]
-multi_deps = {'Python': ['3.14'] }
+multi_deps = {'Python': ['3.14', '3.15'] }
 separate_build_dir = True
 
 # specify locations that CMake can't figure out correctly
