@@ -28,7 +28,7 @@ dependencies = [
     ('zlib', '2.3.2'),
 ]
 
-multi_deps = {'Python': ['3.14']}
+multi_deps = {'Python': ['3.14', '3.15']}
 multi_deps_extensions_only = True
 
 preconfigopts = 'export LDFLAGS="$LDFLAGS -pthread" && '
