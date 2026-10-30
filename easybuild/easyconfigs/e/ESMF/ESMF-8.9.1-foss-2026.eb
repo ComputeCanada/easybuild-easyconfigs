@@ -27,7 +27,7 @@ dependencies = [
     ('ParallelIO', '2.7.0'),
 ]
 
-multi_deps = {'Python': ['3.14']}
+multi_deps = {'Python': ['3.14', '3.15']}
 
 # preconfigopts = 'sed -i -e "/setuptools-git-versioning;/d" src/addon/esmpy/pyproject.toml && '
 
