@@ -21,7 +21,7 @@ builddependencies = [
 
 configopts = "-DBUILD_SHARED_LIBS=ON"
 
-multi_deps = {'Python': ['3.14'] }
+multi_deps = {'Python': ['3.14', '3.15'] }
 multi_deps_extensions_only = True
 
 local_pyext_version = '1.0.0'
