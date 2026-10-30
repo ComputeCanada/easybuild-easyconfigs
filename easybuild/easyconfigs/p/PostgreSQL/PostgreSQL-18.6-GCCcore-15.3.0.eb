@@ -41,7 +41,7 @@ exts_list = [
         'checksums': ['c081f2250df751a943036e42db6df4571c66cd0aabe8291a7a506512b12007d2'],
     }),
     ('psycopg_binary', '3.3.6', {
-        'preinstallopts': "python ./tools/ci/copy_to_binary.py && cd psycopg_binary && ",
+        'preinstallopts': "rm -rf psycopg_binary && python ./tools/ci/copy_to_binary.py && cd psycopg_binary && ",
         'source_tmpl': '%(version)s.tar.gz',
         'source_urls': ['https://github.com/psycopg/psycopg/archive/refs/tags'],
         'checksums': ['bfa3560402b8f8ac2bf9408c6354b5c8c951d64871629a14526f942361560836'],
