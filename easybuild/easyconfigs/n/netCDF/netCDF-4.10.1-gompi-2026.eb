@@ -44,7 +44,7 @@ preconfigopts = (
     " %(builddir)s/%(namelower)s-c-%(version)s/nc_test4/run_par_test.sh.in &&"
 )
 
-local_python_versions = ['3.14']
+local_python_versions = ['3.14', '3.15']
 # make sure both static and shared libs are built
 local_configopts = [
     "-DBUILD_SHARED_LIBS=OFF",
