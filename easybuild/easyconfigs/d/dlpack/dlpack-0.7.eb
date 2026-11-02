@@ -1,0 +1,42 @@
+easyblock = 'CMakeMake'
+
+name = 'dlpack'
+version = '0.7'
+
+homepage = 'https://dmlc.github.io/dlpack/latest/'
+description = """
+In order for an ndarray system to interact with a variety of frameworks, a stable in-memory data structure is needed.
+
+DLPack is one such data structure that allows exchange between major frameworks. It is developed with inputs from many deep learning system core developers. Highlights include:
+
+- Minimum and stable: simple header
+- Designed for cross hardware: CPU, CUDA, OpenCL, Vulkan, Metal, VPI, ROCm, WebGPU, Hexagon
+- Already a standard with wide community adoption and support:
+    * NumPy
+    * CuPy
+    * PyTorch
+    * Tensorflow
+    * MXNet
+    * TVM
+    * mpi4py
+- Clean C ABI compatible.
+    * Means you can create and access it from any language.
+    * It is also essential for building JIT and AOT compilers to support these data types.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://github.com/dmlc/dlpack/archive/refs/tags']
+sources = ['v%(version)s.tar.gz']
+checksums = ['13f60672b324d081545f423d720737121c4952a9b90bdd49dc372a84c3fe96ee']
+
+builddependencies = [
+    ('CMake', '3.23.1')
+]
+
+sanity_check_paths = {
+    'files': ['include/dlpack/dlpack.h'],
+    'dirs': ['include'],
+}
+
+moduleclass = 'tools'
