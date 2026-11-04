@@ -1,0 +1,54 @@
+easyblock = 'ConfigureMake'
+
+name = 'FFmpeg'
+version = '9.0.2'
+
+homepage = 'https://www.ffmpeg.org/'
+description = "A complete, cross-platform solution to record, convert and stream audio and video."
+
+toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
+
+source_urls = ['https://%(namelower)s.org/releases/']
+sources = [SOURCELOWER_TAR_BZ2]
+checksums = ['ee80a25a5621df84498cef46917be87eab3b4f01951e85c2c7cbe5c94914ee70']
+
+builddependencies = [
+    ('ffnvcodec', '13.0.19.0', '', SYSTEM),  # optional nvenc/dec support
+]
+
+dependencies = [
+]
+
+configopts = ' '.join([
+    '--cc="$CC"',
+    '--cxx="$CXX"',
+    '--enable-pic',
+    '--enable-shared',
+    '--enable-gpl',
+    '--enable-version3',
+    '--enable-nonfree',
+    '--enable-libx264',
+    '--enable-libx265',
+    '--enable-libmp3lame',
+    # '--enable-libvpx',
+    '--enable-libwebp',
+    '--enable-libvorbis',
+    # '--enable-libopus',
+    # '--enable-libdav1d',
+    # '--enable-libaom',
+    # '--enable-libsvtav1',
+    '--enable-libfreetype',
+    '--enable-fontconfig',
+    '--enable-libfribidi',
+    '--enable-sdl2',
+    '--disable-htmlpages',
+])
+
+sanity_check_paths = {
+    'files': [f'bin/ff{x}' for x in ['mpeg', 'probe', 'play']] +
+             [f'lib/lib{x}.{y}' for x in ['avdevice', 'avfilter', 'avformat', 'avcodec',
+                                          'swresample', 'swscale', 'avutil'] for y in [SHLIB_EXT, 'a']],
+    'dirs': ['include']
+}
+
+moduleclass = 'vis'
