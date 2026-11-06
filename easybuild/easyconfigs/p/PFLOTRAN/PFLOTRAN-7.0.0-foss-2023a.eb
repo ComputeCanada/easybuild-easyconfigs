@@ -26,7 +26,7 @@ sources = ['pflotran-v%(version)s.tar.gz']
 checksums = ['c511fd7fba0b6e98023757f76956cba1d93ef33ef6e2e2658209d775e9282c5e']
 
 dependencies = [
-    ('HDF5', '1.14.4', '-mpi'), #explicitely required for linking PFLOTRAN with HDF5 libs
+    ('HDF5', '1.14.2', '-mpi'), #explicitely required for linking PFLOTRAN with HDF5 libs
     ('PETSc', '3.24.5'),
 ]
 
