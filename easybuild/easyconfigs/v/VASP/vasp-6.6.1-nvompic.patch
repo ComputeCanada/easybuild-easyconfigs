@@ -10,8 +10,8 @@
  	stockholder.o \
  	pot_electrostat.o \
 --- arch/makefile.include.nvhpc_acc.orig	2026-09-04 13:48:12.000000000 -0700
-+++ arch/makefile.include.nvhpc_acc	2026-09-11 10:33:25.000000000 -0700
-@@ -92,14 +92,13 @@
++++ arch/makefile.include.nvhpc_acc	2026-10-14 16:12:57.000000000 -0700
+@@ -92,30 +92,29 @@
  LAPACK      = -llapack
  
  # scaLAPACK (mandatory)
@@ -30,3 +30,26 @@
  
  # Use cusolvermp (optional)
  # supported as of NVHPC-SDK 24.1 (and needs CUDA-11.8)
+ #CPP_OPTIONS+= -DCUSOLVERMP -DCUBLASMP
+-#LLIBS      += -cudalib=cusolvermp,cublasmp -lnvhpcwrapcal
++#LLIBS      += -cudalib=cusolvermp,cublasmp -lnvhpcwrapcal -Wl,-rpath $(EBROOTCUDA)/stubs/lib64
+ 
+ # HDF5-support (optional but strongly recommended, and mandatory for some features)
+-#CPP_OPTIONS+= -DVASP_HDF5
+-#HDF5_ROOT  ?= /path/to/your/hdf5/installation
+-#LLIBS      += -L$(HDF5_ROOT)/lib -lhdf5_fortran
+-#INCS       += -I$(HDF5_ROOT)/include
++CPP_OPTIONS+= -DVASP_HDF5
++HDF5_ROOT  ?= $(EBROOTHDF5)
++LLIBS      += -lhdf5_fortran
++INCS       += -I$(HDF5_ROOT)/include
+ 
+ # For the VASP-2-Wannier90 interface (optional)
+-#CPP_OPTIONS    += -DVASP2WANNIER90
++CPP_OPTIONS    += -DVASP2WANNIER90
+ #WANNIER90_ROOT ?= /path/to/your/wannier90/installation
+-#LLIBS          += -L$(WANNIER90_ROOT)/lib -lwannier
++LLIBS          += -lwannier
+ 
+ # For machine learning library VASPml (experimental)
+ #CPP_OPTIONS += -Dlibvaspml

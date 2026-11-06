@@ -6,7 +6,7 @@ version = '6.6.1'
 homepage = 'http://www.vasp.at'
 description = """The Vienna Ab initio Simulation Package (VASP) is a computer program for atomic scale
 materials modelling, e.g. electronic structure calculations and quantum-mechanical molecular dynamics,
-based on Density Futional Theory (DFT).  This version of VASP is optimized for GPU-based computing and supports the HDF5 library exclusively."""
+based on Density Futional Theory (DFT). This version of VASP is optimized for GPU-based computing and supports the HDF5 library exclusively."""
 
 toolchain = {'name': 'nvompic', 'version': '2024a'}
 local_binfiles = ['vasp_std', 'vasp_gam', 'vasp_ncl']
@@ -16,13 +16,14 @@ builddependencies = [
     ('FlexiBLAS', '3.4.4','', ('NVHPC', '25.1')),
     ('FFTW', '3.3.10','', ('NVHPC', '25.1')),
     ('ScaLAPACK', '2.2.0','-fb', ('nvompi', '2024a')),
+    ('wannier90', '3.1.0','', ('nvompi', '2024a')),
 ]
 
 sources = ['%(namelower)s.%(version)s.tgz']
 patches = ['%(namelower)s-%(version)s-nvompic.patch']
 checksums = [
     {'vasp.6.6.1.tgz': '261f9c1fd730468106191afeb185821d67cb7a58c982f6e063824dd5432106b0'},
-    {'vasp-6.6.1-nvompic.patch': '20f8a18503f1796abbd48cee5cb467fed50aa454116750ab73487612105f0b22'},
+    {'vasp-6.6.1-nvompic.patch': '935e470e792a892132117dd131956d6cacb8f351d1561220a6d8dcf9a4c83274'},
 ]
 
 # Vasp is proprietary software, see http://www.vasp.at/index.php/faqs on how to get access to the code
