@@ -1,0 +1,30 @@
+easyblock = 'CMakeMake'
+
+name = 'OpenImageDenoise'
+version = '2.5.1'
+
+homepage = 'https://github.com/OpenImageDenoise/oidn'
+description = """Intel Open Image Denoise is an open source library of high-performance, 
+high-quality denoising filters for images rendered with ray tracing. """
+
+toolchain = {'name': 'gccflexiblas', 'version': '2026'}
+toolchainopts = {'pic': True}
+
+source_urls = ['https://github.com/%(name)s/oidn/releases/download/v%(version)s/']
+sources = ['oidn-%(version)s.src.tar.gz']
+
+builddependencies = [
+    ('CMake', '4.4.2'),
+    ('ispc', '1.32.0'),
+    ('tbb', '2022.3.0'),
+    ('OpenImageIO', '3.2.2.0'),
+]
+
+separate_build_dir = True
+
+sanity_check_paths = {
+    'files': ['lib64/libOpenImageDenoise.so', 'bin/oidnTest'],
+    'dirs': ['include/OpenImageDenoise'],
+}
+sanity_check_commands = ['%(installdir)s/bin/oidnTest']
+moduleclass = 'tools'
