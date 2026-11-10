@@ -15,7 +15,8 @@ toolchainopts = {'pic': True}
 #sources = [SOURCELOWER_TGZ]
 #checksums = ['1c8304a7772ac6b99195f1300378c6e3ddf4ad07c85d64a04505652abb8a55f9']
 
-source_urls = ['https://gitlab.cern.ch/CLHEP/CLHEP/-/archive/CLHEP_%s/' % version.replace('.','_')]
+#source_urls = ['https://gitlab.cern.ch/CLHEP/CLHEP/-/archive/CLHEP_%s/' % version.replace('.','_')]
+source_urls = ['https://gitlab.cern.ch/CLHEP/CLHEP/-/archive/CLHEP_2_4_7_2/']
 sources = ['CLHEP-CLHEP_%s.tar.gz' % version.replace('.','_')]
 checksums = ['c40c239fa2c5810b60f4e9ddd6a8cc2ce81b962aa170994748cd2a2b5ac87f84']
 
