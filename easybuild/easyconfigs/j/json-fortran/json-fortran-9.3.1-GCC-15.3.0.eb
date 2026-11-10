@@ -28,7 +28,7 @@ runtest = 'check'
 
 # make sure the *.mod files are copied over
 
-#postinstallcmds = ['cp -f json_*.mod %(installdir)s/include']
+postinstallcmds = ['cp -f json_*.mod %(installdir)s/include']
 
 # the static library is called libjsonfortran-static.a
 
