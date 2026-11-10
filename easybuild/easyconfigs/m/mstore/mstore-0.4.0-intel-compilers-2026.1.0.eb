@@ -1,0 +1,37 @@
+# J. Sassmannshausen (Imperial College London/UK)
+
+easyblock = 'CMakeMake'
+
+name = 'mstore'
+version = '0.4.0'
+
+homepage = 'https://github.com/grimme-lab/mstore'
+description = """Molecular structure store for testing"""
+
+toolchain = {'name': 'intel-compilers', 'version': '2026.1.0'}
+toolchainopts = {'pic': True}
+
+github_account = 'grimme-lab'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['c6743437baedfa900fc23220a00ea308750365262b998c73c3de65f7938bb282']
+
+builddependencies = [
+    ('binutils', '2.39'),
+    ('CMake', '3.24.3'),
+]
+
+dependencies = [
+    ('mctc-lib', '0.7.0'),
+]
+
+configopts = '-DBUILD_SHARED_LIBS=ON'
+
+sanity_check_paths = {
+    'files': ['bin/mstore-fortranize', 'bin/mstore-info', 'lib/libmstore.%s' % SHLIB_EXT],
+    'dirs': ['include/%(name)s', 'lib/cmake', 'lib/pkgconfig'],
+}
+
+sanity_check_commands = ["mstore-info --help"]
+
+moduleclass = 'chem'
