@@ -1,0 +1,45 @@
+easyblock = 'CMakeMake'
+
+name = 'OpenImageIO'
+version = '3.2.2.0'
+
+homepage = 'https://openimageio.org/'
+description = """OpenImageIO is a library for reading and writing images, and a bunch of related classes, utilities,
+ and applications."""
+
+toolchain = {'name': 'gccflexiblas', 'version': '2026'}
+
+source_urls = ['https://github.com/OpenImageIO/oiio/archive/refs/tags/']
+sources = ['v%(version)s.tar.gz']
+
+builddependencies = [
+    ('CMake', '4.4.2'),
+    ('git', '2.41.0', '-nodocs'),
+    ('python-build-bundle', '2026a'),
+    ('HDF5', '2.2.0'),
+]
+dependencies = [
+    ('Boost', '1.92.0'),
+    ('libjpeg-turbo', '3.1.4.1'),
+    ('libpng', '1.6.56'),
+    ('LibTIFF', '4.7.1'),
+    ('OpenEXR', '3.4.12'),
+    ('freetype', '2.14.3'),
+    ('zlib', '2.3.3'),
+    ('tbb', '2022.3.0'),
+    ('OpenCV', '5.1.0'),
+    ('OpenColorIO', '2.6.0'),
+    ('fmt', '12.2.0'),
+]
+multi_deps = {'Python': ['3.14', '3.15']}
+
+separate_build_dir = True
+
+configopts = '-DSTOP_ON_WARNING=OFF -DPython_EXECUTABLE=$EBROOTPYTHON/bin/python' #-DUSE_PYTHON=OFF'
+
+sanity_check_paths = {
+    'files': ['bin/oiiotool', 'lib/libOpenImageIO.%s' % SHLIB_EXT, 'lib/libOpenImageIO_Util.%s' % SHLIB_EXT],
+    'dirs': ['include/OpenImageIO', 'share'],
+}
+
+moduleclass = 'lib'
