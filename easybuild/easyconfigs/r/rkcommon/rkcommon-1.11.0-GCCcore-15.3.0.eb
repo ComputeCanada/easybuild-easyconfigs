@@ -1,0 +1,27 @@
+easyblock = 'CMakeMake'
+
+name = 'rkcommon'
+version = '1.11.0'
+
+homepage = 'https://github.com/ospray/rkcommon'
+description = """ Intel RenderKit common library"""
+
+toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
+
+source_urls = ['https://github.com/ospray/rkcommon/archive']
+sources = ['v%(version)s.tar.gz']
+
+builddependencies = [
+    ('CMake', '4.4.2'),
+    ('tbb', '2022.3.0'),
+]
+
+separate_build_dir = True
+
+configopts = '-DBUILD_TESTING=OFF'
+
+sanity_check_paths = {
+    'files': ['lib/librkcommon.so'],
+    'dirs': ['include/rkcommon'],
+}
+moduleclass = 'tools'
