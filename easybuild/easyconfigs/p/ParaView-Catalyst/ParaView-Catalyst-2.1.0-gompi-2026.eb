@@ -30,7 +30,10 @@ _copts = [
 
 configopts = ' '.join(_copts)
 
-postinstallcmds = ['setrpaths.sh --path %%(installdir)s/lib/python%s --add_path %%(installdir)s/lib64' % v for v in multi_deps['Python']]
+postinstallcmds = [
+    'setrpaths.sh --path %%(installdir)s/lib/python%s --add_path %%(installdir)s/lib64 && '
+    'patchelf --remove-needed libpython%s.so.1.0 %%(installdir)s/lib64/libcatalyst.so.3'
+    % (v, v) for v in multi_deps['Python']]
 
 sanity_check_paths = {
     'files': ['include/catalyst-%(version_major_minor)s/catalyst.hpp'],
