@@ -1,0 +1,162 @@
+easyblock = 'CMakeNinja'
+
+name = 'ParaView'
+version = '6.2.0'
+
+homepage = 'https://www.paraview.org'
+description = "ParaView is a scientific parallel visualizer."
+
+toolchain = {'name': 'gofb', 'version': '2026'}
+toolchainopts = {'pic': True, 'usempi': True}
+
+local_download_suffix = 'download.php?submit=Download&version=v%(version_major_minor)s&type=source&os=all&downloadFile='
+source_urls = [
+     'https://www.paraview.org/files/dependencies/',
+     'https://www.paraview.org/paraview-downloads/%s' % local_download_suffix,
+]
+sources = [
+    "%(name)s-v%(version)s.tar.gz",
+    "nvidia-index-libs-6.0.0.20250604-linux.tar.bz2",
+]
+
+builddependencies = [
+    ('CMake', '4.4.2'),
+    ('Ninja', '1.13.2')
+]
+
+dependencies = [
+    ('Boost', '1.92.0', '', ('GCC', '15.3.0')),
+    ('SciPy-Stack', '2026b'),
+    ('XZ', '5.8.2'),
+    ('HDF5', '2.2.0'),
+    ('netCDF', '4.10.1'),
+    ('libdrm', '2.4.133'),
+    ('OpenGL', '2026.05'),
+    ('Qt6', '6.12.0'),
+    ('zlib', '2.3.2'),
+    ('FFmpeg', '9.0.2'),
+    ('Szip', '2.1.1'),
+    ('matplotlib', '3.10.9'),  # For rendering of latex-format labels
+    ('libxslt', '1.1.45'),
+    ('ParaView-Catalyst', '2.1.0'),
+    ('OpenVKL', '1.3.2'),
+    ('tbb', '2022.3.0'),
+]
+
+if ARCH == 'x86_64':
+    # Leads to incorrect coloring when using OSPRay 3.x
+    dependencies.append(('OSPRay', '2.12.1'))
+
+# these libraries depend on a specific version of python, move them to their own directory
+local_python_dependent_libs = [f'lib{name}-pv6.2.so*'  for name in (
+    'pqApplicationComponents',
+    'pqComponents',
+    'pqCore',
+    'pqPython',
+    'pqWidgets',
+    'vtkFiltersPython',
+    'vtkIOCatalystConduit',
+    'vtkIOIOSS',
+    'vtkioss',
+    'vtkPVAdaptorsCTH',
+    'vtkPVAdaptorsNPIC',
+    'vtkPVAdaptorsParticle',
+    'vtkPVCatalyst',
+    'vtkPVClientWeb',
+    'vtkPVInSitu',
+    'vtkPVPythonCatalyst',
+    'vtkPVVTKExtensionsExtraction',
+    'vtkPVVTKExtensionsExtractionPython',
+    'vtkPVVTKExtensionsFiltersGeneral',
+    'vtkPVVTKExtensionsFiltersParallel',
+    'vtkPVVTKExtensionsFiltersParallelDIY2',
+    'vtkPVVTKExtensionsFiltersPython',
+    'vtkPVVTKExtensionsFiltersRendering',
+    'vtkPVVTKExtensionsIOAMR',
+    'vtkPVVTKExtensionsIOCore',
+    'vtkPVVTKExtensionsIOExodus',
+    'vtkPVVTKExtensionsIOGeneral',
+    'vtkPVVTKExtensionsIOImage',
+    'vtkPVVTKExtensionsIOImport',
+    'vtkPVVTKExtensionsIOSPCTH',
+    'vtkPVVTKExtensionsMisc',
+    'vtkPythonInterpreter',
+    'vtkRemotingAnimation',
+    'vtkRemotingApplication',
+    'vtkRemotingApplicationComponents',
+    'vtkRemotingCore',
+    'vtkRemotingExport',
+    'vtkRemotingImport',
+    'vtkRemotingLive',
+    'vtkRemotingMisc',
+    'vtkRemotingServerManager',
+    'vtkRemotingServerManagerPython',
+    'vtkRemotingSettings',
+    'vtkRemotingViews',
+    'vtkRemotingViewsPython',
+    'vtkRenderingMatplotlib',
+    'vtkUtilitiesPythonInitializer',
+    'vtkUtilitiesPythonInterpreterPath',
+)]
+installopts = ' install && mkdir %(installdir)s/lib-py%(pyshortver)s && cd %(installdir)s/lib && cp -a ' + ' '.join(local_python_dependent_libs) +  ' %(installdir)s/lib-py%(pyshortver)s #'
+
+multi_deps = {'Python': ['3.14', '3.15'] }
+
+postinstallcmds = ['/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %%(installdir)s/lib/python%s --add_path %%(installdir)s/lib-py%s:%%(installdir)s/lib' % (v, v) for v in multi_deps['Python']]
+postinstallcmds += ['/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %%(installdir)s/lib-py%s --add_origin' % v for v in multi_deps['Python']]
+postinstallcmds += ['cp %(builddir)s/nvidia-index-libs-6.0*/lib/* %(installdir)s/lib64']
+
+_copts = [
+    # Basic configuration
+    '-DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON',
+    '-DPARAVIEW_BUILD_SHARED_LIBS=ON',
+    '-DPARAVIEW_USE_MPI=ON',
+    '-DPARAVIEW_ENABLE_FFMPEG=ON',
+    '-DPARAVIEW_USE_PYTHON=ON',
+    '-DPython3_ROOT_DIR=$EBROOTPYTHON',
+    '-DPARAVIEW_USE_QT=ON',
+    '-DPARAVIEW_PLUGIN_ENABLE_pvNVIDIAIndeX=ON',
+    # Useful input formats
+    '-DPARAVIEW_ENABLE_XDMF2=ON',
+    '-DPARAVIEW_ENABLE_XDMF3=ON',
+    # EGL, X and Mesa
+    '-DVTK_OPENGL_HAS_EGL=ON',
+    '-DVTK_USE_X=ON',
+    '-DVTK_PYTHON_OPTIONAL_LINK=ON',
+    '-DPARAVIEW_ENABLE_CATALYST=ON',
+    '-Dcatalyst_DIR=$EBROOTPARAVIEWMINUSCATALYST',
+]
+
+if ARCH == 'x86_64':
+    # requires OSPRay dependency
+    _copts.append('-DPARAVIEW_ENABLE_RAYTRACING=ON')
+configopts = ' '.join(_copts)
+
+# explicitly link libpythonx.y with libcatalyst to avoid link errors
+prebuildopts = "sed -i 's/\\(LINK_LIBRARIES = .*libcatalyst.so.3\\)/\\1 -lpython%(pyver)s/' build.ninja && "
+
+exts_defaultclass = 'PythonPackage'
+exts_default_options = {
+    'source_urls': [PYPI_SOURCE],
+}
+exts_list = [
+    ('openpmd_api', '0.17.1', {
+        'sources': ['openpmd_api-%(version)s.tar.gz'],
+        'preinstallopts': 'openPMD_USE_MPI=ON ',
+	'installopts': '',
+        'sanity_pip_check': False,
+    }),
+]
+exts_filter = ("python -c 'import %(ext_name)s'", "")
+
+modextravars = {'NVINDEX_PVPLUGIN_HOME':'/cvmfs/restricted.computecanada.ca/config/licenses/nvidia-index/'}
+
+sanity_check_paths = {
+    'files': ['bin/paraview', 'bin/pvserver', 'bin/pvpython', 'bin/pvbatch'],
+    'dirs': ['include/paraview-%(version_major_minor)s', 'lib/python%(pyshortver)s/site-packages'],
+}
+
+sanity_check_commands = ['python -s -c "import paraview"']
+
+
+moduleclass = 'vis'
