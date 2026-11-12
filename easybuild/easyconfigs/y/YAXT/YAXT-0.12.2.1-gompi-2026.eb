@@ -1,0 +1,25 @@
+easyblock = 'ConfigureMake'
+
+name = 'YAXT'
+version = "0.12.2.1"
+
+homepage = 'https://www.dkrz.de/redmine/projects/yaxt'
+description = "Yet Another eXchange Tool"
+
+toolchain = {'name': 'gompi', 'version': '2026'}
+toolchainopts = {'usempi': True}
+
+#https://swprojects.dkrz.de/redmine/attachments/download/559/yaxt-0.12.2.1.tar.gz
+
+source_urls = ['https://swprojects.dkrz.de/redmine/attachments/download/559/']
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['a6bae05f4d82ac766aad0f026e9abf88e7c173018b57eb7331693a7d02a44eae']
+
+configopts = 'FC="$F90" FCFLAGS="$F90FLAGS -cpp"'
+
+sanity_check_paths = {
+    'files': ['include/yaxt.h', 'include/yaxt.mod', 'lib/libyaxt.a', 'lib/libyaxt.%s' % SHLIB_EXT],
+    'dirs': ['include/xt'],
+}
+
+moduleclass = 'tools'
