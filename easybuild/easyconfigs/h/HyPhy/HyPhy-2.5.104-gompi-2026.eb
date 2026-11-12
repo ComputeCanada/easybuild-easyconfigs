@@ -1,0 +1,34 @@
+easyblock = "CMakeMake"
+
+name = 'HyPhy'
+version = '2.5.104'
+
+homepage = 'https://veg.github.io/hyphy-site/'
+description = """HyPhy (Hypothesis Testing using Phylogenies) is an open-source software package
+ for the analysis of genetic sequences (in particular the inference of natural selection)
+ using techniques in phylogenetics, molecular evolution, and machine learning"""
+
+toolchain = {'name': 'gompi', 'version': '2026'}
+toolchainopts = {'openmp': True, 'usempi': True}
+
+source_urls = ['https://github.com/veg/hyphy/archive/']
+sources = ['%(version)s.tar.gz']
+checksums = ['608b16322071453812be3c032d9ab575c74d245969c03dca298b2a041933d6a0']
+
+builddependencies = [('CMake', '3.24.3')]
+
+dependencies = [
+    ('cURL', '7.83.0'),
+]
+
+buildopts = [
+    'hyphy',
+    'HYPHYMPI',
+]
+
+sanity_check_paths = {
+    'files': ['bin/hyphy', 'bin/HYPHYMPI'],
+    'dirs': [],
+}
+
+moduleclass = 'bio'
