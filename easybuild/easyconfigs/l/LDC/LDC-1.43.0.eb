@@ -10,7 +10,7 @@ toolchain = SYSTEM
 
 source_urls = ['https://github.com/ldc-developers/ldc/releases/download/v%(version)s/']
 sources = ['ldc2-%(version)s-linux-x86_64.tar.xz']
-checksums = ['35805db60f47fd1a162b2035da84d96beec37e6d1e7b1edf60498a90acfaedce']
+checksums = ['e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855']
 
 unpack_options = '--strip-components=1'
 
