@@ -7,16 +7,15 @@ homepage = 'https://www.cgal.org/'
 description = """The goal of the CGAL Open Source Project is to provide easy access to efficient
  and reliable geometric algorithms in the form of a C++ library."""
 
-toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
-toolchainopts = {'strict': True}
+# Since v5.0 CGAL is a header only library
+toolchain = SYSTEM
 
 source_urls = ['https://github.com/CGAL/cgal/releases/download/v%(version)s/']
 sources = [SOURCE_TAR_XZ]
 checksums = ['b6be77c60765a8456335de991eeaf6ffec55256984e4a9ecc6a97c37bbfe85bf']
 
 builddependencies = [
-    ('CMake', '3.31.3'),
-    ('binutils', '2.42'),
+    ('CMake', '4.4.2'),
 ]
 
 sanity_check_paths = {
