@@ -1,0 +1,43 @@
+easyblock = 'CMakeMake'
+
+name = 'ceres-solver'
+version = '2.2.0'
+
+homepage = 'https://ceres-solver.googlesource.com/ceres-solver/'
+description = """Ceres Solver is an open source C++ library for modeling and solving large, complicated optimization problems. It is a feature rich, mature and performant library which has been used in production at Google since 2010. Ceres Solver can solve two kinds of problems:
+ - Non-linear Least Squares problems with bounds constraints.
+ - General unconstrained optimization problems.
+"""
+
+toolchain = {'name': 'GCC', 'version': '15.3.0'}
+toolchainopts = {'cstd': 'c++20', 'pic': True, 'openmp': True}
+
+source_urls = [homepage + '/+archive']
+sources = [ version + '.tar.gz']
+checksums = ['91bd76cbd215f6bff420a218dd5ec6c67be6f3a107cb0708d9ffb9b50aae2703']
+
+dependencies = []
+
+builddependencies = [
+    ('CMake', '4.4.2'),
+    ('METIS', '5.1.0', '-32idx'),
+    ('SuiteSparse', '7.14.1', '', ('gccflexiblas', '2026')),
+    ('Eigen', '5.0.1'),
+]
+
+configopts  = ' '.join([
+    '-DBUILD_EXAMPLES=OFF',
+    '-DBUILD_TESTING=ON',
+    '-DSUITESPARSE=ON',
+])
+
+separate_build_dir = True
+
+postinstallcmds = ['cd %(installdir)s/ && ln -s lib64 lib']
+
+sanity_check_paths = {
+    'files': ['include/ceres/ceres.h', 'lib64/libceres.a'],
+    'dirs': ['include', 'lib64'],
+}
+
+moduleclass = 'math'
