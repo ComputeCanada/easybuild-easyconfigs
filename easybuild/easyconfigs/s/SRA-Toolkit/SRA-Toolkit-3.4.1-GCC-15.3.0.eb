@@ -3,7 +3,7 @@
 # updated: Pavel Tománek (INUITS)
 # Update: Petr Král (INUITS)
 # updated: Franky Backeljauw (Universiteit Antwerpen)
-
+# updated: Anibal Moreno
 easyblock = 'CMakeMake'
 
 name = 'SRA-Toolkit'
@@ -20,13 +20,17 @@ toolchainopts = {'extra_cflags': '-DH5_USE_110_API'}
 
 source_urls = ['https://github.com/ncbi/sra-tools/archive/refs/tags/']
 sources = [{'download_filename': '%(version)s.tar.gz', 'filename': SOURCE_TAR_GZ}]
-checksums = ['2558683c217ad2318833ab7731939617ed91dc79a6b1dee92bf88b56a1dc142a']
+patches = [
+    '%(name)s-%(version)s_fix-include.patch',
+    '%(name)s-%(version)s_fake-ubuntu.patch'
+]
 
 builddependencies = [
-    ('CMake', '3.31.3'),
+    ('CMake', '4.2.1'),
     ('flex', '2.6.4'),
     ('Bison', '3.8.2'),
     ('Perl', '5.44.0'),
+    ('git', '2.52.0'),
 ]
 
 dependencies = [
@@ -35,10 +39,10 @@ dependencies = [
     ('OpenSSL', '3', '', SYSTEM),
     ('ncbi-vdb', version),
     ('bzip2', '1.0.8'),
-    ('file', '5.46'),
-    ('HDF5', '1.14.2'),
-    ('libxml2', '2.13.4'),
-    ('zlib', '1.3.1'),
+    ('file', '5.48'),
+    ('HDF5', '2.0.0'),
+    ('libxml2', '2.15.1'),
+    ('zlib', '2.3.2'),
 ]
 
 configopts = '-DVDB_INCDIR="$EBROOTNCBIMINVDB/include" -DVDB_LIBDIR="$EBROOTNCBIMINVDB/lib" '
@@ -49,7 +53,7 @@ postinstallcmds = [
 ]
 
 _sra_bin = [
-    'abi-dump', 'abi-load', 'align-info', 'bam-load', 'cache-mgr', 'cg-load', 'copycat', 'fasterq-dump', 'fastq-dump',
+    'abi-dump', 'abi-load', 'align-info', 'bam-load', 'cg-load', 'copycat', 'fasterq-dump', 'fastq-dump',
     'fastq-load', 'helicos-load', 'illumina-dump', 'illumina-load', 'kar', 'kdbmeta', 'latf-load', 'pacbio-load',
     'prefetch', 'rcexplain', 'sam-dump', 'sff-dump', 'sff-load', 'srapath', 'sra-pileup', 'sra-sort', 'sra-stat',
     'sratools', 'srf-load', 'test-sra', 'vdb-config', 'vdb-copy', 'vdb-decrypt', 'vdb-dump', 'vdb-encrypt', 'vdb-lock',
