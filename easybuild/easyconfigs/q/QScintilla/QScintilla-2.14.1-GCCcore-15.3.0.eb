@@ -53,6 +53,7 @@ postinstallcmds = [f"""
     cd ../Python
     for pyver in {" ".join(multi_deps["Python"])}; do
         module load python/$pyver
+        rm -rf build pyproject.toml
         cp pyproject{{-qt6,}}.toml
         echo "[tool.sip.project]" >> pyproject.toml
         sipdir=$EBROOTQT6/lib/python$pyver/site-packages/PyQt6/bindings
@@ -66,8 +67,11 @@ postinstallcmds = [f"""
         rm -rf %(installdir)s/share/sip/PyQt6/Qsci
         mv %(installdir)s/lib/python$pyver/site-packages/PyQt6/bindings/Qsci %(installdir)s/share/sip/PyQt6/Qsci
         ln -s ../../../../../share/sip/PyQt6/Qsci %(installdir)s/lib/python$pyver/site-packages/PyQt6/bindings/Qsci
-        patchelf --add-needed libqscintilla2_qt6.so.15 %(installdir)s/lib/python$pyver/site-packages/PyQt6/Qsci.abi3.so
-        patchelf --add-rpath '$ORIGIN/../../..' %(installdir)s/lib/python$pyver/site-packages/PyQt6/Qsci.abi3.so
+        patchelf --add-needed libqscintilla2_qt6.so.15 %(installdir)s/lib/python$pyver/site-packages/PyQt6/Qsci.abi3*.so
+        patchelf --add-rpath '$ORIGIN/../../..' %(installdir)s/lib/python$pyver/site-packages/PyQt6/Qsci.abi3*.so
+        if [ -f %(installdir)s/lib/python$pyver/site-packages/PyQt6/Qsci.abi3-x86_64-linux-gnu.so ] && [ ! -e %(installdir)s/lib/python$pyver/site-packages/PyQt6/Qsci.abi3.so ]; then
+            ln -s Qsci.abi3-x86_64-linux-gnu.so %(installdir)s/lib/python$pyver/site-packages/PyQt6/Qsci.abi3.so
+        fi
     done
 """
 ]
