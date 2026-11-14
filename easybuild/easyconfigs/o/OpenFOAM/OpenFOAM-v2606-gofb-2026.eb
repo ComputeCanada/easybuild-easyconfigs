@@ -1,0 +1,61 @@
+name = 'OpenFOAM'
+version = 'v2606'
+
+homepage = 'https://www.openfoam.com/'
+description = """OpenFOAM is a free, open source CFD software package.
+ OpenFOAM has an extensive range of features to solve anything from complex fluid flows
+ involving chemical reactions, turbulence and heat transfer,
+ to solid dynamics and electromagnetics."""
+
+toolchain = {'name': 'gofb', 'version': '2026'}
+# Users have found that vectorizion caused OpenFOAM to produce some very incorrect results.
+# Disabling vectorize was confirmed to fix the the known issues.
+# With no test suite, sticking to known working toolchain options until proven otherwise.
+toolchainopts = {'cstd': 'c++17', 'vectorize': False}
+
+#source_urls = ['https://sourceforge.net/projects/openfoam/files/%(version)s/']
+sources = [
+    {
+        'filename': SOURCE_TXZ,
+        'git_config': {
+            'url': 'https://gitlab.com/openfoam/core/',
+            'repo_name': 'openfoam',
+            'tag': 'OpenFOAM-%(version)s',
+            'clone_into': '%(name)s-%(version)s',
+            'recursive': True,
+        }
+    },
+]
+patches = [
+    ('OpenFOAM-v2406-cleanup.patch', 1),
+    ('OpenFOAM-v2212-wmake-OpenMPI.patch', 1),
+]
+checksums = [
+    {SOURCE_TXZ: '8d040ff39de5e20a1c04ac794dbd2bd611ba6cb9399001880fc3a56c2caa0032'},
+    {'OpenFOAM-v2406-cleanup.patch': '3abff48a517fb63719ad57fa32af746bc379a1e80c72d3e5852aa17cd13cf03e'},
+    {'OpenFOAM-v2212-wmake-OpenMPI.patch': '241dc4898c22aab0cbd10c1ea931a07a786508ee03462d45dbc1c202fee3ebe8'},
+]
+
+builddependencies = [
+    ('Bison', '3.8.2'),
+    ('CMake', '4.4.2'),
+    ('flex', '2.6.4'),
+]
+
+dependencies = [
+    ('libreadline', '8.2'),
+    ('ncurses', '6.5'),
+    # OpenFOAM requires 64 bit METIS using 32 bit indexes (array indexes)
+    ('METIS', '5.1.0'),
+    ('SCOTCH', '7.0.18'),
+    ('KaHIP', '3.26'),
+    ('CGAL', '6.2.1'),
+    ('GMP', '6.3.0'),
+    ('MPFR', '4.2.2'),
+    ('ParaView', '6.2.0'),
+    ('gnuplot', '6.0.3'),
+]
+
+prebuildopts = 'sed -i "s/-ldl/-ldl -lgmp/" wmake/makefiles/general && '
+
+moduleclass = 'cae'
