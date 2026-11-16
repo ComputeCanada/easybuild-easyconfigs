@@ -1,0 +1,54 @@
+easyblock = 'CMakeMake'
+
+name = 'ArrayFire'
+version = '3.10.1'
+
+homepage = 'https://arrayfire.com/'
+
+description = """
+ ArrayFire is a general-purpose library that simplifies the process of
+ developing software that targets parallel and massively-parallel architectures
+ including CPUs, GPUs, and other hardware acceleration devices.
+"""
+
+toolchain = {'name': 'gccflexiblascuda', 'version': '2026'}
+
+source_urls = ['https://github.com/arrayfire/arrayfire/releases/download/v%(version)s/']
+sources = ['%(namelower)s-full-%(version)s.tar.bz2']
+patches = ['ArrayFire-3.10.1-fmt12.patch']
+
+builddependencies = [
+    ('CMake', '4.4.2'),
+    ('Boost', '1.92.0'),
+    ('FFTW', '3.3.11'),
+    ('cuDNN', '9.26.0'),
+    ('GLFW', '3.5.1'),
+    ('spdlog', '1.17.0'),
+]
+
+dependencies = []
+
+separate_build_dir = True
+
+configopts = ' '.join([
+    '-DCUDA_architecture_build_targets="%(cuda_cc_semicolon_sep)s"',
+    '-DCBLAS_INCLUDE_DIR=$BLAS_INC_DIR',
+    '-DCBLAS_LIBRARIES="$LIBBLAS"',
+    '-DLAPACK_INCLUDE_DIR=$LAPACK_INC_DIR',
+    '-DLAPACK_LIBRARIES="$LIBLAPACK"',  # lapacke is included in flexiblas 3.5.0 $LIBLAPACK
+    '-DAF_BUILD_FORGE=ON',
+    '-DAF_BUILD_OPENCL=OFF', # avoid extern/ocl_cl2hpp-src/include/CL/opencl.hpp errors
+])
+
+sanity_check_paths = {
+    'files': ['include/af/version.h', 'lib64/libaf.%s' % SHLIB_EXT],
+    'dirs': [
+        'share/ArrayFire/',
+    ]
+}
+modextrapaths = {
+	'AF_PATH': '',
+}
+
+
+moduleclass = 'math'
