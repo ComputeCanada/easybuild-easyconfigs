@@ -1931,10 +1931,10 @@ exts_list = [
         'source_urls': ['https://cpan.metacpan.org/authors/id/R/RR/RRA'],
         'checksums': ['29839c3b13fe4d9ecba2e66ed1b9d3432df084787da6917ed5f3ffd3bc284f25'],
     }),
-    ('Mozilla::CA', '20260813', {
+    ('Mozilla::CA', '20261020', {
         'source_tmpl': 'Mozilla-CA-%(version)s.tar.gz',
         'source_urls': ['https://cpan.metacpan.org/authors/id/L/LW/LWP'],
-        'checksums': ['81f0bd9665eacbb6feef13b0fa16fbb30162c09292542b1206434e569196dd9b'],
+        'checksums': ['1aeed97a463389e582e085e82de03ae0bffae74d46cf8ee4c511341e5508c21d'],
     }),
     ('LWP::Protocol::https', '6.17', {
         'source_tmpl': 'LWP-Protocol-https-%(version)s.tar.gz',

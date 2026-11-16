@@ -10,6 +10,10 @@ toolchainopts = {'pic': True}
 
 source_urls = ['https://www.python.org/ftp/%(namelower)s/%(version)s/']
 sources = [SOURCE_TGZ]
+patches = [
+    'Python-3.11.5-custom-ctypes.patch',
+    'Python-3.13.1_ssl-distrust-compromised-eMudhra-intermediate-CA-keys-CVE-2026-115557.patch',
+]
 
 builddependencies = [
     ('UnZip', '6.0'),
@@ -28,6 +32,8 @@ dependencies = [
     ('OpenSSL', '1.1', '', SYSTEM),
 ]
 
+preconfigopts = "PROFILE_TASK='-m test --pgo -i test_system_transitions'"
+
 install_pip = True
 
 exts_default_options = {
@@ -42,13 +48,13 @@ exts_list = [
     ('flit_core', '3.10.1'),
     ('wheel', '0.45.1'),
     ('setuptools', '75.8.0'),
-    ('pip', '25.0'),
+    ('pip', '25.0', {'patches': ['pip-23.1.2_remove-untrusted-root-certs.patch']}),
     ('tomli', '2.2.1'),
     ('packaging', '24.2'),
     ('setuptools_scm', '8.1.0'),
     ('pathspec', '0.12.1'),
     ('pluggy', '1.5.0'),
-    ('trove-classifiers', '2025.1.15.22', {'source_tmpl': 'trove_classifiers-%(version)s-py3-none-any.whl'}),
+    ('trove-classifiers', '2025.1.15.22', {'source_tmpl': 'trove_classifiers-2025.1.15.22-py3-none-any.whl'}),
     ('hatchling', '1.27.0'),
     ('hatch_vcs', '0.4.0'),
     ('platformdirs', '4.3.6'),

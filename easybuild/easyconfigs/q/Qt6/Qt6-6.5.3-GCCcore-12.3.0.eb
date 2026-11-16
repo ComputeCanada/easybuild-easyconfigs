@@ -65,7 +65,7 @@ dependencies = [
     ('snappy', '1.1.10'),  # WebEngine
     ('OpenSSL', '1.1', '', SYSTEM),
     ('ICU', '73.2'),  # WebEngine, optional
-    ('nodejs', '18.17.1'),  # WebEngine, required
+    ('nodejs', '24.22.1'),  # WebEngine, required
     # ('gRPC', '1.52.2'),  # WebEngine needs older Abseil/gRPC/protobuf
 ]
 multi_deps = {'Python': ['3.11', '3.10']}  # 3.12 is not supported in this version of Qt

@@ -14,8 +14,10 @@ toolchainopts = {'pic': True}
 
 source_urls = ['https://github.com/openucx/ucx/releases/download/v%(version)s']
 sources = ['%(namelower)s-%(version)s.tar.gz']
+patches = ['UCX-1.22.0_avoid-fpe.patch']
 checksums = [
     {'ucx-1.22.0.tar.gz': '258941cddd14ca60d38c0d31b9b09ec1052c901086841011a498da8b55a3cb24'},
+    {'UCX-1.22.0_avoid-fpe.patch': '7dd7e6380679eeced01d6be4120049540aaf428c5486f5c4f0cbeb0505145317'},
 ]
 
 builddependencies = [

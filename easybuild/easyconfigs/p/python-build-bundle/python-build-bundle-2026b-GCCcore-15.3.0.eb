@@ -1,0 +1,32 @@
+easyblock = 'PythonPackage'
+
+name = 'python-build-bundle'
+version = '2026b'
+
+homepage = 'http://python.org/'
+description = """Bundle which contains Python packages useful for building"""
+toolchain = {'name': 'GCCcore', 'version': '14.3.0'}
+
+multi_deps = {
+    'Python': ['3.14', '3.15']
+}
+multi_deps_load_default = False
+
+sources = ['requirements-%(version)s.txt']
+checksums = ['7a5fb290b5f5a3c54913a972c5dcd91459d11876278c87720bd67a1ff44ec450']
+
+# wheels must be available from the wheelhouse
+installopts = '--no-index '
+
+unpack_sources = False
+use_pip = True
+use_pip_for_deps = True
+use_pip_requirement = True
+fix_python_shebang_for = ['bin/*']
+sanity_pip_check = True
+
+exts_filter = ('python -c "import setuptools"', "") # just one of many
+
+sanity_check_paths = {'files': [], 'dirs': ['lib/python%(pyshortver)s/site-packages']}
+
+moduleclass = 'lang'

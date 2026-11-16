@@ -12,10 +12,15 @@ toolchain = SYSTEM
 
 source_urls = ['https://gitlab.mpi-magdeburg.mpg.de/api/v4/projects/386/packages/generic/flexiblas-source/v3.5.0/']
 sources = ['flexiblas-%(version)s.tar.gz']
-patches = ['FlexiBLAS-3.4.5_fix-imkl.patch', 'FlexiBLAS-3.5.0_rsnt-arch.patch']
+patches = [
+    'FlexiBLAS-3.4.5_fix-imkl.patch',
+    'FlexiBLAS-3.5.0_revert-xerbla.patch',
+    'FlexiBLAS-3.5.0_rsnt-arch.patch',
+]
 checksums = [
     {'flexiblas-3.5.0.tar.gz': '4f135fd3d4d844f221624b13734acd0d221a4347a19fa78604a6cbcaa3f477ea'},
     {'FlexiBLAS-3.4.5_fix-imkl.patch': 'd583d570f216ca7914a0f664ffa1a292350db4ff6feca623abc6e3574d7d6245'},
+    {'FlexiBLAS-3.5.0_revert-xerbla.patch': '757d3d483f5731587aa3441ee28f05f4043735a33f4571636fdfb491e6cbb747'},
     {'FlexiBLAS-3.5.0_rsnt-arch.patch': '6e19c6f6042746867806da6d7232b983e90df853bebcfec7b75adef936c608cb'},
 ]
 
@@ -26,7 +31,7 @@ builddependencies = [
 
 install_libdir = 'lib64'
 
-configopts = ''
+configopts = '-DLTO=OFF -DCMAKE_BUILD_TYPE=Debug'
 configopts = [configopts + ' -DINTEGER8=ON -Dimkl_LIBRARY="mkl_gf_ilp64;mkl_gnu_thread;mkl_core;gomp;pthread;m;dl"', configopts]
 
 # workaround for first iteration of LAPACKe build (not used in the end), to have a temporary libflexiblas.so symlink

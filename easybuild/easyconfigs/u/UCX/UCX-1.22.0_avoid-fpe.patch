@@ -1,0 +1,61 @@
+From e2bbd234bd51ac9406dfb3cebe91a1fc2fa30674 Mon Sep 17 00:00:00 2001
+From: Roie Danino <rdanino@nvidia.com>
+Date: Mon, 20 Jul 2026 14:16:36 +0300
+Subject: [PATCH] UCP/CORE: Skip port speed for zero shared bandwidth
+
+---
+ src/ucp/core/ucp_worker.c         |  4 ++++
+ test/gtest/ucp/test_ucp_worker.cc | 18 ++++++++++++++++++
+ 2 files changed, 22 insertions(+)
+
+diff --git a/src/ucp/core/ucp_worker.c b/src/ucp/core/ucp_worker.c
+index 7306212b3ce..b490f81bcbe 100644
+--- a/src/ucp/core/ucp_worker.c
++++ b/src/ucp/core/ucp_worker.c
+@@ -800,6 +800,10 @@ static uint8_t ucp_worker_iface_port_speed(const ucp_worker_iface_t *wiface)
+     ucs_status_t status;
+     double ratio;
+ 
++    if (wiface->attr.bandwidth.shared == 0.0) {
++        return 0;
++    }
++
+     perf_attr.field_mask = UCT_PERF_ATTR_FIELD_BANDWIDTH;
+     status = uct_iface_estimate_perf(wiface->iface, &perf_attr);
+     if (status != UCS_OK) {
+diff --git a/test/gtest/ucp/test_ucp_worker.cc b/test/gtest/ucp/test_ucp_worker.cc
+index 5b27d79bef1..9a94d58d85b 100644
+--- a/test/gtest/ucp/test_ucp_worker.cc
++++ b/test/gtest/ucp/test_ucp_worker.cc
+@@ -7,6 +7,7 @@
+ #include "ucp_test.h"
+ #include <uct/api/uct.h>
+ #include <uct/api/tl.h>
++#include <fenv.h>
+ 
+ extern "C" {
+ #include <ucp/core/ucp_worker.h>
+@@ -880,6 +881,23 @@ UCS_TEST_P(test_ucp_worker_address_version, pack_unpack)
+ 
+ UCP_INSTANTIATE_TEST_CASE_TLS(test_ucp_worker_address_version, self, "self")
+ 
++class test_ucp_worker_port_speed : public test_ucp_context {
++};
++
++UCS_TEST_P(test_ucp_worker_port_speed, no_fp_exceptions)
++{
++    fenv_t env;
++    int exceptions;
++
++    ASSERT_EQ(0, feholdexcept(&env));
++    create_entity();
++    exceptions = fetestexcept(FE_DIVBYZERO | FE_INVALID);
++    EXPECT_EQ(0, fesetenv(&env));
++    EXPECT_EQ(0, exceptions);
++}
++
++UCP_INSTANTIATE_TEST_CASE_TLS(test_ucp_worker_port_speed, self, "self")
++
+ class test_ucp_modify_uct_cfg : public test_ucp_context {
+ public:
+     test_ucp_modify_uct_cfg() : m_seg_size((ucs::rand() & 0x3ff) + 1024) {

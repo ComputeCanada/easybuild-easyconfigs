@@ -34,6 +34,7 @@ postinstallcmds = [
   'cp tensorboard-wrap %(installdir)s/bin',
   'sed -i -e "s;%INSTALLDIR;%(installdir)s;g" %(installdir)s/bin/tensorboard-wrap',
   'chmod +x %(installdir)s/bin/tensorboard-wrap',
+  '/cvmfs/soft.computecanada.ca/easybuild/easybuild-computecanada-config/generate_cvmfs_filebundle.py --executable %(installdir)s/bin/tensorboard-wrap --args " --host=unix:///tmp/some.socket" --follow-fork --timeout 120',
 ]
 
 sanity_check_paths = {

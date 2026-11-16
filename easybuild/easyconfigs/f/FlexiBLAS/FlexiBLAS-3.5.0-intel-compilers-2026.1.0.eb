@@ -13,11 +13,13 @@ sources =  [SOURCELOWER_TAR_GZ]
 patches = [
     'FlexiBLAS-3.4.5_fix-imkl.patch',
     'FlexiBLAS-3.0.4_remove-semicolon.patch',
+    '../FlexiBLAScore/FlexiBLAS-3.5.0_revert-xerbla.patch',
 ]
 checksums = [
     {'flexiblas-3.5.0.tar.gz': '4f135fd3d4d844f221624b13734acd0d221a4347a19fa78604a6cbcaa3f477ea'},
     {'FlexiBLAS-3.4.5_fix-imkl.patch': 'd583d570f216ca7914a0f664ffa1a292350db4ff6feca623abc6e3574d7d6245'},
     {'FlexiBLAS-3.0.4_remove-semicolon.patch': 'a3bbcff7aeca6f8bab989e7e3a8069f2b7b660e4559042221eecaa30dc0ce300'},
+    {'FlexiBLAS-3.5.0_revert-xerbla.patch': '757d3d483f5731587aa3441ee28f05f4043735a33f4571636fdfb491e6cbb747'},
 ]
 
 builddependencies = [
@@ -33,6 +35,7 @@ builddependencies = [
 
 # LP64 .so should be libflexiblas_intel
 preconfigopts = r"sed -i 's/\(  PROPERTIES OUTPUT_NAME ${flexiblasname}\)/\1_intel/' ../flexiblas-%(version)s/src/CMakeLists.txt &&"
+preconfigopts += r"sed -i 's/-xCORE-AVX2//' ../flexiblas-%(version)s/libcscutils/CMakeModules/CCompilerSettings.cmake &&"
 
 # icx with -ax doesn't play well with FlexiBLAS's dynamic loading
 preconfigopts += 'CFLAGS="${CFLAGS/ -axCore-AVX512/}" '
@@ -46,7 +49,7 @@ if ARCH == 'x86_64':
 
 backends = local_backends
 
-configopts = '-DEXTRA="%s" ' % ';'.join(backends + ['AOCL'])
+configopts = '-DLTO=OFF -DEXTRA="%s" ' % ';'.join(backends + ['AOCL'])
 configopts = [configopts + ' -DINTEGER8=ON -Dimkl_LIBRARY="mkl_intel_ilp64;mkl_intel_thread;mkl_core;iomp5;pthread;m;dl"' +
               ' -DBLIS_LIBRARY=blis64 -DOpenBLAS_LIBRARY=openblas64 -DAOCL_LIBRARY="flame64;blis-mt64"',
               configopts + '-DAOCL_LIBRARY="flame;blis-mt"']

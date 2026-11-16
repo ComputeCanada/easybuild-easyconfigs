@@ -1,0 +1,31 @@
+easyblock = 'CMakeMake'
+
+name = 'CFITSIO'
+version = "4.7.0"
+
+homepage = 'https://heasarc.gsfc.nasa.gov/fitsio/'
+description = """CFITSIO is a library of C and Fortran subroutines for reading and writing data files in
+FITS (Flexible Image Transport System) data format."""
+
+toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
+toolchainopts = {'pic': True}
+
+source_urls = ['https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/']
+sources = ['%%(namelower)s-%s.tar.gz' % version]
+checksums = ['ce573bbea8e75b429f8c3d3e86498741ba3dc9628a1530d2f65268397ad059e8']
+
+builddependencies = [('CMake', '3.31.1')]
+
+configopts = [
+    '-DUTILS=ON -DTESTS=ON -DBUILD_SHARED_LIBS=ON',
+    '-DUTILS=ON -DTESTS=ON -DBUILD_SHARED_LIBS=OFF',
+]
+
+sanity_check_paths = {
+    'files': ['lib/libcfitsio.a', 'lib/libcfitsio.%s' % SHLIB_EXT],
+    'dirs': ['include'],
+}
+
+runtest = 'test'
+
+moduleclass = 'lib'

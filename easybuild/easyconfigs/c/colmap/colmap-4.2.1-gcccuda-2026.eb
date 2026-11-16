@@ -1,0 +1,85 @@
+easyblock = 'CMakeMake'
+
+name = 'colmap'
+version = '4.2.1'
+
+homepage = 'https://github.com/colmap/colmap'
+description = "COLMAP is a general-purpose Structure-from-Motion (SfM) and Multi-View Stereo (MVS) pipeline with a graphical and command-line interface. It offers a wide range of features for reconstruction of ordered and unordered image collections. The software is licensed under the new BSD license."
+
+toolchain = {'name': 'gcccuda', 'version': '2026'}
+toolchainopts = {'cstd': 'c++20', 'pic': True, 'openmp': True}
+
+source_urls = ['https://github.com/%(name)s/%(name)s/archive']
+sources = ['%(version)s.tar.gz']
+checksums = ['15fb9e333541676e4ee9bc5d8ab95a3ed6e549a20eb13fc5aafd04ca06c76c88']
+
+dependencies = [
+    ('Qt6', '6.12.0'),
+]
+
+builddependencies = [
+    ('CMake', '3.31.0'),
+    ('ceres-solver', '2.2.0'),
+    ('Boost', '1.92.0'),
+    ('Eigen', '5.0.1'),
+    ('METIS', '5.1.0', '-32idx'),
+    ('SuiteSparse', '7.14.1', '', ('gccflexiblas', '2026')),
+    ('CGAL', '6.2.1'),
+    ('googletest', '1.17.0'),
+    ('OpenImageIO', '3.2.2.0', '', ('gccflexiblas', '2026')),
+    ('python-build-bundle', '2026b'),
+]
+
+multi_deps = {'Python': ['3.14', '3.15']}
+
+configopts = " ".join([
+    "-DTESTS_ENABLED=ON",
+    "-DIPO_ENABLED=ON",
+    "-DSIMD_ENABLED=ON",
+    "-DCGAL_ENABLED=ON",
+])
+
+
+exts_defaultclass = 'PythonPackage'
+exts_list = [
+    ('pycolmap', version, {
+        'sources': ['%(version)s.tar.gz'],
+        'source_urls': [GITHUB_LOWER_SOURCE],
+        'checksums': ['15fb9e333541676e4ee9bc5d8ab95a3ed6e549a20eb13fc5aafd04ca06c76c88'],
+        'preinstallopts': 'export CMAKE_ARGS="-DGENERATE_STUBS=OFF" && ',
+        'sanity_pip_check': False,
+    }),
+]
+exts_filter = ("module load scipy-stack && python -c 'import %(ext_name)s'", '')
+
+local_libraries = [
+    'lib/libcolmap_%s.a' % x for x in [
+        'exe',
+        'estimators',
+        'controllers',
+        'feature',
+        'feature_types',
+        'geometry',
+        'image',
+        'lsd',
+        'math',
+        'mvs',
+        'optim',
+        'poisson_recon',
+        'retrieval',
+        'scene',
+        'sensor',
+        'sfm',
+        'sift_gpu',
+        'ui',
+        'util',
+        'vlfeat',
+    ]
+] + ['lib/libfaiss.a', 'lib/libPoseLib.a']
+
+sanity_check_paths = {
+    'files': ['bin/%(name)s'] + local_libraries,
+    'dirs': ['bin', 'include', 'include/%(name)s', 'lib', 'share'],
+}
+
+moduleclass = 'vis'

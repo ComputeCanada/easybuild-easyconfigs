@@ -1,0 +1,8 @@
+execnet==2.1.2+computecanada
+iniconfig==2.3.0+computecanada
+packaging==26.3+computecanada
+pluggy==1.6.0+computecanada
+pygments==2.21.0+computecanada
+pytest==9.1.1+computecanada
+pytest_timeout==2.4.0+computecanada
+pytest_xdist==3.8.0+computecanada

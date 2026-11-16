@@ -16,6 +16,11 @@ builddependencies = [
     ('pkgconf', '1.9.3'),
 ]
 
+patches = [
+    'Python-3.11.5-custom-ctypes.patch',
+    'Python-3.12.4_ssl-distrust-compromised-eMudhra-intermediate-CA-keys-CVE-2026-115557.patch',
+]
+
 dependencies = [
     ('binutils', '2.40'),
     ('bzip2', '1.0.8'),  # required for bz2 package in Python stdlib
@@ -41,13 +46,13 @@ exts_list = [
     ('flit_core', '3.9.0'),
     ('wheel', '0.43.0'),
     ('setuptools', '70.0.0'),
-    ('pip', '24.0'),
+    ('pip', '24.0', {'patches': ['pip-23.1.2_remove-untrusted-root-certs.patch']}),
     ('tomli', '2.0.1'),
     ('packaging', '24.0'),
     ('setuptools-scm', '8.0.4'),
     ('pathspec', '0.12.1'),
     ('pluggy', '1.5.0'),
-    ('trove-classifiers', '2024.4.10', {'source_tmpl': 'trove_classifiers-%(version)s-py3-none-any.whl'}),
+    ('trove-classifiers', '2024.4.10', {'source_tmpl': 'trove_classifiers-2024.4.10-py3-none-any.whl'}),
     ('hatchling', '1.24.2'),
     ('hatch_vcs', '0.4.0'),
     ('platformdirs', '4.2.0'),

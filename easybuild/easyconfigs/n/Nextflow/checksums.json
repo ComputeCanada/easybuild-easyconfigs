@@ -14,5 +14,6 @@
 	"nextflow-24.04.4-all": "9077cfb151d4bc8682f09a65a77f45346bf34dac5931e371dba0d51bf13a5076",
 	"nextflow-24.10.2-dist": "972bb4f4bcd30bb474c29c247ccf79289bbcd444f799f0307f61123e6b0f7475",
 	"nextflow-25.04.6-dist": "c2424e11bdd5746cf5b522d5e013c66a96905c1bc69b23654aa38924e94e6cec",
-    "nextflow-25.10.2-dist": "59c6f48fce6139157b2e8a28fdca8166bc502a22d9ef1a0a70065ecc9c3ae4a3"
+    "nextflow-25.10.2-dist": "59c6f48fce6139157b2e8a28fdca8166bc502a22d9ef1a0a70065ecc9c3ae4a3",
+    "nextflow-26.10.0-dist": "c6e54be98b86b67d9f4fe994c2d87748d2de3c70bbcac2e594dd9ccdc78fb72b"
 }

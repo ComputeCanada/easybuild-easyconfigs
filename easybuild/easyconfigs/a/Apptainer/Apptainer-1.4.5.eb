@@ -18,7 +18,7 @@ default_component_specs = {
     'start_dir': '%(name)s-%(version)s',
 }
 
-builddependencies = [('Go', '1.21.3')]
+builddependencies = [('Go', '1.26.10')]
 
 local_wrapper_script = """#!%(sysroot)s/bin/bash
 

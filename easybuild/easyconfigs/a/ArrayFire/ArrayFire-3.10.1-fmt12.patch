@@ -1,0 +1,70 @@
+--- a/src/backend/common/jit/NodeIO.hpp
++++ b/src/backend/common/jit/NodeIO.hpp
+@@ -16,7 +16,8 @@
+ template<>
+ struct fmt::formatter<af::dtype> : fmt::formatter<char> {
+     template<typename FormatContext>
+-    auto format(const af::dtype& p, FormatContext& ctx) -> decltype(ctx.out()) {
++    auto format(const af::dtype& p, FormatContext& ctx) const
++        -> decltype(ctx.out()) {
+         format_to(ctx.out(), "{}", arrayfire::common::getName(p));
+         return ctx.out();
+     }
+@@ -58,7 +59,7 @@
+     // Formats the point p using the parsed format specification (presentation)
+     // stored in this formatter.
+     template<typename FormatContext>
+-    auto format(const arrayfire::common::Node& node, FormatContext& ctx)
++    auto format(const arrayfire::common::Node& node, FormatContext& ctx) const
+         -> decltype(ctx.out()) {
+         // ctx.out() is an output iterator to write to.
+ 
+--- a/src/backend/common/ArrayFireTypesIO.hpp
++++ b/src/backend/common/ArrayFireTypesIO.hpp
+@@ -21,7 +21,8 @@
+     }
+ 
+     template<typename FormatContext>
+-    auto format(const af_seq& p, FormatContext& ctx) -> decltype(ctx.out()) {
++    auto format(const af_seq& p, FormatContext& ctx) const
++        -> decltype(ctx.out()) {
+         // ctx.out() is an output iterator to write to.
+         if (p.begin == af_span.begin && p.end == af_span.end &&
+             p.step == af_span.step) {
+@@ -73,19 +74,19 @@
+     }
+ 
+     template<typename FormatContext>
+-    auto format(const arrayfire::common::Version& ver, FormatContext& ctx)
++    auto format(const arrayfire::common::Version& ver, FormatContext& ctx) const
+         -> decltype(ctx.out()) {
+         if (ver.major() == -1) return format_to(ctx.out(), "N/A");
+-        if (ver.minor() == -1) show_minor = false;
+-        if (ver.patch() == -1) show_patch = false;
+-        if (show_major && !show_minor && !show_patch) {
++        bool minor = show_minor && ver.minor() != -1;
++        bool patch = show_patch && ver.patch() != -1;
++        if (show_major && !minor && !patch) {
+             return format_to(ctx.out(), "{}", ver.major());
+         }
+-        if (show_major && show_minor && !show_patch) {
++        if (show_major && minor && !patch) {
+             return format_to(ctx.out(), "{}.{}", ver.major(), ver.minor());
+         }
+-        if (show_major && show_minor && show_patch) {
++        if (show_major && minor && patch) {
+             return format_to(ctx.out(), "{}.{}.{}", ver.major(), ver.minor(),
+                              ver.patch());
+         }
+         return ctx.out();
+--- a/src/backend/cuda/debug_cuda.hpp
++++ b/src/backend/cuda/debug_cuda.hpp
+@@ -29,7 +29,7 @@
+ struct fmt::formatter<dim3> : fmt::formatter<std::string> {
+     // parse is inherited from formatter<string_view>.
+     template<typename FormatContext>
+-    auto format(dim3 c, FormatContext& ctx) {
++    auto format(dim3 c, FormatContext& ctx) const {
+         std::string name = fmt::format("{} {} {}", c.x, c.y, c.z);
+         return formatter<std::string>::format(name, ctx);
+     }

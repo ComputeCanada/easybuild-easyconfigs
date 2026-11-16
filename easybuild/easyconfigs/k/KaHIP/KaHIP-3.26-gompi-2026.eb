@@ -1,0 +1,40 @@
+# METIS support added
+# Author: J. Saßmannshausen (Imperial College London/UK)
+
+easyblock = 'CMakeMake'
+
+name = 'KaHIP'
+version = '3.26'
+
+homepage = 'https://kahip.github.io/'
+description = """The graph partitioning framework KaHIP --
+Karlsruhe High Quality Partitioning."""
+
+toolchain = {'name': 'gompi', 'version': '2026'}
+toolchainopts = {'pic': True}
+
+source_urls = ['https://github.com/KaHIP/KaHIP/archive/refs/tags']
+sources = ['v%(version)s.tar.gz']
+checksums = ['33c0e0c57265b83f9e45bf8a9d1ef192fb26e01a77c6d69b1287dc6f43e956f7']
+
+builddependencies = [
+    ('binutils', '2.46.1'),
+    ('CMake', '4.4.2'),
+]
+
+dependencies = [
+    ('GKlib-METIS', '5.1.1'),
+    ('METIS', '5.1.0'),
+    ('gperftools', '2.18.1'),
+]
+
+configopts = '-DUSE_TCMALLOC=ON '
+
+sanity_check_paths = {
+    'files': ["lib/libkahip_static.a", f"lib/libkahip.{SHLIB_EXT}"] +
+             ["lib/libparhip_interface_static.a", f"lib/libparhip_interface.{SHLIB_EXT}"] +
+             ["include/%s" % x for x in ["kaHIP_interface.h", "parhip_interface.h"]],
+    'dirs': [],
+}
+
+moduleclass = 'math'

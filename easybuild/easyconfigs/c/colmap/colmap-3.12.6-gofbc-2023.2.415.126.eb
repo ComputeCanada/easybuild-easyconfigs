@@ -30,11 +30,26 @@ dependencies = [
 builddependencies = [
     ('CMake', '3.31.0'),
     ('googletest', '1.14.0'),
+    ('python-build-bundle', '2026a'),
 ]
+
+multi_deps = {'Python' : ['3.11', '3.12', '3.13', '3.14']}
 
 configopts = ""
 configopts += "-DTESTS_ENABLED=ON "
 configopts += "-DIPO_ENABLED=ON -DSIMD_ENABLED=ON -DCGAL_ENABLED=ON "
+
+exts_defaultclass = 'PythonPackage'
+exts_list = [
+    ('pycolmap', version, {
+        'sources': ['%(version)s.tar.gz'],
+        'source_urls': [GITHUB_LOWER_SOURCE],
+        'checksums': ['f66d34be7a738fa753d1b71aec4fb7411d8c117beb58d1f2ba84ee2696c96410'],
+        'preinstallopts': 'export CMAKE_ARGS="-DGENERATE_STUBS=OFF" && ',
+        'sanity_pip_check': False,
+    }),
+]
+exts_filter = ("module load scipy-stack && python -c 'import %(ext_name)s'", '')
 
 local_libraries = ['lib/libcolmap_%s.a' % x for x in ['exe', 'estimators', 'controllers', 'feature', 'feature_types', 'geometry', 'image', 'lsd', 'math', 'mvs', 'optim', 'poisson_recon', 'retrieval', 'scene', 'sensor', 'sfm', 'sift_gpu', 'ui', 'util', 'vlfeat']]
 local_libraries += ['lib/libfaiss.a', 'lib/libPoseLib.a']

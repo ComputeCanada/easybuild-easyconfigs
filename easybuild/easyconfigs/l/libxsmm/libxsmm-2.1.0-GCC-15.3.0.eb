@@ -1,0 +1,27 @@
+easyblock = 'ConfigureMake'
+
+name = 'libxsmm'
+version = '2.1.0'
+
+homepage = 'https://github.com/hfp/libxsmm'
+description = """LIBXSMM is a library for small dense and small sparse matrix-matrix multiplications
+targeting Intel Architecture (x86)."""
+
+toolchain = {'name': 'GCC', 'version': '15.3.0'}
+
+source_urls = ['https://github.com/libxsmm/libxsmm/archive/refs/tags/']
+sources = ['%(version)s.tar.gz']
+checksums = ['704ed8f99b61a767798ed1ee1cadc5d185ca449f466a2bae37930f68c65961e9']
+
+# install both static and dynamic version
+installopts = ['PREFIX=%(installdir)s', 'PREFIX=%(installdir)s STATIC=0']
+
+skipsteps = ['configure']
+maxparallel = 1
+
+sanity_check_paths = {
+    'files': ['bin/libxsmm_gemm_generator', 'include/%(name)s/libxsmm.h', 'lib/libxsmm.a', 'lib/libxsmm.%s' % SHLIB_EXT],
+    'dirs': ['include/%(name)s', 'share']
+}
+
+moduleclass = 'math'

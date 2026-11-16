@@ -1,0 +1,34 @@
+easyblock = 'CMakeMake'
+
+name = 'AMPL-MP'
+version = '4.1.0'
+
+homepage = 'https://github.com/ampl/mp'
+description = " An open-source library for mathematical programming. "
+
+toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
+
+source_urls = ['https://github.com/ampl/mp/archive/', 'https://github.com/ampl/mp/archive/refs/tags/']
+sources = ['v%(version)s.tar.gz']
+patches = [
+   'AMPL-MP-4.1.0-fix_gcc15.patch',
+]
+checksums = [
+    {'v4.1.0.tar.gz': 'c75274fe2ef8b61f67826267e3c2cb339021c62d724659ab89a5b63c3959067d'},
+    {'AMPL-MP-4.1.0-fix_gcc15.patch': '62676a842e7c18572b27798ae2a4aa0d7098d0775683d387e621a9054ad67331'},
+]
+
+builddependencies = [
+    ('CMake', '4.4.2'),
+]
+
+configopts = " -DBENCHMARK_ENABLE_TESTING=OFF -DMP_LINK_WITH_SHARED_LIB=ON "
+
+separate_build_dir = True
+
+sanity_check_paths = {
+    'files': ['lib/libmp.a'],
+    'dirs': ['include/mp', 'share'],
+}
+
+moduleclass = 'math'

@@ -1,0 +1,21 @@
+name = 'Armadillo'
+version = '15.6.0'
+
+homepage = 'https://arma.sourceforge.net/'
+description = """Armadillo is an open-source C++ linear algebra library (matrix maths) aiming towards
+ a good balance between speed and ease of use. Integer, floating point and complex numbers are supported,
+ as well as a subset of trigonometric and statistics functions."""
+
+toolchain = {'name': 'gccflexiblas', 'version': '2026'}
+
+source_urls = ['https://sourceforge.net/projects/arma/files']
+sources = [SOURCELOWER_TAR_XZ]
+checksums = ['e00a11b15ce4f3a75c634bfa58411ce1acb4317705b418a72348e81dc8f56464']
+
+builddependencies = [
+    ('Boost', '1.92.0'),
+    ('arpack-ng', '3.9.1'),
+    ('CMake', '4.4.2'),
+]
+
+moduleclass = 'numlib'

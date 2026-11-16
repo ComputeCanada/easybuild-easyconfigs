@@ -28,7 +28,7 @@ attrs==25.4.0
 babel==2.17.0
 beautifulsoup4==4.14.3
 bleach==6.3.0
-certifi==2026.1.4
+certifi==2026.10.23
 certipy==0.2.2
 cffi==2.0.0
 charset-normalizer==3.4.4
@@ -65,6 +65,7 @@ jupyter-core==5.9.1
 jupyter-server==2.17.0
 jupyter-server-terminals==0.5.4
 jupyterlab-pygments==0.3.0
+jupyterlab-spreadsheet-editor==0.7.2
 jupyterlab-server==2.28.0
 jupyterlab-widgets==3.0.16
 lark==1.3.1

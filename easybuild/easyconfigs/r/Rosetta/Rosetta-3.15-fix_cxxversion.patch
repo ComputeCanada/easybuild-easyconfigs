@@ -1,0 +1,11 @@
+--- rosetta.source.release-408/main/source/tools/build/setup_platforms.py.orig	2026-10-22 22:49:46.341171053 -0400
++++ rosetta.source.release-408/main/source/tools/build/setup_platforms.py	2026-10-22 22:50:01.523543757 -0400
+@@ -288,7 +288,7 @@
+    #        "Compiler '%s' needs explicit handling in %s._get_compiler_version" % \
+    #        (compiler, __name__)
+     if compiler == 'gcc':
+-        compiler_output = os.popen("%s -dumpversion" % compiler_command).read()
++        compiler_output = os.popen("%s -dumpfullversion" % compiler_command).read()
+         if compiler_output:
+             full_version = compiler_output.strip()
+             version = ".".join(full_version.split(".")[0:2])
