@@ -5,7 +5,7 @@ homepage = 'https://www.earthsystemcog.org/projects/esmf/'
 description = """The Earth System Modeling Framework (ESMF) is a suite of software tools for developing
  high-performance, multi-component Earth science modeling applications."""
 
-toolchain = {'name': 'foss', 'version': '2026'}
+toolchain = {'name': 'gofb', 'version': '2026'}
 toolchainopts = {'usempi': True, 'openmp': True, 'cstd': 'c++11', 'pic': True}
 
 source_urls = ['https://github.com/esmf-org/esmf/archive/']
