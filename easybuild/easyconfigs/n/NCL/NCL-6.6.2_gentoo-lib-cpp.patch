@@ -11,3 +11,14 @@ Bart Oldeman <bart.oldeman@calculquebec.ca>
  endif
  
  # set cpp options
+--- ncl-6.6.2/config/LINUX.orig	2026-11-17 16:00:46.366601506 +0000
++++ ncl-6.6.2/config/LINUX	2026-11-17 16:01:03.645014010 +0000
+@@ -17,7 +17,7 @@
+ #define ByteSwapped
+ #define Cstatic
+ #define Cdynamic
+-#define CppCommand '/usr/bin/cpp -traditional'
++#define CppCommand 'cpp -traditional'
+ #define CCompiler   gcc
+ #define FCompiler   gfortran
+ #define CtoFLibraries   -lgfortran -lm
