@@ -21,7 +21,7 @@ checksums = [
     {'cuda_12.9.2_575.57.08_linux.run': '8639beb33a5ef63d8747e33ba1537aee934c947e9cd33bb7466ad466b127e9f4'},
     {'cuda-postinstall.sh': '20ca9ff9b5130e48ef2df4e3e1378bd0734beec13520a204f613afae6254bc97'},
     {'nvidia-cuda-toolkit-glibc-2.41-r1.patch': 'dc952d20d84e0eece52c1734c444d3e78d611c44c5a37707d81cea312c26a0e6'},
-    {'nvidia-cuda-toolkit-glibc-2.42.patch': '2486ba47e8b3f7504063fe25995755e3602e8e65a900fb9db53d688dc9b8ec18'},
+    {'nvidia-cuda-toolkit-glibc-2.42.patch': '9c77b9affb116b2e224aee28fe686740b533f358f846f63d18097070b1e781e3'},
     {'cuda-installer-wrapper.sh': '8bea045a50b8217dc2850adc59d3f000e9448031898afb82b9adca40e4bc670a'},
 ]
 
