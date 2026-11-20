@@ -1,0 +1,21 @@
+easyblock = 'Toolchain'
+
+name = 'gfbfc'
+version = '2026.129'
+
+homepage = '(none)'
+description = """GNU Compiler Collection (GCC) based compiler toolchain, including
+ FlexiBLAS (BLAS and LAPACK support), (serial) FFTW, and CUDA."""
+
+toolchain = SYSTEM
+
+local_gccver = '14.4.0'
+
+dependencies = [
+    ('GCC', local_gccver),
+    ('FlexiBLAS', '3.5.0', '', ('GCC', local_gccver)),
+    ('FFTW', '3.3.11', '', ('GCC', local_gccver)),
+    ('CUDA', '12.9', '', ('GCC', local_gccver)),
+]
+
+moduleclass = 'toolchain'
