@@ -9,7 +9,7 @@ description = """The GNU Compiler Collection includes front ends for C, C++, Obj
  
 toolchain = SYSTEM
 
-builddependencies = [('GCCcore', '14.4.0')]
+builddependencies = [('GCCcore', '15.3.0')]
 
 modextrapaths = {'PATH': '%(version_major)s'}
  
