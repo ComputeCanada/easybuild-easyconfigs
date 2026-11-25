@@ -8,7 +8,7 @@ description = """Insight Segmentation and Registration Toolkit (ITK) provides
  an extensive suite of software tools for registering and segmenting
  multidimensional imaging data."""
 
-toolchain = {'name': 'gcccude', 'version': '2026'}
+toolchain = {'name': 'gcccuda', 'version': '2026'}
 # extra_cxxflags is a workaround for an Eigen header combined with CastXML/Clang headers
 toolchainopts = {'pic': True, 'extra_cxxflags': '-D__builtin_ia32_sqrtsd=_mm_sqrt_pd'}
 
