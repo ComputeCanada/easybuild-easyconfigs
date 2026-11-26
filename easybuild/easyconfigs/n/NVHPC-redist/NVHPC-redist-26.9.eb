@@ -1,0 +1,37 @@
+easyblock = 'Bundle'
+
+name = 'NVHPC-redist'
+version = '26.9'
+modaltsoftname = 'nvhpc'
+
+hidden = True
+
+altroot = 'NVHPC'
+
+homepage = 'https://developer.nvidia.com/hpc-sdk/'
+description = """C, C++ and Fortran compilers included with the NVIDIA HPC SDK (previously: PGI)"""
+
+toolchain = SYSTEM
+
+dependencies = [
+    ('NVHPC', version),
+]
+
+# This easyconfig copies redistributable components from restricted to soft
+# The generated module is hidden and not used
+postinstallcmds = [
+'''
+    cd $EBROOTNVHPC/Linux_x86_64/%(version)s/REDIST
+    publicdir=%(installdir)s/Linux_x86_64/%(version)s
+    mkdir -p $publicdir
+    cp -a compilers cuda $publicdir
+    for i in $(find compilers cuda); do
+        if [[ $(readlink $i) == ../../../* ]]; then
+             rm $publicdir/$i
+             cp -p $i $publicdir/$i
+         fi
+    done
+'''
+]
+
+moduleclass = 'lib'
