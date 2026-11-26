@@ -1,0 +1,28 @@
+From 711bcc27f46456ada79ade7432a6a17ca698bf3d Mon Sep 17 00:00:00 2001
+From: Axel Garcia <axel.garcia1997@gmail.com>
+Date: Mon, 13 Apr 2026 13:55:49 +0200
+Subject: [PATCH 1/2] COMP: Update to the new cuCtxCreate() in cuda 13
+
+CUDA 13.0 has replaced the older cuCtxCreate() function with a new version, so th  CUDA 13 cuCtxCreate signature is used with CUctxCreateParams in GetFreeGPUGlobalMemory, while keeping a fallback for older CUDA versions via CUDA_VERSION guards.
+---
+ src/rtkCudaUtilities.cu | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/rtkCudaUtilities.cu b/src/rtkCudaUtilities.cu
+index b0eae16e6..753d94cd5 100644
+--- a/src/rtkCudaUtilities.cu
++++ b/src/rtkCudaUtilities.cu
+@@ -57,7 +57,12 @@ GetFreeGPUGlobalMemory(int device)
+ 
+   // create cuda context
+   CUcontext cudaContext;
++#if CUDA_VERSION >= 13000
++  CUctxCreateParams ctxCreateParams = {};
++  result = cuCtxCreate(&cudaContext, &ctxCreateParams, CU_CTX_SCHED_AUTO, device);
++#else
+   result = cuCtxCreate(&cudaContext, CU_CTX_SCHED_AUTO, device);
++#endif
+   if (result != CUDA_SUCCESS)
+   {
+     itkGenericExceptionMacro(<< "Could not create context on this CUDA device");
+

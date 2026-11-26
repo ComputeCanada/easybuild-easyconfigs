@@ -14,8 +14,11 @@ toolchainopts = {'pic': True, 'extra_cxxflags': '-D__builtin_ia32_sqrtsd=_mm_sqr
 
 github_account = 'InsightSoftwareConsortium'
 source_urls = [GITHUB_SOURCE]
-sources = ['v%(version)s.tar.gz']
-
+sources = [
+    'v%(version)s.tar.gz',
+    # applied after configure step
+    {'filename': 'ITK-5.4.8_RTK-CUDA-13.patch', 'extract_cmd': 'cp %s %(builddir)s'},
+]
 builddependencies = [
     ('CMake', '4.4.2'),
     ('Eigen', '5.0.1'),
@@ -67,7 +70,8 @@ local_sys_deps = [
 local_sys_cmake = ['-DITK_USE_SYSTEM_%s=ON' % d for d in local_sys_deps]
 configopts += ' ' + ' '.join(local_sys_cmake)
 
-prebuildopts = "LC_ALL=C CPATH=$CPATH:$EBROOTVTK/include/vtk-9.7 "
+prebuildopts = "(cd ../ITK-%(version)s/Modules/Remote/RTK && patch -p1 < %(builddir)s/ITK-5.4.8_RTK-CUDA-13.patch) && "
+prebuildopts += "LC_ALL=C CPATH=$CPATH:$EBROOTVTK/include/vtk-9.7 "
 
 local_lib_names = ['ITKCommon', 'ITKIOHDF5', 'ITKIOJPEG', 'ITKIOPNG', 'ITKIOTIFF',
                    'ITKReview', 'ITKVTK', 'ITKVtkGlue', 'itkSimpleITKFilters', 'itkRTK']
