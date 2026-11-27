@@ -1,0 +1,19 @@
+--- a/Modules/qes_read_module.f90
++++ b/Modules/qes_read_module.f90
+@@ -14904,6 +14904,16 @@
+     END IF
+     ! 
+     IF (hasAttribute(xml_node, "l")) THEN
++      IF (.NOT. obj%nbeta_ispresent) THEN
++        CALL errore('qes_read_pseudoPath', &
++                    'l attribute present but nbeta missing', 1)
++      END IF
++      IF (obj%nbeta <= 0) THEN
++        CALL errore('qes_read_pseudoPath', &
++                    'invalid nbeta value', 1)
++      END IF
++      IF (ALLOCATED(obj%l)) DEALLOCATE(obj%l)
++      ALLOCATE(obj%l(obj%nbeta))
+       CALL extractDataAttribute(xml_node, "l", obj%l)
+       obj%l_ispresent = .TRUE.
+     ELSE
