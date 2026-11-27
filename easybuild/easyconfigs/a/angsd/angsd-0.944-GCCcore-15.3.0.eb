@@ -11,7 +11,6 @@ toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
 github_account = 'ANGSD'
 source_urls = [GITHUB_LOWER_SOURCE]
 sources = ['%(version)s.tar.gz']
-checksums = ['760ba3066d7cb24e9eea5c85fd67a611d3edf8b9509295efc48d689c1808a026']
 
 dependencies = [
     ('zlib', '1.2.11'),
