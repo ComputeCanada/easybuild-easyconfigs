@@ -80,6 +80,9 @@ pretestopts = ''.join([
     'export OMPI_MCA_rmaps_base_oversubscribe=true && ',
 ])
 
+modextrapaths = {
+    'EBPYTHONPREFIXES': [''],
+}
 modextravars = {
     'GROMACS_ROOT': '%(installdir)s'
 }

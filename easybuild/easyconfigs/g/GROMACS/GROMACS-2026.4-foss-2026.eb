@@ -45,6 +45,7 @@ dependencies = [
     ('SciPy-Stack', '2026b','', ('GCCcore', '15.3.0')),
 ]
 
+# GROMACS easyblock doesn't support multideps:
 # multi_deps = {
 #     'Python': [
 #         '3.14', '3.15'
@@ -86,6 +87,9 @@ pretestopts = ''.join([
     'export OMPI_MCA_rmaps_base_oversubscribe=true && ',
 ])
 
+modextrapaths = {
+    'EBPYTHONPREFIXES': [''],
+}
 modextravars = {
     'GROMACS_ROOT': '%(installdir)s'
 }
