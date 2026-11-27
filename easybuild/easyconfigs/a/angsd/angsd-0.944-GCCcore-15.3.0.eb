@@ -1,0 +1,40 @@
+easyblock = 'MakeCp'
+
+name = 'angsd'
+version = '0.944'
+
+homepage = 'http://www.popgen.dk/angsd'
+description = """Program for analysing NGS data."""
+
+toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
+
+github_account = 'ANGSD'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['%(version)s.tar.gz']
+checksums = ['760ba3066d7cb24e9eea5c85fd67a611d3edf8b9509295efc48d689c1808a026']
+
+dependencies = [
+    ('zlib', '1.2.11'),
+    ('bzip2', '1.0.8'),
+    ('XZ', '5.2.5'),
+    ('HTSlib', '1.24'),
+]
+
+buildopts = "HTSSRC=systemwide"
+
+files_to_copy = [
+    (['angsd', 'misc/supersim', 'misc/thetaStat', 'misc/realSFS', 'misc/msToGlf',
+      'misc/smartCount', 'misc/printIcounts', 'misc/contamination', 'misc/splitgl',
+      'misc/NGSadmix', 'misc/contamination2', 'misc/haploToPlink', 'misc/ngsPSMC',
+      'misc/ibs'], 'bin'),
+    'doc',
+]
+
+sanity_check_paths = {
+    'files': ['bin/angsd'],
+    'dirs': ['doc'],
+}
+
+sanity_check_commands = ["angsd --help"]
+
+moduleclass = 'bio'
