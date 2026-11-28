@@ -37,13 +37,20 @@ builddependencies = [
     ('pytest', '9.2.0'),
     ('PLUMED', '2.10.2'),
     # GROMACS easyblock doesn't support multideps:
-    ('Python', '3.14'),
+    ('Python', '3.15'),
 ]
 dependencies = [
     ('mpi4py', '4.1.2'),
     ('hwloc', '2.14.0'),
     ('SciPy-Stack', '2026b','', ('GCCcore', '15.3.0')),
 ]
+
+# GROMACS easyblock doesn't support multideps:
+# multi_deps = {
+#     'Python': [
+#         '3.14', '3.15'
+#     ]}
+# multi_deps_extensions_only = True
 
 plumed = 'native'  # use GROMACS' native PLUMED interface
 python_pkg = False # don't build gmxapi Python package
@@ -80,6 +87,9 @@ pretestopts = ''.join([
     'export OMPI_MCA_rmaps_base_oversubscribe=true && ',
 ])
 
+modextrapaths = {
+    'EBPYTHONPREFIXES': [''],
+}
 modextravars = {
     'GROMACS_ROOT': '%(installdir)s'
 }

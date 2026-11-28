@@ -1,0 +1,18 @@
+--- a/test-suite/pw_md/CMakeLists.txt
++++ b/test-suite/pw_md/CMakeLists.txt
+@@ -8,7 +8,14 @@
+ add_test(NAME ${test_name_prefix}--md_restart_verlet-init
+ COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/md_restart_verlet_original.md ${CMAKE_CURRENT_BINARY_DIR}/md_restart_verlet/md_restart_verlet.md)
+ 
+-set_property(TEST ${test_name_prefix}--preparation APPEND PROPERTY DEPENDS "${test_name_prefix}--restart_verlet-cleanup;${test_name_prefix}--md_restart_verlet-init")
++
++set_property(TEST ${test_name_prefix}--md_restart_verlet-init
++  APPEND PROPERTY DEPENDS
++  "${test_name_prefix}--md_restart_verlet-cleanup")
++
++set_property(TEST ${test_name_prefix}--preparation
++  APPEND PROPERTY DEPENDS
++  "${test_name_prefix}--md_restart_verlet-init")
+ 
+ set(prep_tests
+     ${test_name_prefix}--preparation

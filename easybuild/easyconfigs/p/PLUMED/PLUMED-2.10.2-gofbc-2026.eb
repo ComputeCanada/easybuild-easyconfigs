@@ -34,7 +34,7 @@ dependencies = [
     ('SciPy-Stack', '2026b', '', ('GCCcore', '15.3.0')),
     ('Boost', '1.92.0'),
     ('XDRfile', '1.1.4'),
-    #('ArrayFire', '3.10.0'), # only available in CUDA
+    ('ArrayFire', '3.10.1'), # only available in CUDA
 ]
 multi_deps = {
     'Python': [
@@ -49,6 +49,7 @@ configopts = " ".join([
     # "--enable-boost_graph", # Bug in 2.10.x: https://github.com/plumed/plumed2/issues/1294 & removed in 2.11
     "--enable-boost_serialization",
     "--enable-asmjit",
+    "--enable-af_cuda",
 ])
 
 prebuildopts = "source sourceme.sh && "

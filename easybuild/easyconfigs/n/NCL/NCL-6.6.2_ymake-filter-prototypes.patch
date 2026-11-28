@@ -1,0 +1,24 @@
+Use proper prototypes in ymake-filter, to compile with GCC 15
+
+Bart Oldeman <bart.oldeman@calculquebec.ca>
+--- ncl-6.6.2/config/ymake-filter.c.orig	2026-11-17 14:32:08.462527417 +0000
++++ ncl-6.6.2/config/ymake-filter.c	2026-11-17 14:33:05.232875896 +0000
+@@ -47,7 +47,7 @@
+ {
+ 	char	*line, *getcppline();
+ 	int	len, lastlen;
+-	int	isacppcomment();
++	int	isacppcomment(char *line);
+ 
+ 	lastlen = 0;
+ 
+@@ -209,8 +209,7 @@
+ 	return buf;
+ }
+ 
+-int isacppcomment(line)
+-char	*line;
++int isacppcomment(char *line)
+ {
+ 	if (line[0] == '#' && (line[1] == ' ' || line[1] == '\t') &&
+ 		(isdigit(line[2]) || (line[2] == 'l' && line[3] == 'i' &&

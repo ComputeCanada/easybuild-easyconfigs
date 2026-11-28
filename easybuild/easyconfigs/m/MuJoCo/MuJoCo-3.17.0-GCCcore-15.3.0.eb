@@ -1,0 +1,67 @@
+easyblock = 'CMakeMake'
+
+name = 'MuJoCo'
+version = '3.17.0'
+
+homepage = 'https://mujoco.org/'
+description = """MuJoCo stands for Multi-Joint dynamics with Contact. It is a general purpose
+physics engine that aims to facilitate research and development in robotics,
+biomechanics, graphics and animation, machine learning, and other areas which
+demand fast and accurate simulation of articulated structures interacting with
+their environment."""
+
+toolchain = {'name': 'GCCcore', 'version': '15.3.0'}
+
+source_urls = ['https://github.com/deepmind/mujoco/archive/refs/tags']
+sources = ['%(version)s.tar.gz']
+checksums = ['cc96b572d9b8cc257ea963546f39b91a93166f10a3d25839e841e922b84b3905']
+
+builddependencies = [
+    ('CMake', '4.4.2'),
+    ('numpy', '2.5.3'),
+    ('python-build-bundle', '2026b'),
+]
+
+dependencies = [
+   ('GLFW', '3.5.1'),
+]
+
+configopts = '-DGLFW_BUILD_WAYLAND=OFF'
+
+multi_deps = {'Python': ['3.14', '3.15']}
+multi_deps_extensions_only = True
+
+exts_defaultclass = 'PythonPackage'
+exts_default_options = {'source_urls': [PYPI_SOURCE], 'use_pip': True, 'use_pip_for_deps': True}
+exts_list = [
+    ('mujoco', version, {
+        'preinstallopts': "export MUJOCO_PATH=%(installdir)s && export MUJOCO_PLUGIN_PATH=%(installdir)s/share/mujoco/model/plugin && export MUJOCO_CMAKE_ARGS='-DGLFW_BUILD_WAYLAND=OFF' && ",
+        'sources': ['mujoco-%(version)s.tar.gz'],
+        'checksums': ['5e49c15905e7a39eaa1efb1cae809a81c5f5c2439467f23e7e6e383624d957be'],
+    }),
+]
+
+exts_filter = ("module load scipy-stack && python -c 'import %(ext_name)s'", "")
+
+sanity_check_paths = {
+    'files': ['bin/basic', 'bin/compile', 'bin/record', 'bin/simulate',
+              'lib64/libmujoco.%s' % SHLIB_EXT],
+    'dirs': ['include', 'share/mujoco/model'],
+}
+
+sanity_check_commands = [
+    "basic 2>&1 | grep -q 'USAGE:'"
+]
+
+modextrapaths = {
+    'EBPYTHONPREFIXES': '',
+    'MUJOCO_PATH': '',
+    'MUJOCO_PLUGIN_PATH': 'share/mujoco/model/plugin',
+}
+
+# Depends on any numpy at runtime.
+modluafooter = """
+depends_on("scipy-stack")
+"""
+
+moduleclass = 'phys'

@@ -1,0 +1,99 @@
+easyblock = 'CMakeMake'
+
+name = 'ITK'
+version = '5.4.8'
+
+homepage = 'https://itk.org'
+description = """Insight Segmentation and Registration Toolkit (ITK) provides
+ an extensive suite of software tools for registering and segmenting
+ multidimensional imaging data."""
+
+toolchain = {'name': 'gcccuda', 'version': '2026'}
+# extra_cxxflags is a workaround for an Eigen header combined with CastXML/Clang headers
+toolchainopts = {'pic': True, 'extra_cxxflags': '-D__builtin_ia32_sqrtsd=_mm_sqrt_pd'}
+
+github_account = 'InsightSoftwareConsortium'
+source_urls = [GITHUB_SOURCE]
+sources = [
+    'v%(version)s.tar.gz',
+    # applied after configure step
+    {'filename': 'ITK-5.4.8_RTK-CUDA-13.patch', 'extract_cmd': 'cp %s %(builddir)s'},
+]
+builddependencies = [
+    ('CMake', '4.4.2'),
+    ('Eigen', '5.0.1'),
+    ('SWIG', '4.4.1'),
+]
+dependencies = [
+    ('HDF5', '2.2.0'),
+    ('VTK', '9.7.2'),
+    ('CastXML', '0.8.0'),
+]
+multi_deps = {'Python': ['3.14', '3.15'] }
+
+# Features
+configopts = ' '.join([
+    '-DBUILD_SHARED_LIBS=ON',
+    '-DBUILD_TESTING=OFF',
+    '-DModule_ITKReview=ON',
+    '-DModule_ITKVtkGlue=ON',
+    '-DModule_SimpleITKFilters=ON',
+    '-DModule_GenericLabelInterpolator:BOOL=ON',
+    '-DModule_AdaptiveDenoising:BOOL=ON',
+    '-DModule_RTK=ON',
+    '-DRTK_BUILD_APPLICATIONS=ON',
+    '-DRTK_USE_CUDA=ON',
+])
+
+# Enable Python bindings
+configopts += ' ' + ' '.join([
+    '-DITK_WRAP_PYTHON:BOOL=ON',
+    '-DSWIG_EXECUTABLE=$EBROOTSWIG/bin/swig',
+    '-DSWIG_DIR=$EBROOTSWIG',
+    '-DPY_SITE_PACKAGES_PATH=%(installdir)s/lib/python${EBVERSIONPYTHON:0:4}/site-packages',
+])
+
+# Dependencies from EB
+local_sys_deps = [
+    'CASTXML',
+    'DOUBLECONVERSION',
+    'EIGEN',
+    'EXPAT',
+    'FFTW',
+    'HDF5',
+    'JPEG',
+    'PNG',
+    'SWIG',
+    'TIFF',
+    'ZLIB'
+]
+local_sys_cmake = ['-DITK_USE_SYSTEM_%s=ON' % d for d in local_sys_deps]
+configopts += ' ' + ' '.join(local_sys_cmake)
+
+prebuildopts = "(cd ../ITK-%(version)s/Modules/Remote/RTK && patch -p1 < %(builddir)s/ITK-5.4.8_RTK-CUDA-13.patch) && "
+prebuildopts += "LC_ALL=C CPATH=$CPATH:$EBROOTVTK/include/vtk-9.7 "
+
+local_lib_names = ['ITKCommon', 'ITKIOHDF5', 'ITKIOJPEG', 'ITKIOPNG', 'ITKIOTIFF',
+                   'ITKReview', 'ITKVTK', 'ITKVtkGlue', 'itkSimpleITKFilters', 'itkRTK']
+
+postinstallcmds = [
+    "mkdir -p %(installdir)s/lib/python{py}/site-packages/{dist}-%(version)s.dist-info && echo -e 'Metadata-Version: 2.4\nName: {dist}\nVersion: %(version)s' > %(installdir)s/lib/python{py}/site-packages/{dist}-%(version)s.dist-info/METADATA".format(py=py, dist=name.lower())
+    for py in multi_deps['Python']
+]
+
+modextrapaths = {"EBPYTHONPREFIXES": ""}
+
+sanity_check_paths = {
+    'files': ['bin/itkTestDriver'] +
+             ['lib/lib%s-%%(version_major)s.%%(version_minor)s.%s' % (l, SHLIB_EXT) for l in local_lib_names],
+    'dirs': ['include/ITK-%(version_major)s.%(version_minor)s', 'share'],
+}
+
+sanity_check_commands = ["python -s -c 'import itk'"]
+
+modluafooter = """
+if convertToCanonical(LmodVersion()) >= convertToCanonical("8.2.9") then
+    extensions("itk/{}")
+end
+""".format(version)
+moduleclass = 'data'
