@@ -1,0 +1,132 @@
+easyblock = 'Binary'
+#easyblock = 'PackedBinary'
+
+name = 'ANSYSEDT'
+local_version = '2026R1'
+#local_update = '1'
+local_subdir = '261'
+#version = '%s.%s' % ( local_version, local_update )
+version = '%s' % ( local_version )
+
+homepage = 'http://www.ansys.com'
+description = """ANSYS simulation software enables organizations to confidently predict
+    how their products will operate in the real world. We believe that every product is
+    a promise of something greater."""
+
+toolchain = SYSTEM
+
+# unpack -> /tmp/ANSYSEDT/2024R2.1/system-system/{Electronics_242_linx64,Electronics_24.2.1_linx64}
+sources = [
+  '%s/ELECTRONICS_%s_LINX64.tgz' % (local_version, local_version)                     # ELECTRONICS_2026R1_LINX64.tgz
+ #'%s/ELECTRONICS_%s_LINX64.tgz' % (local_version, version),                          # ELECTRONICS_2024R2.1_LINX64.tgz
+ #'%s/ELECTRONICS_LOCAL_HELP_%s.zip' % (local_version, local_version)                 # ELECTRONICS_LOCAL_HELP_2024R2.zip
+]
+# sha256sum -> /cvmfs/restricted.computecanada.ca/easybuild/sources/a/ANSYSEDT/2026R1/*
+checksums = [
+  'da2116eeac35d500fe2f6fcfb299fe4cc3453fd19aeaad8c9c3230ab0f0fbcf0'   # ELECTRONICS_2026R1_LINX64.tgz
+ #'c8b9bc09e4c5e15cb5c585aae459c4ee8cb3d5d4c375d04e5ad0407cbe0733c1',  # ELECTRONICS_2024R2.1_LINX64.tgz
+ #'25fe69decf64c19cf670f4f1baac3f96fd5c25f8438e315794a4532cef214a4d'   # ELECTRONICS_LOCAL_HELP_2024R21.zip
+]
+
+extract_sources = True
+
+install_cmd = "\
+mkdir %(builddir)s/instcore/linx64; cd %(builddir)s/instcore/linx64; tar -xf ../linx64.tar.gz;\
+cd %(builddir)s/instcore; mv linx64.tar.gz linx64.tar.gz-orig;\
+patchelf --set-interpreter $EPREFIX/lib64/ld-linux-x86-64.so.2 %(builddir)s/instcore/linx64/instcore;\
+cd %(builddir)s/instcore/linx64; tar czvf ../linx64.tar.gz *; cd %(builddir)s/instcore; mv linx64 linx64-patched;\
+cd %(builddir)s; pwd; ls -l | sort -r; ./INSTALL -silent -install_dir %(installdir)s -nochecks";
+
+postinstallcmds = [
+  "find %(installdir)s -type d -exec chmod 755 {} \;",
+  "find %(installdir)s -type f \( -name '*.so' -o -name '*.so.*' \) -exec chmod 755 {} \;",
+  "/cvmfs/soft.computecanada.ca/easybuild/bin/setrpaths.sh --path %(installdir)s",
+  "grep -rlI '/bin' %(installdir)s | while read a; do echo \"Considering binfile = \"$a\"\"; \
+    sed -i \"s|#![[:space:]]*/bin/|#!$EPREFIX/bin/|g\" \"$a\"; \
+    sed -i \"s|#![[:space:]]*/usr/bin/|#!$EPREFIX/usr/bin/|g\" \"$a\"; \
+    sed -i \"s|#[[:space:]]!/usr/bin/|#!$EPREFIX/usr/bin/|g\" \"$a\"; \
+    sed -i \"s|/bin:/usr/bin|$EPREFIX/bin:$EPREFIX/usr/bin|g\" \"$a\"; \
+    sed -i \"s|/usr/bin:/bin|$EPREFIX/usr/bin:$EPREFIX/bin|g\" \"$a\"; \
+    sed -i \"s|/sbin:/usr/sbin|$EPREFIX/sbin:$EPREFIX/usr/sbin|g\" \"$a\"; \
+    sed -i \"s|/usr/sbin:/sbin|$EPREFIX/usr/sbin:$EPREFIX/sbin|g\" \"$a\"; \
+    sed -i \"s|[[:space:]]/bin/| $EPREFIX/bin/|g\" \"$a\"; \
+    sed -i \"s|'/bin/|'$EPREFIX/bin/|g\" \"$a\"; \
+    sed -i \"s|\`/bin/|\`$EPREFIX/bin/|g\" \"$a\"; \
+    sed -i \"s|\\\"/bin/|\\\"$EPREFIX/bin/|g\" \"$a\"; \
+    sed -i \"s|\=/bin/|\=$EPREFIX/bin/|g\" \"$a\"; \
+    sed -i \"s|^/bin/|$EPREFIX/bin/|g\" \"$a\"; \
+    sed -i \"s|\:/bin/|\:$EPREFIX/bin/|g\" \"$a\"; \
+    sed -i \"s|[[:space:]]/sbin/| $EPREFIX/sbin/|g\" \"$a\"; \
+    sed -i \"s|'/sbin/|'$EPREFIX/sbin/|g\" \"$a\"; \
+    sed -i \"s|\`/sbin/|\`$EPREFIX/sbin/|g\" \"$a\"; \
+    sed -i \"s|\\\"/sbin/|\\\"$EPREFIX/sbin/|g\" \"$a\"; \
+    sed -i \"s|\=/sbin/|\=$EPREFIX/sbin/|g\" \"$a\"; \
+    sed -i \"s|^/sbin/|$EPREFIX/sbin/|g\" \"$a\"; \
+    sed -i \"s|\:/sbin/|\:$EPREFIX/sbin/|g\" \"$a\"; \
+    sed -i \"s|[[:space:]]/usr/bin| $EPREFIX/usr/bin|g\" \"$a\"; \
+    sed -i \"s|'/usr/bin|'$EPREFIX/usr/bin|g\" \"$a\"; \
+    sed -i \"s|\`/usr/bin|\`$EPREFIX/usr/bin|g\" \"$a\"; \
+    sed -i \"s|\\\"/usr/bin|\\\"$EPREFIX/usr/bin|g\" \"$a\"; \
+    sed -i \"s|=/usr/bin|=$EPREFIX/usr/bin|g\" \"$a\"; \
+    sed -i \"s|^/usr/bin/|$EPREFIX/usr/bin/|g\" \"$a\"; \
+    sed -i \"s|\:/usr/bin|\:$EPREFIX/usr/bin|g\" \"$a\"; \
+    sed -i \"s|\(/usr/bin|\($EPREFIX/usr/bin|g\" \"$a\"; \
+    sed -i \"s|\-/usr/bin|\-$EPREFIX/usr/bin|g\" \"$a\"; \
+    sed -i \"s|\#/usr/bin|\#$EPREFIX/usr/bin|g\" \"$a\"; \
+    sed -i \"s|\*/usr/bin|\*$EPREFIX/usr/bin|g\" \"$a\"; \
+    sed -i \"s|[[:space:]]/usr/sbin| $EPREFIX/usr/sbin|g\" \"$a\"; \
+    sed -i \"s|'/usr/sbin|'$EPREFIX/usr/sbin|g\" \"$a\"; \
+    sed -i \"s|\`/usr/sbin|\`$EPREFIX/usr/sbin|g\" \"$a\"; \
+    sed -i \"s|\\\"/usr/sbin|\\\"$EPREFIX/usr/sbin|g\" \"$a\"; \
+    sed -i \"s|\=/usr/sbin|\=$EPREFIX/usr/sbin|g\" \"$a\"; \
+    sed -i \"s|^/usr/sbin/|$EPREFIX/usr/sbin/|g\" \"$a\"; \
+    sed -i \"s|\:/usr/sbin|\:$EPREFIX/usr/sbin|g\" \"$a\"; \
+    sed -i \"s|\$(/usr/bin|\$($EPREFIX/usr/bin|g\" \"$a\"; done",
+  "grep -rlI '/lib' %(installdir)s | while read a; do echo \"Considering libfile = \"$a\"\"; \
+    sed -i \"s|[[:space:]]/lib[[:space:]]| |g\" \"$a\"; \
+    sed -i \"s|[[:space:]]/usr/lib[[:space:]]| |g\" \"$a\"; \
+    sed -i \"s|[[:space:]]/usr/lib64[[:space:]]| |g\" \"$a\"; \
+    sed -i \"s|\`glxinfo|\`LD_LIBRARY_PATH=/usr/lib64/nvidia glxinfo|g\" \"$a\"; \
+    sed -i \"s|X11_LIB_DIR=/usr.*|X11_LIB_DIR=/usr/X11R6/bin|g\" \"$a\"; \
+    sed -i \"s|X11_LIB_DIR=\`echo.*|X11_LIB_DIR=/usr/X11R6/bin|g\" \"$a\"; \
+    sed -i \"s|OGL_LIB_DIR=\\\"\$d\\\"|OGL_LIB_DIR=/usr/X11R6/bin|g\" \"$a\"; \
+    sed -i \"s|LD_PRELOAD=\\\"\${SysLibStdCpp|# LD_PRELOAD=\\\"\${SysLibStdCpp|g\" \"$a\"; done",
+  "cd %(installdir)s/v261/AnsysEM/defer; mkdir avoid; mv libX* avoid; cd ..; \
+   mv rpm rpm-avoid; ln -s /cvmfs/soft.computecanada.ca/custom/bin/rpm rpm;",
+]
+
+modextravars = {
+    'LM_PROJECT': 'research',
+    'SLURM_ENABLED': '1',
+    'NO_DEP_CHECK': '1',
+    'ANS_IGNOREOS': '1',
+    'SCHEDULER_TIGHT_COUPLING': '1',
+    'ANS_FLEXLM_DISABLE_DEFLICPATH': '1',
+}
+
+modextrapaths = {
+     'PATH': ['v%s/AnsysEM' % local_subdir],
+}
+
+sanity_check_paths = {
+      'files': ['v%s/AnsysEM/ansysedt' % local_subdir],
+      'dirs' : ['shared_files','v%s' % local_subdir],
+}
+
+modluafooter = """
+require("SitePackage")
+local found, path = find_and_define_license_file("__ANSYS_LICENSE_FILE", "ansys")
+if (not found) then
+	local error_message = [[
+We did not find a suitable license for ANSYS. If you have access to one, you can create the file $HOME/.licenses/ansysedt.lic with the license information. If you think you should have access to one as part of your institution, please write to support@tech.alliancecan.ca so that we can configure it. For more information about configuring an ANSYS license, please see https://docs.alliancecan.ca/wiki/AnsysEDT
+
+Nous n'avons pas trouve de licence utilisable pour ANSYS. Si vous avez acces a une licence de ANSYS, vous pouvez creer le fichier $HOME/.licenses/ansysedt.lic avec l'information de la licence. Si vous   pensez que vous devriez automatiquement avoir acces a une licence via votre institution, veuillez ecrire a support@tech.alliancecan.ca pour que nous puissions la configurer. Pour plus d'information sur la facon de configurer une licence pour ANSYS, veuillez consulter la page https://docs.alliancecan.ca/wiki/AnsysEDT/fr
+	]]
+	LmodError(error_message)
+elseif (path) then
+	-- load the license file which should contain Lua commands to set the license path
+	assert(loadfile(path))()
+end
+"""
+
+moduleclass = 'tools'
